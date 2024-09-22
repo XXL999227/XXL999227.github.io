@@ -6,8 +6,16 @@
         <description>Recent content on 潇潇</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
-        <copyright>Power by 潇潇</copyright>
-        <lastBuildDate>Sun, 08 Sep 2024 21:59:07 +0800</lastBuildDate><atom:link href="https://example.com/index.xml" rel="self" type="application/rss+xml" /><item>
+        <copyright>Powered by 潇潇</copyright>
+        <lastBuildDate>Sun, 22 Sep 2024 17:43:26 +0800</lastBuildDate><atom:link href="https://example.com/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Index</title>
+        <link>https://example.com/p/index/</link>
+        <pubDate>Sun, 22 Sep 2024 17:43:26 +0800</pubDate>
+        
+        <guid>https://example.com/p/index/</guid>
+        <description></description>
+        </item>
+        <item>
         <title>Blog2</title>
         <link>https://example.com/p/blog2/</link>
         <pubDate>Sun, 08 Sep 2024 21:59:07 +0800</pubDate>
@@ -21,7 +29,30 @@
         <pubDate>Sun, 08 Sep 2024 17:28:02 +0800</pubDate>
         
         <guid>https://example.com/p/myfirstblog/</guid>
-        <description>&lt;p&gt;hello&lt;/p&gt;
+        <description>&lt;p&gt;&lt;img src=&#34;https://example.com/p/myfirstblog/image.png&#34;
+	width=&#34;929&#34;
+	height=&#34;385&#34;
+	srcset=&#34;https://example.com/p/myfirstblog/image_hu8546233374244308387.png 480w, https://example.com/p/myfirstblog/image_hu596487887803235842.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;241&#34;
+		data-flex-basis=&#34;579px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;hello&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>Index2</title>
+        <link>https://example.com/p/index2/</link>
+        <pubDate>Thu, 05 Sep 2024 10:17:50 +0000</pubDate>
+        
+        <guid>https://example.com/p/index2/</guid>
+        <description>&lt;img src="https://example.com/post/image.png" alt="Featured image of post Index2" /&gt;&lt;p&gt;哈哈哈哈2&lt;/p&gt;
 </description>
         </item>
         <item>
