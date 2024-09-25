@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html lang="zh-cn" dir="ltr">
     <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="Redis 简介 、{{ $image := .Resources.Get &ldquo;image.png&rdquo; }} 2 Redis（Remote Dictionary Server）是一个开源的内存数据结构存储系统，广泛应用于缓存、消息队列、实时分析等场景。它支持多种数据结构，如字符串、哈希、列表、集合、有序集合、位图、HyperLogLog 和地理空间索引等。\n">
-<title>Test</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="安装hugo Hugo官网： The world’s fastest framework for building websites\n下载下面这个即可：\n将压缩包解压到 **bin **目录下：\n配置环境变量 配置环境变量，就可以在任意位置使用hugo命令了\n">
+<title>hugo搭建博客</title>
 
-<link rel='canonical' href='https://example.com/archives/test/'>
+<link rel='canonical' href='https://example.com/archives/hugo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/'>
 
-<link rel="stylesheet" href="/scss/style.min.663803bebe609202d5b39d848f2d7c2dc8b598a2d879efa079fa88893d29c49c.css"><meta property='og:title' content="Test">
-<meta property='og:description' content="Redis 简介 、{{ $image := .Resources.Get &ldquo;image.png&rdquo; }} 2 Redis（Remote Dictionary Server）是一个开源的内存数据结构存储系统，广泛应用于缓存、消息队列、实时分析等场景。它支持多种数据结构，如字符串、哈希、列表、集合、有序集合、位图、HyperLogLog 和地理空间索引等。\n">
-<meta property='og:url' content='https://example.com/archives/test/'>
+<link rel="stylesheet" href="/scss/style.min.663803bebe609202d5b39d848f2d7c2dc8b598a2d879efa079fa88893d29c49c.css"><meta property='og:title' content="hugo搭建博客">
+<meta property='og:description' content="安装hugo Hugo官网： The world’s fastest framework for building websites\n下载下面这个即可：\n将压缩包解压到 **bin **目录下：\n配置环境变量 配置环境变量，就可以在任意位置使用hugo命令了\n">
+<meta property='og:url' content='https://example.com/archives/hugo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/'>
 <meta property='og:site_name' content='潇潇'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='标签1' /><meta property='article:tag' content='标签2' /><meta property='article:published_time' content='2024-09-15T20:55:33&#43;08:00'/><meta property='article:modified_time' content='2024-12-23T20:55:33&#43;08:00'/><meta property='og:image' content='https://example.com/post/%E6%B5%8B%E8%AF%95%E5%8D%9A%E5%AE%A2/image.png' />
-<meta name="twitter:title" content="Test">
-<meta name="twitter:description" content="Redis 简介 、{{ $image := .Resources.Get &ldquo;image.png&rdquo; }} 2 Redis（Remote Dictionary Server）是一个开源的内存数据结构存储系统，广泛应用于缓存、消息队列、实时分析等场景。它支持多种数据结构，如字符串、哈希、列表、集合、有序集合、位图、HyperLogLog 和地理空间索引等。\n"><meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content='https://example.com/post/%E6%B5%8B%E8%AF%95%E5%8D%9A%E5%AE%A2/image.png' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='博客' /><meta property='article:tag' content='hugo' /><meta property='article:published_time' content='2024-09-25T21:27:40&#43;08:00'/><meta property='article:modified_time' content='2024-09-25T21:27:40&#43;08:00'/><meta property='og:image' content='https://gcore.jsdelivr.net/gh/XXL999227/image/img/20240925213741.png' />
+<meta name="twitter:title" content="hugo搭建博客">
+<meta name="twitter:description" content="安装hugo Hugo官网： The world’s fastest framework for building websites\n下载下面这个即可：\n将压缩包解压到 **bin **目录下：\n配置环境变量 配置环境变量，就可以在任意位置使用hugo命令了\n"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://gcore.jsdelivr.net/gh/XXL999227/image/img/20240925213741.png' />
     <link rel="shortcut icon" href="/favicon.ico" />
 
     </head>
@@ -262,25 +262,21 @@
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li><a href="#特点">特点</a></li>
-    <li><a href="#安装">安装</a>
+    <li><a href="#安装hugo">安装hugo</a>
       <ol>
-        <li><a href="#在-linux-上安装">在 Linux 上安装</a></li>
-        <li><a href="#在-windows-上安装">在 Windows 上安装</a></li>
+        <li><a href="#配置环境变量">配置环境变量</a></li>
       </ol>
     </li>
-    <li><a href="#基本命令">基本命令</a>
+    <li><a href="#搭建博客">搭建博客</a>
       <ol>
-        <li><a href="#字符串">字符串</a></li>
-        <li><a href="#哈希">哈希</a></li>
-        <li><a href="#列表">列表</a></li>
-        <li><a href="#集合">集合</a></li>
-        <li><a href="#有序集合">有序集合</a></li>
+        <li><a href="#创建博客">创建博客</a></li>
+        <li><a href="#配置主题">配置主题</a></li>
       </ol>
     </li>
-    <li><a href="#持久化">持久化</a>
+    <li><a href="#写博客">写博客</a>
       <ol>
-        <li><a href="#rdbredis-database">RDB（Redis Database）</a></li>
+        <li><a href="#在指定位置打开cmd">在指定位置打开cmd</a></li>
+        <li><a href="#使用-hugo-new-content-postmyfirstblogindexmd">使用 hugo new content post/MyFirstBlog/index.md</a></li>
       </ol>
     </li>
   </ol>
@@ -297,9 +293,9 @@
     <article class="has-image main-article">
     <header class="article-header">
         <div class="article-image">
-            <a href="/archives/test/">
+            <a href="/archives/hugo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/">
                 
-                    <img src="/post/%e6%b5%8b%e8%af%95%e5%8d%9a%e5%ae%a2/image.png" loading="lazy" alt="Featured image of post Test" />
+                    <img src="https://gcore.jsdelivr.net/gh/XXL999227/image/img/20240925213741.png" loading="lazy" alt="Featured image of post hugo搭建博客" />
                 
             </a>
         </div>
@@ -309,12 +305,12 @@
     
     <header class="article-category">
         
-            <a href="/categories/%E5%88%86%E7%B1%BB1/" >
-                分类1
+            <a href="/categories/%E5%8D%9A%E5%AE%A2/" >
+                博客
             </a>
         
-            <a href="/categories/%E5%88%86%E7%B1%BB2/" >
-                分类2
+            <a href="/categories/hugo/" >
+                Hugo
             </a>
         
     </header>
@@ -322,7 +318,7 @@
 
     <div class="article-title-wrapper">
         <h2 class="article-title">
-            <a href="/archives/test/">Test</a>
+            <a href="/archives/hugo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/">hugo搭建博客</a>
         </h2>
     
         
@@ -345,13 +341,13 @@
   <path d="M18 16.496v1.504l1 1" />
 </svg>
                 <time class="article-time--published">
-                    创建时间：2024-09-15</time>
+                    创建时间：2024-09-25</time>
                 <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-clock-hour-4"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M12 12l3 2" /><path d="M12 7v5" /></svg>
                 <time class="article-time--lastUpdated">
-                    更新时间：2024-12-23</time>
+                    更新时间：2024-09-25</time>
                 <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-file-word"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2" /><path d="M9 12l1.333 5l1.667 -4l1.667 4l1.333 -5" /></svg>
                 <time class="article-time--word">
-                    字数总计：575</time>
+                    字数总计：474</time>
             </div>
         
 
@@ -367,213 +363,204 @@
     <section class="article-content">
     
     
-    <h1 id="redis-简介">Redis 简介
-</h1><p><img src="/image.png"
+    <h2 id="安装hugo">安装hugo
+</h2><p>Hugo官网： <a class="link" href="https://gohugo.io/"  target="_blank" rel="noopener"
+    >The world’s fastest framework for building websites</a></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/png/42408833/1725784728319-351ff040-5c75-4fad-8226-bafb1c5da337.png"
 	
 	
 	
 	loading="lazy"
 	
-		alt="11"
 	
-	
->
-、{{ $image := .Resources.Get &ldquo;image.png&rdquo; }}
-2
-<img src="/.assets/image.png"
+></p>
+<p>下载下面这个即可：</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/png/42408833/1725784753659-7463bde1-7d7a-4569-9507-59e3f2f930cb.png"
 	
 	
 	
 	loading="lazy"
 	
-		alt="alt text"
+	
+></p>
+<p>将压缩包解压到 **<font style="color:#DF2A3F;">bin </font>**目录下：</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/png/42408833/1725784816485-6e6fdc50-7d62-4f86-a1a9-e8f34958687c.png"
 	
 	
->
-Redis（Remote Dictionary Server）是一个开源的内存数据结构存储系统，广泛应用于缓存、消息队列、实时分析等场景。它支持多种数据结构，如字符串、哈希、列表、集合、有序集合、位图、HyperLogLog 和地理空间索引等。</p>
-<h2 id="特点">特点
-</h2><ul>
-<li><strong>高性能</strong>：Redis 通过内存存储和高效的数据结构操作，提供了极高的读写性能。</li>
-<li><strong>丰富的数据类型</strong>：支持多种数据结构，满足不同应用场景的需求。</li>
-<li><strong>持久化</strong>：支持 RDB 和 AOF 两种持久化方式，确保数据的持久性。</li>
-<li><strong>高可用性</strong>：通过主从复制、哨兵模式和集群模式，实现高可用性和数据分片。</li>
-<li><strong>Lua 脚本</strong>：支持 Lua 脚本，提供了更强大的数据操作能力。</li>
-<li><strong>事务</strong>：支持事务操作，保证一组命令的原子性执行。</li>
-</ul>
-<h2 id="安装">安装
-</h2><h3 id="在-linux-上安装">在 Linux 上安装
-</h3><ol>
-<li>
-<p>下载 Redis 源码：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">wget http://download.redis.io/releases/redis-6.2.6.tar.gz
-</span></span></code></pre></td></tr></table>
-</div>
-</div></li>
-<li>
-<p>解压并编译：</p>
+	
+	loading="lazy"
+	
+	
+></p>
+<h3 id="配置环境变量">配置环境变量
+</h3><p>配置环境变量，就可以在任意位置使用hugo命令了</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/png/42408833/1725784922550-ca21ea1f-6b6f-49a4-8fa2-e4a04468919c.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p>任意位置打开cmd，输入hugo version验证一下</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/png/42408833/1725784969607-dcc2be84-9162-4cef-adab-5e59ee587843.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<h2 id="搭建博客">搭建博客
+</h2><h3 id="创建博客">创建博客
+</h3><p>在任意位置打开cmd，输入：hugo new site xxx</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/png/42408833/1725785237240-43e6e3df-f7ed-455c-be8c-d95cd9b67214.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p>可以看到对应位置出现文件夹</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/png/42408833/1725785290579-72ef332c-2244-483b-9ea7-efb68a1e7950.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p>cd进入对应的目录，然后使用命令启动hugo</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">tar xzf redis-6.2.6.tar.gz
-</span></span><span class="line"><span class="cl"><span class="nb">cd</span> redis-6.2.6
-</span></span><span class="line"><span class="cl">make
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">hugo server --buildDrafts 
+</span></span><span class="line"><span class="cl"><span class="c1"># 或者简写</span>
+</span></span><span class="line"><span class="cl">hugo server -D 
+</span></span><span class="line"><span class="cl"><span class="c1"># 或者</span>
+</span></span><span class="line"><span class="cl">hugo server
 </span></span></code></pre></td></tr></table>
 </div>
-</div></li>
-<li>
-<p>启动 Redis 服务器：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">src/redis-server
-</span></span></code></pre></td></tr></table>
-</div>
-</div></li>
-</ol>
-<h3 id="在-windows-上安装">在 Windows 上安装
-</h3><p>可以使用第三方提供的 Windows 版本 Redis，例如 <a class="link" href="https://www.memurai.com/"  target="_blank" rel="noopener"
-    >Memurai</a> 或 <a class="link" href="https://github.com/microsoftarchive/redis/releases"  target="_blank" rel="noopener"
-    >Redis for Windows</a>。</p>
-<h2 id="基本命令">基本命令
-</h2><h3 id="字符串">字符串
-</h3><ul>
-<li>
-<p>设置键值对：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">SET key value
-</span></span></code></pre></td></tr></table>
-</div>
-</div></li>
-<li>
-<p>获取键值：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">GET key
-</span></span></code></pre></td></tr></table>
-</div>
-</div></li>
-</ul>
-<h3 id="哈希">哈希
-</h3><ul>
-<li>
-<p>设置哈希字段：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">HSET myhash field1 value1
-</span></span></code></pre></td></tr></table>
-</div>
-</div></li>
-<li>
-<p>获取哈希字段：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">HGET myhash field1
-</span></span></code></pre></td></tr></table>
-</div>
-</div></li>
-</ul>
-<h3 id="列表">列表
-</h3><ul>
-<li>
-<p>在列表头部插入元素：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">LPUSH mylist value
-</span></span></code></pre></td></tr></table>
-</div>
-</div></li>
-<li>
-<p>获取列表中的元素：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">LRANGE mylist <span class="m">0</span> -1
-</span></span></code></pre></td></tr></table>
-</div>
-</div></li>
-</ul>
-<h3 id="集合">集合
-</h3><ul>
-<li>
-<p>添加元素到集合：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">SADD myset value
-</span></span></code></pre></td></tr></table>
-</div>
-</div></li>
-<li>
-<p>获取集合中的所有元素：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">SMEMBERS myset
-</span></span></code></pre></td></tr></table>
-</div>
-</div></li>
-</ul>
-<h3 id="有序集合">有序集合
-</h3><ul>
-<li>
-<p>添加元素到有序集合：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ZADD myzset score value
-</span></span></code></pre></td></tr></table>
-</div>
-</div></li>
-<li>
-<p>获取有序集合中的元素：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ZRANGE myzset <span class="m">0</span> -1 WITHSCORES
-</span></span></code></pre></td></tr></table>
-</div>
-</div></li>
-</ul>
-<h2 id="持久化">持久化
-</h2><h3 id="rdbredis-database">RDB（Redis Database）
-</h3><p>RDB 通过生成快照的方式将数据持久化到磁盘。可以通过以下命令手动生成快照：</p>
+</div><p><img src="https://cdn.nlark.com/yuque/0/2024/png/42408833/1725785433495-5da07e05-0138-4084-a4c1-56d68f897bd9.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p>在浏览器输入 <a class="link" href="http://localhost:1313/"  target="_blank" rel="noopener"
+    >http://localhost:1313</a>，出现<font style="color:rgb(0, 0, 0);">Page Not Found则表示成功，Page Not Found是因为还没配主题</font></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/png/42408833/1725785473206-d4f8dc76-0e11-4a70-8292-01d0e59054fb.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<h3 id="配置主题">配置主题
+</h3><p>在hugo官网找一个喜欢的主题下载即可</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/png/42408833/1725785689509-fb139886-00ca-43bf-9c8b-9d8e937aecfd.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p>选择主题的源码并下载</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/png/42408833/1725785980593-ae5390c6-f9b3-43f7-938c-86d04591c217.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p>解压并放到themes目录下</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/png/42408833/1725786061528-f70e5e14-4a42-44bc-aab1-a7277324409d.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p>打开exampleSite文件夹，将<font style="color:rgb(0, 0, 0);"> </font><strong><font style="color:rgb(0, 0, 0);">Content</font></strong><font style="color:rgb(0, 0, 0);"> 和 </font><strong><font style="color:rgb(0, 0, 0);">hugo.yaml</font></strong><font style="color:rgb(0, 0, 0);"> 复制到主文件夹下</font></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/png/42408833/1725786272624-0689da11-7bf2-4563-868a-a47b0a23876e.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/png/42408833/1725786403995-a4d7f8f0-f51c-41e5-9d45-50834cae4e75.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/png/42408833/1725786496046-a5835177-d345-4964-93a0-a3781d8f3b08.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p>修改theme为themes文件夹下的主题名，以后需要换一个主题也是修改这里</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/png/42408833/1725786688831-c6456430-8194-4ad5-9353-010cf9c26951.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p>重新启动hugo即可，相关配置修改**<font style="color:rgb(0, 0, 0);">hugo.yaml</font>**</p>
+<p><strong><font style="color:rgb(0, 0, 0);">stack官网：</font></strong></p>
+<p><a class="link" href="https://stack.jimmycai.com/"  target="_blank" rel="noopener"
+    ><strong>Stack | Card-style Hugo theme designed for bloggers (jimmycai.com)</strong></a></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/png/42408833/1725786888174-50c3c80f-9c19-497e-90ab-d91b589b90f8.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<h2 id="写博客">写博客
+</h2><h3 id="在指定位置打开cmd">在指定位置打开cmd
+</h3><p><img src="https://cdn.nlark.com/yuque/0/2024/png/42408833/1725787872089-e533c38d-1740-421f-9bce-55c9bd363a4d.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<h3 id="使用-hugo-new-content-postmyfirstblogindexmd">使用 hugo new content post/MyFirstBlog/index.md
+</h3><p>其中/MyFirstBlog可以任意命名
+/index.md 不能任意命名，否则图片等资源无法显示</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/png/42408833/1725787901263-1826aff4-c963-441d-9b0f-1f32ece25555.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
 
 </section>
 
@@ -582,9 +569,9 @@ Redis（Remote Dictionary Server）是一个开源的内存数据结构存储系
     
     <section class="article-tags">
         
-            <a href="/tags/%E6%A0%87%E7%AD%BE1/">标签1</a>
+            <a href="/tags/%E5%8D%9A%E5%AE%A2/">博客</a>
         
-            <a href="/tags/%E6%A0%87%E7%AD%BE2/">标签2</a>
+            <a href="/tags/hugo/">Hugo</a>
         
     </section>
 
@@ -601,19 +588,7 @@ Redis（Remote Dictionary Server）是一个开源的内存数据结构存储系
 
         <span>Licensed under CC BY-NC-SA 4.0</span>
     </section>
-    <section class="article-lastmod">
-        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="12" cy="12" r="9" />
-  <polyline points="12 7 12 12 15 15" />
-</svg>
-
-
-
-        <span>
-            最后更新于 2024-12-23
-        </span>
-    </section></footer>
+    </footer>
 
 
     
@@ -789,6 +764,99 @@ Redis（Remote Dictionary Server）是一个开源的内存数据结构存储系
 
         document.head.appendChild(customFont);
     }());
+</script>
+
+<script>
+    
+    const cssPath = "https://example.com/waifu/waifu.css";
+    const tipsJsonPath = "https://example.com/waifu/waifu-tips.json";
+    
+    const live2d_path = "https://fastly.jsdelivr.net/gh/stevenjoezhang/live2d-widget@latest/";
+    const live2dMinJsPath = "https://example.com/waifu/live2d.min.js";
+
+    
+    function loadExternalResource(url, type) {
+        return new Promise((resolve, reject) => {
+            let tag;
+            if (type === "css") {
+                tag = document.createElement("link");
+                tag.rel = "stylesheet";
+                tag.href = url;
+            }
+            else if (type === "js") {
+                tag = document.createElement("script");
+                tag.src = url;
+            }
+            if (tag) {
+                tag.onload = () => resolve(url);
+                tag.onerror = () => reject(url);
+                document.head.appendChild(tag);
+            }
+        });
+    }
+
+    
+    if (screen.width >= 768) {
+        Promise.all([
+            loadExternalResource(cssPath, "css"),
+            loadExternalResource(live2dMinJsPath, "js"),
+            loadExternalResource(live2d_path + "waifu-tips.js", "js")
+        ]).then(() => {
+            
+            initWidget({
+                waifuPath: tipsJsonPath,
+                cdnPath: "https://cdn.jsdelivr.net/gh/XXL999227/static-resource@v1.0.0",
+                tools: ["hitokoto", "asteroids", "switch-model", "switch-texture", "photo", "info", "quit"]
+            });
+            
+            initWaifuMouseEvent();
+        });
+    }
+
+    function initWaifuMouseEvent() {
+        const waifu = document.getElementById("waifu");
+        let isDown = false;
+        let waifuLeft;
+        let mouseLeft;
+        let waifuTop;
+        let mouseTop;
+        
+        waifu.onmousedown = function (e) {
+            isDown = true;
+            
+            waifuLeft = waifu.offsetLeft;
+            mouseLeft = e.clientX;
+            
+            waifuTop = waifu.offsetTop;
+            mouseTop = e.clientY;
+        }
+        
+        window.onmousemove = function (e) {
+            if (!isDown) {
+                return;
+            }
+            
+            let currentLeft = waifuLeft + (e.clientX - mouseLeft);
+            if (currentLeft < 0) {
+                currentLeft = 0;
+            } else if (currentLeft > window.innerWidth - 300) {
+                currentLeft = window.innerWidth - 300;
+            }
+            waifu.style.left = currentLeft  + "px";
+            
+            let currentTop = waifuTop + (e.clientY - mouseTop);
+            if (currentTop < 30) {
+                currentTop = 30
+            } else if (currentTop > window.innerHeight - 290) {
+                currentTop = window.innerHeight - 290
+            }
+            waifu.style.top = currentTop + "px";
+        }
+        
+        window.onmouseup = function (e) {
+            isDown = false;
+        }
+    }
 </script>
 
     </body>

@@ -7,20 +7,20 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Powered by 潇潇</copyright>
-        <lastBuildDate>Mon, 23 Dec 2024 20:55:33 +0800</lastBuildDate><atom:link href="https://example.com/tags/index.xml" rel="self" type="application/rss+xml" /><item>
-        <title>标签1</title>
-        <link>https://example.com/tags/%E6%A0%87%E7%AD%BE1/</link>
-        <pubDate>Sun, 15 Sep 2024 20:55:33 +0800</pubDate>
+        <lastBuildDate>Wed, 25 Sep 2024 21:27:40 +0800</lastBuildDate><atom:link href="https://example.com/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Hugo</title>
+        <link>https://example.com/tags/hugo/</link>
+        <pubDate>Wed, 25 Sep 2024 21:27:40 +0800</pubDate>
         
-        <guid>https://example.com/tags/%E6%A0%87%E7%AD%BE1/</guid>
+        <guid>https://example.com/tags/hugo/</guid>
         <description></description>
         </item>
         <item>
-        <title>标签2</title>
-        <link>https://example.com/tags/%E6%A0%87%E7%AD%BE2/</link>
-        <pubDate>Sun, 15 Sep 2024 20:55:33 +0800</pubDate>
+        <title>博客</title>
+        <link>https://example.com/tags/%E5%8D%9A%E5%AE%A2/</link>
+        <pubDate>Wed, 25 Sep 2024 21:27:40 +0800</pubDate>
         
-        <guid>https://example.com/tags/%E6%A0%87%E7%AD%BE2/</guid>
+        <guid>https://example.com/tags/%E5%8D%9A%E5%AE%A2/</guid>
         <description></description>
         </item>
         
