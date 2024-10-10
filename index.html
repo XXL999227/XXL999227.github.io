@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="zh-cn" dir="ltr">
     <head>
-	<meta name="generator" content="Hugo 0.134.3"><meta charset='utf-8'>
+	<meta name="generator" content="Hugo 0.135.0"><meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="演示说明">
-<title>潇潇</title>
+<title>潇潇’s blog</title>
 
 <link rel='canonical' href='https://xxl999227.github.io/'>
 
-<link rel="stylesheet" href="/scss/style.min.663803bebe609202d5b39d848f2d7c2dc8b598a2d879efa079fa88893d29c49c.css"><meta property='og:title' content="潇潇">
+<link rel="stylesheet" href="/scss/style.min.663803bebe609202d5b39d848f2d7c2dc8b598a2d879efa079fa88893d29c49c.css"><meta property='og:title' content="潇潇’s blog">
 <meta property='og:description' content="演示说明">
 <meta property='og:url' content='https://xxl999227.github.io/'>
-<meta property='og:site_name' content='潇潇'>
+<meta property='og:site_name' content='潇潇’s blog'>
 <meta property='og:type' content='website'><meta property='og:updated_time' content=' 2024-09-25T21:27:40&#43;08:00 '/>
-<meta name="twitter:title" content="潇潇">
+<meta name="twitter:title" content="潇潇’s blog">
 <meta name="twitter:description" content="演示说明"><link rel="alternate" type="application/rss&#43;xml" href="https://xxl999227.github.io/index.xml">
     <link rel="shortcut icon" href="/favicon.ico" />
 
@@ -70,7 +70,7 @@
         
         
         <div class="site-meta">
-            <h1 class="site-name"><a href="/">潇潇</a></h1>
+            <h1 class="site-name"><a href="/">潇潇’s blog</a></h1>
             <h2 class="site-description">欢迎来到我的网站，此博客由【Hugo &#43; Stack】来进行搭建，主要分享个人生活和学习笔记</h2>
         </div>
     </header><ol class="menu-social">
@@ -420,7 +420,7 @@
                     更新时间：2024-09-25</time>
                 <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-file-word"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2" /><path d="M9 12l1.333 5l1.667 -4l1.667 4l1.333 -5" /></svg>
                 <time class="article-time--word">
-                    字数总计：474</time>
+                    字数总计：504</time>
             </div>
         
 
@@ -473,6 +473,7 @@
     
     const cssPath = "https://xxl999227.github.io/waifu/waifu.css";
     const tipsJsonPath = "https://xxl999227.github.io/waifu/waifu-tips.json";
+    const myTipsJsonPath = "https://xxl999227.github.io/waifu/my-waifu-tips.js";
     
     const live2d_path = "https://fastly.jsdelivr.net/gh/stevenjoezhang/live2d-widget@latest/";
     const live2dMinJsPath = "https://xxl999227.github.io/waifu/live2d.min.js";
@@ -503,13 +504,13 @@
         Promise.all([
             loadExternalResource(cssPath, "css"),
             loadExternalResource(live2dMinJsPath, "js"),
-            loadExternalResource(live2d_path + "waifu-tips.js", "js")
+            loadExternalResource(myTipsJsonPath, "js")
         ]).then(() => {
             
             initWidget({
                 waifuPath: tipsJsonPath,
                 cdnPath: "https://cdn.jsdelivr.net/gh/XXL999227/static-resource@v1.0.0",
-                tools: ["hitokoto", "asteroids", "switch-model", "switch-texture", "photo", "info", "quit"]
+                tools: ["hitokoto", "asteroids", "switch-model", "switch-texture", "photo",  "quit"]
             });
             
             initWaifuMouseEvent();

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
-        <title>Hugo on 潇潇</title>
+        <title>Hugo on 潇潇’s blog</title>
         <link>https://xxl999227.github.io/tags/hugo/</link>
-        <description>Recent content in Hugo on 潇潇</description>
+        <description>Recent content in Hugo on 潇潇’s blog</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Powered by 潇潇</copyright>
@@ -16,68 +16,82 @@
         <description>&lt;img src="https://gcore.jsdelivr.net/gh/XXL999227/image/img/20240925213741.png" alt="Featured image of post hugo搭建博客" /&gt;&lt;h2 id=&#34;安装hugo&#34;&gt;安装hugo
 &lt;/h2&gt;&lt;p&gt;Hugo官网： &lt;a class=&#34;link&#34; href=&#34;https://gohugo.io/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;The world’s fastest framework for building websites&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://cdn.nlark.com/yuque/0/2024/png/42408833/1725784728319-351ff040-5c75-4fad-8226-bafb1c5da337.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://gcore.jsdelivr.net/gh/XXL999227/image/img/20241010200056.png&#34;
 	
 	
 	
 	loading=&#34;lazy&#34;
+	
+		alt=&#34;20241010200056&#34;
 	
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;下载下面这个即可：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://cdn.nlark.com/yuque/0/2024/png/42408833/1725784753659-7463bde1-7d7a-4569-9507-59e3f2f930cb.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://gcore.jsdelivr.net/gh/XXL999227/image/img/20241010200234.png&#34;
 	
 	
 	
 	loading=&#34;lazy&#34;
+	
+		alt=&#34;20241010200234&#34;
 	
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;将压缩包解压到 **&lt;font style=&#34;color:#DF2A3F;&#34;&gt;bin &lt;/font&gt;**目录下：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://cdn.nlark.com/yuque/0/2024/png/42408833/1725784816485-6e6fdc50-7d62-4f86-a1a9-e8f34958687c.png&#34;
+&lt;p&gt;将压缩包解压到 &lt;font style=&#34;color:#DF2A3F;&#34;&gt;bin &lt;/font&gt;目录下：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://gcore.jsdelivr.net/gh/XXL999227/image/img/20241010200310.png&#34;
 	
 	
 	
 	loading=&#34;lazy&#34;
+	
+		alt=&#34;20241010200310&#34;
 	
 	
 &gt;&lt;/p&gt;
 &lt;h3 id=&#34;配置环境变量&#34;&gt;配置环境变量
 &lt;/h3&gt;&lt;p&gt;配置环境变量，就可以在任意位置使用hugo命令了&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://cdn.nlark.com/yuque/0/2024/png/42408833/1725784922550-ca21ea1f-6b6f-49a4-8fa2-e4a04468919c.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://gcore.jsdelivr.net/gh/XXL999227/image/img/20241010200355.png&#34;
 	
 	
 	
 	loading=&#34;lazy&#34;
+	
+		alt=&#34;20241010200355&#34;
 	
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;任意位置打开cmd，输入hugo version验证一下&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://cdn.nlark.com/yuque/0/2024/png/42408833/1725784969607-dcc2be84-9162-4cef-adab-5e59ee587843.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://gcore.jsdelivr.net/gh/XXL999227/image/img/20241010200603.png&#34;
 	
 	
 	
 	loading=&#34;lazy&#34;
+	
+		alt=&#34;20241010200603&#34;
 	
 	
 &gt;&lt;/p&gt;
 &lt;h2 id=&#34;搭建博客&#34;&gt;搭建博客
 &lt;/h2&gt;&lt;h3 id=&#34;创建博客&#34;&gt;创建博客
 &lt;/h3&gt;&lt;p&gt;在任意位置打开cmd，输入：hugo new site xxx&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://cdn.nlark.com/yuque/0/2024/png/42408833/1725785237240-43e6e3df-f7ed-455c-be8c-d95cd9b67214.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://gcore.jsdelivr.net/gh/XXL999227/image/img/20241010200620.png&#34;
 	
 	
 	
 	loading=&#34;lazy&#34;
+	
+		alt=&#34;20241010200620&#34;
 	
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;可以看到对应位置出现文件夹&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://cdn.nlark.com/yuque/0/2024/png/42408833/1725785290579-72ef332c-2244-483b-9ea7-efb68a1e7950.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://gcore.jsdelivr.net/gh/XXL999227/image/img/20241010200638.png&#34;
 	
 	
 	
 	loading=&#34;lazy&#34;
+	
+		alt=&#34;20241010200638&#34;
 	
 	
 &gt;&lt;/p&gt;
@@ -98,83 +112,101 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;hugo server
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://cdn.nlark.com/yuque/0/2024/png/42408833/1725785433495-5da07e05-0138-4084-a4c1-56d68f897bd9.png&#34;
+&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://gcore.jsdelivr.net/gh/XXL999227/image/img/20241010200802.png&#34;
 	
 	
 	
 	loading=&#34;lazy&#34;
+	
+		alt=&#34;20241010200802&#34;
 	
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;在浏览器输入 &lt;a class=&#34;link&#34; href=&#34;http://localhost:1313/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;http://localhost:1313&lt;/a&gt;，出现&lt;font style=&#34;color:rgb(0, 0, 0);&#34;&gt;Page Not Found则表示成功，Page Not Found是因为还没配主题&lt;/font&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://cdn.nlark.com/yuque/0/2024/png/42408833/1725785473206-d4f8dc76-0e11-4a70-8292-01d0e59054fb.png&#34;
+    &gt;http://localhost:1313&lt;/a&gt;，出现&lt;font style=&#34;color:#DF2A3F;&#34;&gt;Page Not Found&lt;/font&gt;则表示成功，Page Not Found是因为还没配主题&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://gcore.jsdelivr.net/gh/XXL999227/image/img/20241010200925.png&#34;
 	
 	
 	
 	loading=&#34;lazy&#34;
+	
+		alt=&#34;20241010200925&#34;
 	
 	
 &gt;&lt;/p&gt;
 &lt;h3 id=&#34;配置主题&#34;&gt;配置主题
 &lt;/h3&gt;&lt;p&gt;在hugo官网找一个喜欢的主题下载即可&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://cdn.nlark.com/yuque/0/2024/png/42408833/1725785689509-fb139886-00ca-43bf-9c8b-9d8e937aecfd.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://gcore.jsdelivr.net/gh/XXL999227/image/img/20241010200936.png&#34;
 	
 	
 	
 	loading=&#34;lazy&#34;
+	
+		alt=&#34;20241010200936&#34;
 	
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;选择主题的源码并下载&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://cdn.nlark.com/yuque/0/2024/png/42408833/1725785980593-ae5390c6-f9b3-43f7-938c-86d04591c217.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://gcore.jsdelivr.net/gh/XXL999227/image/img/20241010200948.png&#34;
 	
 	
 	
 	loading=&#34;lazy&#34;
+	
+		alt=&#34;20241010200948&#34;
 	
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;解压并放到themes目录下&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://cdn.nlark.com/yuque/0/2024/png/42408833/1725786061528-f70e5e14-4a42-44bc-aab1-a7277324409d.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://gcore.jsdelivr.net/gh/XXL999227/image/img/20241010201002.png&#34;
 	
 	
 	
 	loading=&#34;lazy&#34;
+	
+		alt=&#34;20241010201002&#34;
 	
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;打开exampleSite文件夹，将&lt;font style=&#34;color:rgb(0, 0, 0);&#34;&gt; &lt;/font&gt;&lt;strong&gt;&lt;font style=&#34;color:rgb(0, 0, 0);&#34;&gt;Content&lt;/font&gt;&lt;/strong&gt;&lt;font style=&#34;color:rgb(0, 0, 0);&#34;&gt; 和 &lt;/font&gt;&lt;strong&gt;&lt;font style=&#34;color:rgb(0, 0, 0);&#34;&gt;hugo.yaml&lt;/font&gt;&lt;/strong&gt;&lt;font style=&#34;color:rgb(0, 0, 0);&#34;&gt; 复制到主文件夹下&lt;/font&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://cdn.nlark.com/yuque/0/2024/png/42408833/1725786272624-0689da11-7bf2-4563-868a-a47b0a23876e.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://gcore.jsdelivr.net/gh/XXL999227/image/img/20241010201016.png&#34;
 	
 	
 	
 	loading=&#34;lazy&#34;
+	
+		alt=&#34;20241010201016&#34;
 	
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://cdn.nlark.com/yuque/0/2024/png/42408833/1725786403995-a4d7f8f0-f51c-41e5-9d45-50834cae4e75.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://gcore.jsdelivr.net/gh/XXL999227/image/img/20241010201032.png&#34;
 	
 	
 	
 	loading=&#34;lazy&#34;
+	
+		alt=&#34;20241010201032&#34;
 	
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://cdn.nlark.com/yuque/0/2024/png/42408833/1725786496046-a5835177-d345-4964-93a0-a3781d8f3b08.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://gcore.jsdelivr.net/gh/XXL999227/image/img/20241010201047.png&#34;
 	
 	
 	
 	loading=&#34;lazy&#34;
+	
+		alt=&#34;20241010201047&#34;
 	
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;修改theme为themes文件夹下的主题名，以后需要换一个主题也是修改这里&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://cdn.nlark.com/yuque/0/2024/png/42408833/1725786688831-c6456430-8194-4ad5-9353-010cf9c26951.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://gcore.jsdelivr.net/gh/XXL999227/image/img/20241010201058.png&#34;
 	
 	
 	
 	loading=&#34;lazy&#34;
+	
+		alt=&#34;20241010201058&#34;
 	
 	
 &gt;&lt;/p&gt;
@@ -182,35 +214,50 @@
 &lt;p&gt;&lt;strong&gt;&lt;font style=&#34;color:rgb(0, 0, 0);&#34;&gt;stack官网：&lt;/font&gt;&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://stack.jimmycai.com/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;&lt;strong&gt;Stack | Card-style Hugo theme designed for bloggers (jimmycai.com)&lt;/strong&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://cdn.nlark.com/yuque/0/2024/png/42408833/1725786888174-50c3c80f-9c19-497e-90ab-d91b589b90f8.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://gcore.jsdelivr.net/gh/XXL999227/image/img/20241010201124.png&#34;
 	
 	
 	
 	loading=&#34;lazy&#34;
+	
+		alt=&#34;20241010201124&#34;
 	
 	
 &gt;&lt;/p&gt;
 &lt;h2 id=&#34;写博客&#34;&gt;写博客
 &lt;/h2&gt;&lt;h3 id=&#34;在指定位置打开cmd&#34;&gt;在指定位置打开cmd
-&lt;/h3&gt;&lt;p&gt;&lt;img src=&#34;https://cdn.nlark.com/yuque/0/2024/png/42408833/1725787872089-e533c38d-1740-421f-9bce-55c9bd363a4d.png&#34;
+&lt;/h3&gt;&lt;p&gt;&lt;img src=&#34;https://gcore.jsdelivr.net/gh/XXL999227/image/img/20241010201135.png&#34;
 	
 	
 	
 	loading=&#34;lazy&#34;
 	
+		alt=&#34;20241010201135&#34;
+	
 	
 &gt;&lt;/p&gt;
-&lt;h3 id=&#34;使用-hugo-new-content-postmyfirstblogindexmd&#34;&gt;使用 hugo new content post/MyFirstBlog/index.md
-&lt;/h3&gt;&lt;p&gt;其中/MyFirstBlog可以任意命名
-/index.md 不能任意命名，否则图片等资源无法显示&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://cdn.nlark.com/yuque/0/2024/png/42408833/1725787901263-1826aff4-c963-441d-9b0f-1f32ece25555.png&#34;
+&lt;h3 id=&#34;创建indexmd&#34;&gt;创建index.md
+&lt;/h3&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;hugo new content post/MyFirstBlog/index.md
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;其中/MyFirstBlog可以任意命名&lt;/p&gt;
+&lt;p&gt;/index.md 不能任意命名，否则图片等资源无法显示&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://gcore.jsdelivr.net/gh/XXL999227/image/img/20241010201147.png&#34;
 	
 	
 	
 	loading=&#34;lazy&#34;
 	
+		alt=&#34;20241010201147&#34;
+	
 	
 &gt;&lt;/p&gt;
+&lt;p&gt;最后，就可以愉快的在index.md中写博客了&lt;/p&gt;
 </description>
         </item>
         
