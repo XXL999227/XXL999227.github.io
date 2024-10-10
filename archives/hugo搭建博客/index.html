@@ -10,10 +10,10 @@
 <meta property='og:description' content="安装hugo Hugo官网： The world’s fastest framework for building websites\n下载下面这个即可：\n将压缩包解压到 bin 目录下：\n配置环境变量 配置环境变量，就可以在任意位置使用hugo命令了\n任意位置打开cmd，输入hugo version验证一下\n">
 <meta property='og:url' content='https://xxl999227.github.io/archives/hugo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/'>
 <meta property='og:site_name' content='潇潇’s blog'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='博客' /><meta property='article:tag' content='hugo' /><meta property='article:published_time' content='2024-09-25T21:27:40&#43;08:00'/><meta property='article:modified_time' content='2024-09-25T21:27:40&#43;08:00'/><meta property='og:image' content='https://gcore.jsdelivr.net/gh/XXL999227/image/img/20240925213741.png' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='博客' /><meta property='article:tag' content='hugo' /><meta property='article:published_time' content='2024-09-25T21:27:40&#43;08:00'/><meta property='article:modified_time' content='2024-09-25T21:27:40&#43;08:00'/><meta property='og:image' content='https://gcore.jsdelivr.net/gh/XXL999227/image/img/20241010210254.png' />
 <meta name="twitter:title" content="hugo搭建博客">
 <meta name="twitter:description" content="安装hugo Hugo官网： The world’s fastest framework for building websites\n下载下面这个即可：\n将压缩包解压到 bin 目录下：\n配置环境变量 配置环境变量，就可以在任意位置使用hugo命令了\n任意位置打开cmd，输入hugo version验证一下\n"><meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content='https://gcore.jsdelivr.net/gh/XXL999227/image/img/20240925213741.png' />
+    <meta name="twitter:image" content='https://gcore.jsdelivr.net/gh/XXL999227/image/img/20241010210254.png' />
     <link rel="shortcut icon" href="/favicon.ico" />
 
     </head>
@@ -295,7 +295,7 @@
         <div class="article-image">
             <a href="/archives/hugo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/">
                 
-                    <img src="https://gcore.jsdelivr.net/gh/XXL999227/image/img/20240925213741.png" loading="lazy" alt="Featured image of post hugo搭建博客" />
+                    <img src="https://gcore.jsdelivr.net/gh/XXL999227/image/img/20241010210254.png" loading="lazy" alt="Featured image of post hugo搭建博客" />
                 
             </a>
         </div>
@@ -818,6 +818,7 @@
     const cssPath = "https://xxl999227.github.io/waifu/waifu.css";
     const tipsJsonPath = "https://xxl999227.github.io/waifu/waifu-tips.json";
     const myTipsJsonPath = "https://xxl999227.github.io/waifu/my-waifu-tips.js";
+    const gamePath = "https://xxl999227.github.io/waifu/asteroids.js";
     
     const live2d_path = "https://fastly.jsdelivr.net/gh/stevenjoezhang/live2d-widget@latest/";
     const live2dMinJsPath = "https://xxl999227.github.io/waifu/live2d.min.js";
@@ -853,8 +854,10 @@
             
             initWidget({
                 waifuPath: tipsJsonPath,
+                gamePath: gamePath,
                 cdnPath: "https://cdn.jsdelivr.net/gh/XXL999227/static-resource@v1.0.0",
-                tools: ["hitokoto", "asteroids", "switch-model", "switch-texture", "photo",  "quit"]
+                tools: ["hitokoto", "asteroids", "switch-model", "switch-texture", "photo", "quit"]
+             
             });
             
             initWaifuMouseEvent();
