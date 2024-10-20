@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh-cn" dir="ltr">
     <head>
-	<meta name="generator" content="Hugo 0.135.0"><meta charset='utf-8'>
+	<meta name="generator" content="Hugo 0.136.2"><meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="演示说明">
 <title>潇潇’s blog</title>
 
@@ -230,7 +230,7 @@
 
 
 
-                        <span>暗色模式</span>
+                        <span class="switch-model">暗色模式</span>
                     </li>
                 
             </ol>
@@ -239,6 +239,26 @@
 </aside>
 
     <aside class="sidebar right-sidebar sticky">
+        
+        <button class="back-to-top" id="scrollToTop" style="
+            position: fixed; 
+            bottom: 20px; 
+            right: 375px; 
+            width: 40px; 
+            height: 40px; 
+            border-radius: 50%; 
+            background-color: white; 
+            border: 1px solid #ccc; 
+            display: none; /* 初始隐藏 */
+            align-items: center; 
+            justify-content: center;
+            cursor: pointer;
+            font-size: 20px;
+            color: #888;
+        ">
+            ↑
+        </button>
+        
         
             
                 <form action="/search/" class="search-form widget" >
@@ -352,6 +372,24 @@
             
         
     </aside>
+
+
+<script>
+    
+    const scrollToTopButton = document.getElementById('scrollToTop');
+
+    window.addEventListener('scroll', function() {
+        if (window.scrollY > 0) {
+            scrollToTopButton.style.display = 'flex';
+        } else {
+            scrollToTopButton.style.display = 'none';
+        }
+    });
+
+    scrollToTopButton.addEventListener('click', function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+</script>
 
 
             <main class="main full-width">
