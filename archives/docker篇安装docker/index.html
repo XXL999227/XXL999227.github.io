@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html lang="zh-cn" dir="ltr">
     <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="使用【Hugo】+【Stack】搭建博客">
-<title>HUGO搭建博客</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="安装Docker\n本安装教程参考Docker官方文档，地址如下：\nhttps://docs.docker.com/engine/install/centos/\n卸载旧版 首先如果系统中已经存在旧的Docker，则先卸载：\n1 2 3 4 5 6 7 8 yum remove docker \\ docker-client \\ docker-client-latest \\ docker-common \\ docker-latest \\ docker-latest-logrotate \\ docker-logrotate \\ docker-engine 配置Docker的yum库 首先要安装一个yum工具\n">
+<title>【docker篇】安装Docker</title>
 
-<link rel='canonical' href='https://xxl999227.github.io/archives/hugo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/'>
+<link rel='canonical' href='https://xxl999227.github.io/archives/docker%E7%AF%87%E5%AE%89%E8%A3%85docker/'>
 
-<link rel="stylesheet" href="/scss/style.min.d91c2070e085e35f1fd5131bcadf95da720496f3d8c0dd302289c6e1955ee051.css"><meta property='og:title' content="HUGO搭建博客">
-<meta property='og:description' content="使用【Hugo】+【Stack】搭建博客">
-<meta property='og:url' content='https://xxl999227.github.io/archives/hugo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/'>
+<link rel="stylesheet" href="/scss/style.min.d91c2070e085e35f1fd5131bcadf95da720496f3d8c0dd302289c6e1955ee051.css"><meta property='og:title' content="【docker篇】安装Docker">
+<meta property='og:description' content="安装Docker\n本安装教程参考Docker官方文档，地址如下：\nhttps://docs.docker.com/engine/install/centos/\n卸载旧版 首先如果系统中已经存在旧的Docker，则先卸载：\n1 2 3 4 5 6 7 8 yum remove docker \\ docker-client \\ docker-client-latest \\ docker-common \\ docker-latest \\ docker-latest-logrotate \\ docker-logrotate \\ docker-engine 配置Docker的yum库 首先要安装一个yum工具\n">
+<meta property='og:url' content='https://xxl999227.github.io/archives/docker%E7%AF%87%E5%AE%89%E8%A3%85docker/'>
 <meta property='og:site_name' content='潇潇’s blog'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='博客' /><meta property='article:tag' content='hugo' /><meta property='article:published_time' content='2024-09-25T21:27:40&#43;08:00'/><meta property='article:modified_time' content='2024-09-26T21:27:40&#43;08:00'/><meta property='og:image' content='https://gcore.jsdelivr.net/gh/XXL999227/image/img/20241010210254.png' />
-<meta name="twitter:title" content="HUGO搭建博客">
-<meta name="twitter:description" content="使用【Hugo】+【Stack】搭建博客"><meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content='https://gcore.jsdelivr.net/gh/XXL999227/image/img/20241010210254.png' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='docker' /><meta property='article:published_time' content='2024-11-01T23:10:19&#43;08:00'/><meta property='article:modified_time' content='2024-11-01T23:10:19&#43;08:00'/><meta property='og:image' content='https://xxl999227.github.io/archives/docker%E7%AF%87%E5%AE%89%E8%A3%85docker/img/image.png' />
+<meta name="twitter:title" content="【docker篇】安装Docker">
+<meta name="twitter:description" content="安装Docker\n本安装教程参考Docker官方文档，地址如下：\nhttps://docs.docker.com/engine/install/centos/\n卸载旧版 首先如果系统中已经存在旧的Docker，则先卸载：\n1 2 3 4 5 6 7 8 yum remove docker \\ docker-client \\ docker-client-latest \\ docker-common \\ docker-latest \\ docker-latest-logrotate \\ docker-logrotate \\ docker-engine 配置Docker的yum库 首先要安装一个yum工具\n"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://xxl999227.github.io/archives/docker%E7%AF%87%E5%AE%89%E8%A3%85docker/img/image.png' />
     <link rel="shortcut icon" href="/favicon.ico" />
 
     </head>
@@ -281,21 +281,15 @@
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li><a href="#安装hugo">安装hugo</a>
+    <li><a href="#卸载旧版">卸载旧版</a></li>
+    <li><a href="#配置docker的yum库">配置Docker的yum库</a></li>
+    <li><a href="#安装docker">安装Docker</a></li>
+    <li><a href="#启动和校验">启动和校验</a></li>
+    <li><a href="#配置镜像加速">配置镜像加速</a>
       <ol>
-        <li><a href="#配置环境变量">配置环境变量</a></li>
-      </ol>
-    </li>
-    <li><a href="#搭建博客">搭建博客</a>
-      <ol>
-        <li><a href="#创建博客">创建博客</a></li>
-        <li><a href="#配置主题">配置主题</a></li>
-      </ol>
-    </li>
-    <li><a href="#写博客">写博客</a>
-      <ol>
-        <li><a href="#在指定位置打开cmd">在指定位置打开cmd</a></li>
-        <li><a href="#创建indexmd">创建index.md</a></li>
+        <li><a href="#注册阿里云账号">注册阿里云账号</a></li>
+        <li><a href="#开通镜像服务">开通镜像服务</a></li>
+        <li><a href="#配置镜像加速-1">配置镜像加速</a></li>
       </ol>
     </li>
   </ol>
@@ -330,9 +324,13 @@
     <article class="has-image main-article">
     <header class="article-header">
         <div class="article-image">
-            <a href="/archives/hugo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/">
-                
-                    <img src="https://gcore.jsdelivr.net/gh/XXL999227/image/img/20241010210254.png" loading="lazy" alt="Featured image of post HUGO搭建博客" />
+            <a href="/archives/docker%E7%AF%87%E5%AE%89%E8%A3%85docker/">
+                <img src="/archives/docker%E7%AF%87%E5%AE%89%E8%A3%85docker/img/image.png"
+                        
+                        width="1000" 
+                        height="250" 
+                        loading="lazy"
+                        alt="Featured image of post 【docker篇】安装Docker" />
                 
             </a>
         </div>
@@ -342,12 +340,12 @@
     
     <header class="article-category">
         
-            <a href="/categories/%E5%8D%9A%E5%AE%A2/" style="background-color: #2a9d8f; color: #fff;">
-                博客
+            <a href="/categories/%E6%95%99%E7%A8%8B/" >
+                教程
             </a>
         
-            <a href="/categories/hugo/" style="background-color: #221d01bf; color: #fff;">
-                Hugo
+            <a href="/categories/%E6%8A%80%E6%9C%AF/" >
+                技术
             </a>
         
     </header>
@@ -355,13 +353,9 @@
 
     <div class="article-title-wrapper">
         <h2 class="article-title">
-            <a href="/archives/hugo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/">HUGO搭建博客</a>
+            <a href="/archives/docker%E7%AF%87%E5%AE%89%E8%A3%85docker/">【docker篇】安装Docker</a>
         </h2>
     
-        
-        <h3 class="article-subtitle">
-            使用【Hugo】&#43;【Stack】搭建博客
-        </h3>
         
     </div>
 
@@ -382,13 +376,13 @@
   <path d="M18 16.496v1.504l1 1" />
 </svg>
                 <time class="article-time--published">
-                    创建时间：2024-09-25</time>
+                    创建时间：2024-11-01</time>
                 <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-clock-hour-4"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M12 12l3 2" /><path d="M12 7v5" /></svg>
                 <time class="article-time--lastUpdated">
-                    更新时间：2024-09-26</time>
+                    更新时间：2024-11-01</time>
                 <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-file-word"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2" /><path d="M9 12l1.333 5l1.667 -4l1.667 4l1.333 -5" /></svg>
                 <time class="article-time--word">
-                    字数总计：504</time>
+                    字数总计：510</time>
             </div>
         
 
@@ -404,89 +398,12 @@
     <section class="article-content">
     
     
-    <h2 id="安装hugo">安装hugo
-</h2><p>Hugo官网： <a class="link" href="https://gohugo.io/"  target="_blank" rel="noopener"
-    >The world’s fastest framework for building websites</a></p>
-<p><img src="https://gcore.jsdelivr.net/gh/XXL999227/image/img/20241010200056.png"
-	
-	
-	
-	loading="lazy"
-	
-		alt="20241010200056"
-	
-	
-></p>
-<p>下载下面这个即可：</p>
-<p><img src="https://gcore.jsdelivr.net/gh/XXL999227/image/img/20241010200234.png"
-	
-	
-	
-	loading="lazy"
-	
-		alt="20241010200234"
-	
-	
-></p>
-<p>将压缩包解压到 <font style="color:#DF2A3F;">bin </font>目录下：</p>
-<p><img src="https://gcore.jsdelivr.net/gh/XXL999227/image/img/20241010200310.png"
-	
-	
-	
-	loading="lazy"
-	
-		alt="20241010200310"
-	
-	
-></p>
-<h3 id="配置环境变量">配置环境变量
-</h3><p>配置环境变量，就可以在任意位置使用hugo命令了</p>
-<p><img src="https://gcore.jsdelivr.net/gh/XXL999227/image/img/20241010200355.png"
-	
-	
-	
-	loading="lazy"
-	
-		alt="20241010200355"
-	
-	
-></p>
-<p>任意位置打开cmd，输入hugo version验证一下</p>
-<p><img src="https://gcore.jsdelivr.net/gh/XXL999227/image/img/20241010200603.png"
-	
-	
-	
-	loading="lazy"
-	
-		alt="20241010200603"
-	
-	
-></p>
-<h2 id="搭建博客">搭建博客
-</h2><h3 id="创建博客">创建博客
-</h3><p>在任意位置打开cmd，输入：hugo new site xxx</p>
-<p><img src="https://gcore.jsdelivr.net/gh/XXL999227/image/img/20241010200620.png"
-	
-	
-	
-	loading="lazy"
-	
-		alt="20241010200620"
-	
-	
-></p>
-<p>可以看到对应位置出现文件夹</p>
-<p><img src="https://gcore.jsdelivr.net/gh/XXL999227/image/img/20241010200638.png"
-	
-	
-	
-	loading="lazy"
-	
-		alt="20241010200638"
-	
-	
-></p>
-<p>cd进入对应的目录，然后使用命令启动hugo</p>
+    <p>安装Docker</p>
+<p>本安装教程参考Docker官方文档，地址如下：</p>
+<p><a class="link" href="https://docs.docker.com/engine/install/centos/"  target="_blank" rel="noopener"
+    >https://docs.docker.com/engine/install/centos/</a></p>
+<h2 id="卸载旧版">卸载旧版
+</h2><p>首先如果系统中已经存在旧的Docker，则先卸载：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -494,162 +411,194 @@
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">hugo server --buildDrafts 
-</span></span><span class="line"><span class="cl"><span class="c1"># 或者简写</span>
-</span></span><span class="line"><span class="cl">hugo server -D 
-</span></span><span class="line"><span class="cl"><span class="c1"># 或者</span>
-</span></span><span class="line"><span class="cl">hugo server
+<pre tabindex="0" class="chroma"><code class="language-plain" data-lang="plain"><span class="line"><span class="cl">yum remove docker \
+</span></span><span class="line"><span class="cl">    docker-client \
+</span></span><span class="line"><span class="cl">    docker-client-latest \
+</span></span><span class="line"><span class="cl">    docker-common \
+</span></span><span class="line"><span class="cl">    docker-latest \
+</span></span><span class="line"><span class="cl">    docker-latest-logrotate \
+</span></span><span class="line"><span class="cl">    docker-logrotate \
+</span></span><span class="line"><span class="cl">    docker-engine
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p><img src="https://gcore.jsdelivr.net/gh/XXL999227/image/img/20241010200802.png"
-	
-	
-	
-	loading="lazy"
-	
-		alt="20241010200802"
-	
-	
-></p>
-<p>在浏览器输入 <a class="link" href="http://localhost:1313/"  target="_blank" rel="noopener"
-    >http://localhost:1313</a>，出现<font style="color:#DF2A3F;">Page Not Found</font>则表示成功，Page Not Found是因为还没配主题</p>
-<p><img src="https://gcore.jsdelivr.net/gh/XXL999227/image/img/20241010200925.png"
-	
-	
-	
-	loading="lazy"
-	
-		alt="20241010200925"
-	
-	
-></p>
-<h3 id="配置主题">配置主题
-</h3><p>在hugo官网找一个喜欢的主题下载即可</p>
-<p><img src="https://gcore.jsdelivr.net/gh/XXL999227/image/img/20241010200936.png"
-	
-	
-	
-	loading="lazy"
-	
-		alt="20241010200936"
-	
-	
-></p>
-<p>选择主题的源码并下载</p>
-<p><img src="https://gcore.jsdelivr.net/gh/XXL999227/image/img/20241010200948.png"
-	
-	
-	
-	loading="lazy"
-	
-		alt="20241010200948"
-	
-	
-></p>
-<p>解压并放到themes目录下</p>
-<p><img src="https://gcore.jsdelivr.net/gh/XXL999227/image/img/20241010201002.png"
-	
-	
-	
-	loading="lazy"
-	
-		alt="20241010201002"
-	
-	
-></p>
-<p>打开exampleSite文件夹，将<font style="color:rgb(0, 0, 0);"> </font><strong><font style="color:rgb(0, 0, 0);">Content</font></strong><font style="color:rgb(0, 0, 0);"> 和 </font><strong><font style="color:rgb(0, 0, 0);">hugo.yaml</font></strong><font style="color:rgb(0, 0, 0);"> 复制到主文件夹下</font></p>
-<p><img src="https://gcore.jsdelivr.net/gh/XXL999227/image/img/20241010201016.png"
-	
-	
-	
-	loading="lazy"
-	
-		alt="20241010201016"
-	
-	
-></p>
-<p><img src="https://gcore.jsdelivr.net/gh/XXL999227/image/img/20241010201032.png"
-	
-	
-	
-	loading="lazy"
-	
-		alt="20241010201032"
-	
-	
-></p>
-<p><img src="https://gcore.jsdelivr.net/gh/XXL999227/image/img/20241010201047.png"
-	
-	
-	
-	loading="lazy"
-	
-		alt="20241010201047"
-	
-	
-></p>
-<p>修改theme为themes文件夹下的主题名，以后需要换一个主题也是修改这里</p>
-<p><img src="https://gcore.jsdelivr.net/gh/XXL999227/image/img/20241010201058.png"
-	
-	
-	
-	loading="lazy"
-	
-		alt="20241010201058"
-	
-	
-></p>
-<p>重新启动hugo即可，相关配置修改**<font style="color:rgb(0, 0, 0);">hugo.yaml</font>**</p>
-<p><strong><font style="color:rgb(0, 0, 0);">stack官网：</font></strong></p>
-<p><a class="link" href="https://stack.jimmycai.com/"  target="_blank" rel="noopener"
-    ><strong>Stack | Card-style Hugo theme designed for bloggers (jimmycai.com)</strong></a></p>
-<p><img src="https://gcore.jsdelivr.net/gh/XXL999227/image/img/20241010201124.png"
-	
-	
-	
-	loading="lazy"
-	
-		alt="20241010201124"
-	
-	
-></p>
-<h2 id="写博客">写博客
-</h2><h3 id="在指定位置打开cmd">在指定位置打开cmd
-</h3><p><img src="https://gcore.jsdelivr.net/gh/XXL999227/image/img/20241010201135.png"
-	
-	
-	
-	loading="lazy"
-	
-		alt="20241010201135"
-	
-	
-></p>
-<h3 id="创建indexmd">创建index.md
-</h3><div class="highlight"><div class="chroma">
+</div><h2 id="配置docker的yum库">配置Docker的yum库
+</h2><p>首先要安装一个yum工具</p>
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">hugo new content post/MyFirstBlog/index.md
+<pre tabindex="0" class="chroma"><code class="language-plain" data-lang="plain"><span class="line"><span class="cl">yum install -y yum-utils
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>其中/MyFirstBlog可以任意命名</p>
-<p>/index.md 不能任意命名，否则图片等资源无法显示</p>
-<p><img src="https://gcore.jsdelivr.net/gh/XXL999227/image/img/20241010201147.png"
-	
-	
+</div><p>安装成功后，执行命令，配置Docker的yum源：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-plain" data-lang="plain"><span class="line"><span class="cl">yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这里建议阿里云的yum源</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="安装docker">安装Docker
+</h2><p>最后，执行命令，安装Docker</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-plain" data-lang="plain"><span class="line"><span class="cl">yum install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="启动和校验">启动和校验
+</h2><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-plain" data-lang="plain"><span class="line"><span class="cl"># 启动Docker
+</span></span><span class="line"><span class="cl">systemctl start docker
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># 停止Docker
+</span></span><span class="line"><span class="cl">systemctl stop docker
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># 重启
+</span></span><span class="line"><span class="cl">systemctl restart docker
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># 设置开机自启
+</span></span><span class="line"><span class="cl">systemctl enable docker
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># 执行docker ps命令，如果不报错，说明安装启动成功
+</span></span><span class="line"><span class="cl">docker ps
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="配置镜像加速">配置镜像加速
+</h2><p>这里以阿里云镜像加速为例。</p>
+<h3 id="注册阿里云账号">注册阿里云账号
+</h3><p>首先访问阿里云网站:</p>
+<p><a class="link" href="https://www.aliyun.com/"  target="_blank" rel="noopener"
+    >https://www.aliyun.com/</a></p>
+<p>注册一个账号。</p>
+<h3 id="开通镜像服务">开通镜像服务
+</h3><p>在首页的产品中，找到阿里云的<strong>容器镜像服务</strong>：</p>
+<p><img src="/archives/docker%E7%AF%87%E5%AE%89%E8%A3%85docker/img/image-1.png"
+	width="937"
+	height="371"
 	
 	loading="lazy"
 	
-		alt="20241010201147"
 	
+		class="gallery-image" 
+		data-flex-grow="252"
+		data-flex-basis="606px"
 	
 ></p>
-<p>最后，就可以愉快的在index.md中写博客了</p>
-
+<p>点击后进入控制台：</p>
+<p><img src="/archives/docker%E7%AF%87%E5%AE%89%E8%A3%85docker/img/image-2.png"
+	width="937"
+	height="326"
+	
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="287"
+		data-flex-basis="689px"
+	
+></p>
+<p>首次可能需要选择立刻开通，然后进入控制台。</p>
+<h3 id="配置镜像加速-1">配置镜像加速
+</h3><p>找到<strong>镜像工具</strong>下的<strong>镜像****加速器</strong>：</p>
+<p><img src="/archives/docker%E7%AF%87%E5%AE%89%E8%A3%85docker/img/image-3.png"
+	width="937"
+	height="440"
+	
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="212"
+		data-flex-basis="511px"
+	
+></p>
+<p>页面向下滚动，即可找到配置的文档说明：</p>
+<p><img src="/archives/docker%E7%AF%87%E5%AE%89%E8%A3%85docker/img/image-4.png"
+	width="937"
+	height="537"
+	
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="174"
+		data-flex-basis="418px"
+	
+></p>
+<p>具体命令如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1"># 创建目录</span>
+</span></span><span class="line"><span class="cl">mkdir -p /etc/docker
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 复制内容，注意把其中的镜像加速地址改成你自己的</span>
+</span></span><span class="line"><span class="cl">tee /etc/docker/daemon.json <span class="s">&lt;&lt;-&#39;EOF&#39;
+</span></span></span><span class="line"><span class="cl"><span class="s">{
+</span></span></span><span class="line"><span class="cl"><span class="s">  &#34;registry-mirrors&#34;: [&#34;https://xxxx.mirror.aliyuncs.com&#34;]
+</span></span></span><span class="line"><span class="cl"><span class="s">}
+</span></span></span><span class="line"><span class="cl"><span class="s">EOF</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 重新加载配置</span>
+</span></span><span class="line"><span class="cl">systemctl daemon-reload
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 重启Docker</span>
+</span></span><span class="line"><span class="cl">systemctl restart docker
+</span></span></code></pre></td></tr></table>
+</div>
+</div>
 </section>
 
 
@@ -657,9 +606,7 @@
     
     <section class="article-tags">
         
-            <a href="/tags/%E5%8D%9A%E5%AE%A2/">博客</a>
-        
-            <a href="/tags/hugo/">Hugo</a>
+            <a href="/tags/docker/">Docker</a>
         
     </section>
 
@@ -676,19 +623,7 @@
 
         <span>Licensed under CC BY-NC-SA 4.0</span>
     </section>
-    <section class="article-lastmod">
-        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="12" cy="12" r="9" />
-  <polyline points="12 7 12 12 15 15" />
-</svg>
-
-
-
-        <span>
-            最后更新于 2024-09-26
-        </span>
-    </section></footer>
+    </footer>
 
 
     
