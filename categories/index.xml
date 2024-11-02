@@ -7,23 +7,7 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Powered by 潇潇</copyright>
-        <lastBuildDate>Fri, 01 Nov 2024 23:10:19 +0800</lastBuildDate><atom:link href="https://xxl999227.github.io/categories/index.xml" rel="self" type="application/rss+xml" /><item>
-        <title>技术</title>
-        <link>https://xxl999227.github.io/categories/%E6%8A%80%E6%9C%AF/</link>
-        <pubDate>Fri, 01 Nov 2024 23:10:19 +0800</pubDate>
-        
-        <guid>https://xxl999227.github.io/categories/%E6%8A%80%E6%9C%AF/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>教程</title>
-        <link>https://xxl999227.github.io/categories/%E6%95%99%E7%A8%8B/</link>
-        <pubDate>Fri, 01 Nov 2024 23:10:19 +0800</pubDate>
-        
-        <guid>https://xxl999227.github.io/categories/%E6%95%99%E7%A8%8B/</guid>
-        <description></description>
-        </item>
-        <item>
+        <lastBuildDate>Thu, 26 Sep 2024 21:27:40 +0800</lastBuildDate><atom:link href="https://xxl999227.github.io/categories/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>Hugo</title>
         <link>https://xxl999227.github.io/categories/hugo/</link>
         <pubDate>Wed, 25 Sep 2024 21:27:40 +0800</pubDate>
@@ -38,6 +22,22 @@
         
         <guid>https://xxl999227.github.io/categories/%E5%8D%9A%E5%AE%A2/</guid>
         <description>&lt;img src="https://xxl999227.github.io/categories/%E5%8D%9A%E5%AE%A2/hutomo-abrianto-l2jk-uxb1BY-unsplash.jpg" alt="Featured image of post 博客" /&gt;</description>
+        </item>
+        <item>
+        <title>技术</title>
+        <link>https://xxl999227.github.io/categories/%E6%8A%80%E6%9C%AF/</link>
+        <pubDate>Thu, 18 Jan 2024 21:50:56 +0800</pubDate>
+        
+        <guid>https://xxl999227.github.io/categories/%E6%8A%80%E6%9C%AF/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>教程</title>
+        <link>https://xxl999227.github.io/categories/%E6%95%99%E7%A8%8B/</link>
+        <pubDate>Thu, 18 Jan 2024 21:50:56 +0800</pubDate>
+        
+        <guid>https://xxl999227.github.io/categories/%E6%95%99%E7%A8%8B/</guid>
+        <description></description>
         </item>
         
     </channel>
