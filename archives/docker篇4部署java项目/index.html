@@ -1,0 +1,1496 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="使用docker部署java项目">
+<title>【docker篇】4、部署java项目</title>
+
+<link rel='canonical' href='https://xxl999227.github.io/archives/docker%E7%AF%874%E9%83%A8%E7%BD%B2java%E9%A1%B9%E7%9B%AE/'>
+
+<link rel="stylesheet" href="/scss/style.min.d91c2070e085e35f1fd5131bcadf95da720496f3d8c0dd302289c6e1955ee051.css"><meta property='og:title' content="【docker篇】4、部署java项目">
+<meta property='og:description' content="使用docker部署java项目">
+<meta property='og:url' content='https://xxl999227.github.io/archives/docker%E7%AF%874%E9%83%A8%E7%BD%B2java%E9%A1%B9%E7%9B%AE/'>
+<meta property='og:site_name' content='潇潇’s blog'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='docker' /><meta property='article:tag' content='java' /><meta property='article:published_time' content='2024-01-22T23:50:51&#43;08:00'/><meta property='article:modified_time' content='2024-01-22T23:50:51&#43;08:00'/><meta property='og:image' content='https://xxl999227.github.io/archives/docker%E7%AF%874%E9%83%A8%E7%BD%B2java%E9%A1%B9%E7%9B%AE/img/image.png' />
+<meta name="twitter:title" content="【docker篇】4、部署java项目">
+<meta name="twitter:description" content="使用docker部署java项目"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://xxl999227.github.io/archives/docker%E7%AF%874%E9%83%A8%E7%BD%B2java%E9%A1%B9%E7%9B%AE/img/image.png' />
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu6975665600438320786.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">❤️‍</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">潇潇’s blog</a></h1>
+            <h2 class="site-description">欢迎来到我的网站，此博客由【Hugo &#43; Stack】来进行搭建，主要分享个人生活和学习笔记</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://xxl999227.github.io/'
+                        target="_blank"
+                        title="Gitee"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-home-2"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l-2 0l9 -9l9 9l-2 0" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" /><path d="M10 12h4v4h-4z" /></svg>
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://github.com/XXL999227'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%85%B3%E4%BA%8E/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%8F%8B%E6%83%85%E9%93%BE%E6%8E%A5/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>友情链接</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span class="switch-model">暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+        <button class="back-to-top" id="scrollToTop" style="
+            position: fixed; 
+            bottom: 20px; 
+            width: 40px; 
+            height: 40px; 
+            border-radius: 50%; 
+            background-color: white; 
+            border: 1px solid #ccc; 
+            display: none; /* 初始隐藏 */
+            align-items: center; 
+            justify-content: center;
+            cursor: pointer;
+            font-size: 20px;
+            color: #888;
+        ">
+            ↑
+        </button>
+        
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#部署java项目">部署Java项目</a></li>
+    <li><a href="#部署前端">部署前端</a></li>
+    <li><a href="#dockercompose">DockerCompose</a>
+      <ol>
+        <li><a href="#基本语法">基本语法</a></li>
+        <li><a href="#基础命令">基础命令</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+<script>
+    
+    const scrollToTopButton = document.getElementById('scrollToTop');
+
+    window.addEventListener('scroll', function() {
+        if (window.scrollY > 0) {
+            scrollToTopButton.style.display = 'flex';
+        } else {
+            scrollToTopButton.style.display = 'none';
+        }
+    });
+
+    scrollToTopButton.addEventListener('click', function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+</script>
+
+
+            <main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+        <div class="article-image">
+            <a href="/archives/docker%E7%AF%874%E9%83%A8%E7%BD%B2java%E9%A1%B9%E7%9B%AE/">
+                <img src="/archives/docker%E7%AF%874%E9%83%A8%E7%BD%B2java%E9%A1%B9%E7%9B%AE/img/image.png"
+                        
+                        width="1000" 
+                        height="250" 
+                        loading="lazy"
+                        alt="Featured image of post 【docker篇】4、部署java项目" />
+                
+            </a>
+        </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/java/" >
+                Java
+            </a>
+        
+            <a href="/categories/%E6%95%99%E7%A8%8B/" >
+                教程
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/archives/docker%E7%AF%874%E9%83%A8%E7%BD%B2java%E9%A1%B9%E7%9B%AE/">【docker篇】4、部署java项目</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            使用docker部署java项目
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">
+                    创建时间：2024-01-22</time>
+                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-clock-hour-4"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M12 12l3 2" /><path d="M12 7v5" /></svg>
+                <time class="article-time--lastUpdated">
+                    更新时间：2024-01-22</time>
+                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-file-word"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2" /><path d="M9 12l1.333 5l1.667 -4l1.667 4l1.333 -5" /></svg>
+                <time class="article-time--word">
+                    字数总计：2704</time>
+            </div>
+        
+
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <p>好了，我们已经熟悉了Docker的基本用法，接下来可以尝试部署项目了。</p>
+<p>在课前资料中已经提供了一个黑马商城项目给大家，如图：</p>
+<p>项目说明：</p>
+<ul>
+<li>hmall：商城的后端代码</li>
+<li>hmall-portal：商城用户端的前端代码</li>
+<li>hmall-admin：商城管理端的前端代码</li>
+</ul>
+<p>部署的容器及端口说明：</p>
+<div class="table-wrapper"><table>
+  <thead>
+      <tr>
+          <th style="text-align: center"><strong>项目</strong></th>
+          <th style="text-align: center"><strong>容器名</strong></th>
+          <th style="text-align: center"><strong>端口</strong></th>
+          <th style="text-align: center"><strong>备注</strong></th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: center">hmall</td>
+          <td style="text-align: center">hmall</td>
+          <td style="text-align: center">8080</td>
+          <td style="text-align: center">黑马商城后端API入口</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">hmall-portal</td>
+          <td style="text-align: center">nginx</td>
+          <td style="text-align: center">18080</td>
+          <td style="text-align: center">黑马商城用户端入口</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">hmall-admin</td>
+          <td style="text-align: center"></td>
+          <td style="text-align: center">18081</td>
+          <td style="text-align: center">黑马商城管理端入口</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">mysql</td>
+          <td style="text-align: center">mysql</td>
+          <td style="text-align: center">3306</td>
+          <td style="text-align: center">数据库</td>
+      </tr>
+  </tbody>
+</table></div>
+<p>在正式部署前，我们先删除之前的nginx、dd两个容器：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">docker rm -f nginx dd
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>mysql容器中已经准备好了商城的数据，所以就不再删除了。</p>
+<h2 id="部署java项目">部署Java项目
+</h2><p>hmall项目是一个maven聚合项目，使用IDEA打开hmall项目，查看项目结构如图：</p>
+<p><img src="/archives/docker%E7%AF%874%E9%83%A8%E7%BD%B2java%E9%A1%B9%E7%9B%AE/img/image-1.png"
+	width="864"
+	height="253"
+	
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="341"
+		data-flex-basis="819px"
+	
+></p>
+<p>我们要部署的就是其中的hm-service，其中的配置文件采用了多环境的方式：</p>
+<p><img src="/archives/docker%E7%AF%874%E9%83%A8%E7%BD%B2java%E9%A1%B9%E7%9B%AE/img/image-2.png"
+	width="898"
+	height="594"
+	
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="151"
+		data-flex-basis="362px"
+	
+></p>
+<p>其中的application-dev.yaml是部署到开发环境的配置，application-local.yaml是本地运行时的配置。</p>
+<p>查看application.yaml，你会发现其中的JDBC地址并未写死，而是读取变量：</p>
+<p><img src="/archives/docker%E7%AF%874%E9%83%A8%E7%BD%B2java%E9%A1%B9%E7%9B%AE/img/image-3.png"
+	width="937"
+	height="335"
+	
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="279"
+		data-flex-basis="671px"
+	
+></p>
+<p>这两个变量在application-dev.yaml和application-local.yaml中并不相同：</p>
+<p><img src="/archives/docker%E7%AF%874%E9%83%A8%E7%BD%B2java%E9%A1%B9%E7%9B%AE/img/image-4.png"
+	width="937"
+	height="208"
+	
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="450"
+		data-flex-basis="1081px"
+	
+></p>
+<p>在dev开发环境（也就是Docker部署时）采用了mysql作为地址，刚好是我们的mysql容器名，只要两者在一个网络，就一定能互相访问。</p>
+<p>我们将项目打包：</p>
+<p><img src="/archives/docker%E7%AF%874%E9%83%A8%E7%BD%B2java%E9%A1%B9%E7%9B%AE/img/image-5.png"
+	width="924"
+	height="528"
+	
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="175"
+		data-flex-basis="420px"
+	
+></p>
+<p>结果：</p>
+<p><img src="/archives/docker%E7%AF%874%E9%83%A8%E7%BD%B2java%E9%A1%B9%E7%9B%AE/img/image-6.png"
+	width="797"
+	height="503"
+	
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="158"
+		data-flex-basis="380px"
+	
+></p>
+<p>将hm-service目录下的Dockerfile和hm-service/target目录下的hm-service.jar一起上传到虚拟机的root目录：</p>
+<p><img src="/archives/docker%E7%AF%874%E9%83%A8%E7%BD%B2java%E9%A1%B9%E7%9B%AE/img/image-7.png"
+	width="937"
+	height="338"
+	
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="277"
+		data-flex-basis="665px"
+	
+></p>
+<p>部署项目：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1"># 1.构建项目镜像，不指定tag，则默认为latest</span>
+</span></span><span class="line"><span class="cl">docker build -t hmall .
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 2.查看镜像</span>
+</span></span><span class="line"><span class="cl">docker images
+</span></span><span class="line"><span class="cl"><span class="c1"># 结果</span>
+</span></span><span class="line"><span class="cl">REPOSITORY    TAG       IMAGE ID       CREATED          SIZE
+</span></span><span class="line"><span class="cl">hmall         latest    0bb07b2c34b9   <span class="m">43</span> seconds ago   362MB
+</span></span><span class="line"><span class="cl">docker-demo   1.0       49743484da68   <span class="m">24</span> hours ago     327MB
+</span></span><span class="line"><span class="cl">nginx         latest    605c77e624dd   <span class="m">16</span> months ago    141MB
+</span></span><span class="line"><span class="cl">mysql         latest    3218b38490ce   <span class="m">17</span> months ago    516MB
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 3.创建并运行容器，并通过--network将其加入hmall网络，这样才能通过容器名访问mysql</span>
+</span></span><span class="line"><span class="cl">docker run -d --name hmall --network hmall -p 8080:8080 hmall
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>测试，通过浏览器访问：http://你的虚拟机地址:8080/search/list</p>
+<h2 id="部署前端">部署前端
+</h2><p>hmall-portal和hmall-admin是前端代码，需要基于nginx部署。在课前资料中已经给大家提供了nginx的部署目录：</p>
+<p><img src="/archives/docker%E7%AF%874%E9%83%A8%E7%BD%B2java%E9%A1%B9%E7%9B%AE/img/image-8.png"
+	width="868"
+	height="211"
+	
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="411"
+		data-flex-basis="987px"
+	
+></p>
+<p>其中：</p>
+<ul>
+<li>html是静态资源目录，我们需要把hmall-portal以及hmall-admin都复制进去</li>
+<li>nginx.conf是nginx的配置文件，主要是完成对html下的两个静态资源目录做代理</li>
+</ul>
+<p>我们现在要做的就是把整个nginx目录上传到虚拟机的/root目录下：</p>
+<p><img src="/archives/docker%E7%AF%874%E9%83%A8%E7%BD%B2java%E9%A1%B9%E7%9B%AE/img/image-9.png"
+	width="937"
+	height="239"
+	
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="392"
+		data-flex-basis="940px"
+	
+></p>
+<p>然后创建nginx容器并完成两个挂载：</p>
+<ul>
+<li>把/root/nginx/nginx.conf挂载到/etc/nginx/nginx.conf</li>
+<li>把/root/nginx/html挂载到/usr/share/nginx/html</li>
+</ul>
+<p>由于需要让nginx同时代理hmall-portal和hmall-admin两套前端资源，因此我们需要暴露两个端口：</p>
+<ul>
+<li>18080：对应hmall-portal</li>
+<li>18081：对应hmall-admin</li>
+</ul>
+<p>命令如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">docker run -d <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  --name nginx <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  -p 18080:18080 <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  -p 18081:18081 <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  -v /root/nginx/html:/usr/share/nginx/html <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  -v /root/nginx/nginx.conf:/etc/nginx/nginx.conf <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  --network hmall <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  nginx
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>测试，通过浏览器访问：http://你的虚拟机ip:18080</p>
+<p><img src="/archives/docker%E7%AF%874%E9%83%A8%E7%BD%B2java%E9%A1%B9%E7%9B%AE/img/image-10.png"
+	width="937"
+	height="465"
+	
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="201"
+		data-flex-basis="483px"
+	
+></p>
+<h2 id="dockercompose">DockerCompose
+</h2><p>大家可以看到，我们部署一个简单的java项目，其中包含3个容器：</p>
+<ul>
+<li>MySQL</li>
+<li>Nginx</li>
+<li>Java项目</li>
+</ul>
+<p>而稍微复杂的项目，其中还会有各种各样的其它中间件，需要部署的东西远不止3个。如果还像之前那样手动的逐一部署，就太麻烦了。</p>
+<p>而Docker Compose就可以帮助我们实现<strong>多个相互关联的Docker容器的快速部署</strong>。它允许用户通过一个单独的 docker-compose.yml 模板文件（YAML 格式）来定义一组相关联的应用容器。</p>
+<p><img src="/archives/docker%E7%AF%874%E9%83%A8%E7%BD%B2java%E9%A1%B9%E7%9B%AE/img/image-11.png"
+	width="937"
+	height="467"
+	
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="200"
+		data-flex-basis="481px"
+	
+></p>
+<h3 id="基本语法">基本语法
+</h3><p>docker-compose.yml文件的基本语法可以参考官方文档：</p>
+<p><a class="link" href="https://docs.docker.com/compose/compose-file/compose-file-v3/"  target="_blank" rel="noopener"
+    >https://docs.docker.com/compose/compose-file/compose-file-v3/</a></p>
+<p>docker-compose文件中可以定义多个相互关联的应用容器，每一个应用容器被称为一个服务（service）。由于service就是在定义某个应用的运行时参数，因此与docker run参数非常相似。</p>
+<p>举例来说，用docker run部署MySQL的命令如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">docker run -d <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  --name mysql <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  -p 3306:3306 <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  -e <span class="nv">TZ</span><span class="o">=</span>Asia/Shanghai <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  -e <span class="nv">MYSQL_ROOT_PASSWORD</span><span class="o">=</span><span class="m">123</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  -v ./mysql/data:/var/lib/mysql <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  -v ./mysql/conf:/etc/mysql/conf.d <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  -v ./mysql/init:/docker-entrypoint-initdb.d <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  --network hmall
+</span></span><span class="line"><span class="cl">  mysql
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果用docker-compose.yml文件来定义，就是这样：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">version: <span class="s2">&#34;3.8&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">services:
+</span></span><span class="line"><span class="cl">  mysql:
+</span></span><span class="line"><span class="cl">    image: mysql
+</span></span><span class="line"><span class="cl">    container_name: mysql
+</span></span><span class="line"><span class="cl">    ports:
+</span></span><span class="line"><span class="cl">      - <span class="s2">&#34;3306:3306&#34;</span>
+</span></span><span class="line"><span class="cl">    environment:
+</span></span><span class="line"><span class="cl">      TZ: Asia/Shanghai
+</span></span><span class="line"><span class="cl">      MYSQL_ROOT_PASSWORD: <span class="m">123</span>
+</span></span><span class="line"><span class="cl">    volumes:
+</span></span><span class="line"><span class="cl">      - <span class="s2">&#34;./mysql/conf:/etc/mysql/conf.d&#34;</span>
+</span></span><span class="line"><span class="cl">      - <span class="s2">&#34;./mysql/data:/var/lib/mysql&#34;</span>
+</span></span><span class="line"><span class="cl">    networks:
+</span></span><span class="line"><span class="cl">      - new
+</span></span><span class="line"><span class="cl">networks:
+</span></span><span class="line"><span class="cl">  new:
+</span></span><span class="line"><span class="cl">    name: hmall
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>对比如下：</p>
+<p><img src="/archives/docker%E7%AF%874%E9%83%A8%E7%BD%B2java%E9%A1%B9%E7%9B%AE/img/image-12.png"
+	width="937"
+	height="453"
+	
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="206"
+		data-flex-basis="496px"
+	
+></p>
+<div class="table-wrapper"><table>
+  <thead>
+      <tr>
+          <th style="text-align: center"><strong>docker run 参数</strong></th>
+          <th style="text-align: center"><strong>docker compose 指令</strong></th>
+          <th style="text-align: center"><strong>说明</strong></th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: center">&ndash;name</td>
+          <td style="text-align: center">container_name</td>
+          <td style="text-align: center">容器名称</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">-p</td>
+          <td style="text-align: center">ports</td>
+          <td style="text-align: center">端口映射</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">-e</td>
+          <td style="text-align: center">environment</td>
+          <td style="text-align: center">环境变量</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">-v</td>
+          <td style="text-align: center">volumes</td>
+          <td style="text-align: center">数据卷配置</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">&ndash;network</td>
+          <td style="text-align: center">networks</td>
+          <td style="text-align: center">网络</td>
+      </tr>
+  </tbody>
+</table></div>
+<p>明白了其中的对应关系，相信编写docker-compose文件应该难不倒大家。</p>
+<p>黑马商城部署文件：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">version: <span class="s2">&#34;3.8&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">services:
+</span></span><span class="line"><span class="cl">  mysql:
+</span></span><span class="line"><span class="cl">    image: mysql
+</span></span><span class="line"><span class="cl">    container_name: mysql
+</span></span><span class="line"><span class="cl">    ports:
+</span></span><span class="line"><span class="cl">      - <span class="s2">&#34;3306:3306&#34;</span>
+</span></span><span class="line"><span class="cl">    environment:
+</span></span><span class="line"><span class="cl">      TZ: Asia/Shanghai
+</span></span><span class="line"><span class="cl">      MYSQL_ROOT_PASSWORD: <span class="m">123</span>
+</span></span><span class="line"><span class="cl">    volumes:
+</span></span><span class="line"><span class="cl">      - <span class="s2">&#34;./mysql/conf:/etc/mysql/conf.d&#34;</span>
+</span></span><span class="line"><span class="cl">      - <span class="s2">&#34;./mysql/data:/var/lib/mysql&#34;</span>
+</span></span><span class="line"><span class="cl">      - <span class="s2">&#34;./mysql/init:/docker-entrypoint-initdb.d&#34;</span>
+</span></span><span class="line"><span class="cl">    networks:
+</span></span><span class="line"><span class="cl">      - hm-net
+</span></span><span class="line"><span class="cl">  hmall:
+</span></span><span class="line"><span class="cl">    build: 
+</span></span><span class="line"><span class="cl">      context: .
+</span></span><span class="line"><span class="cl">      dockerfile: Dockerfile
+</span></span><span class="line"><span class="cl">    container_name: hmall
+</span></span><span class="line"><span class="cl">    ports:
+</span></span><span class="line"><span class="cl">      - <span class="s2">&#34;8080:8080&#34;</span>
+</span></span><span class="line"><span class="cl">    networks:
+</span></span><span class="line"><span class="cl">      - hm-net
+</span></span><span class="line"><span class="cl">    depends_on:
+</span></span><span class="line"><span class="cl">      - mysql
+</span></span><span class="line"><span class="cl">  nginx:
+</span></span><span class="line"><span class="cl">    image: nginx
+</span></span><span class="line"><span class="cl">    container_name: nginx
+</span></span><span class="line"><span class="cl">    ports:
+</span></span><span class="line"><span class="cl">      - <span class="s2">&#34;18080:18080&#34;</span>
+</span></span><span class="line"><span class="cl">      - <span class="s2">&#34;18081:18081&#34;</span>
+</span></span><span class="line"><span class="cl">    volumes:
+</span></span><span class="line"><span class="cl">      - <span class="s2">&#34;./nginx/nginx.conf:/etc/nginx/nginx.conf&#34;</span>
+</span></span><span class="line"><span class="cl">      - <span class="s2">&#34;./nginx/html:/usr/share/nginx/html&#34;</span>
+</span></span><span class="line"><span class="cl">    depends_on:
+</span></span><span class="line"><span class="cl">      - hmall
+</span></span><span class="line"><span class="cl">    networks:
+</span></span><span class="line"><span class="cl">      - hm-net
+</span></span><span class="line"><span class="cl">networks:
+</span></span><span class="line"><span class="cl">  hm-net:
+</span></span><span class="line"><span class="cl">    name: hmall
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="基础命令">基础命令
+</h3><p>编写好docker-compose.yml文件，就可以部署项目了。常见的命令：</p>
+<p><a class="link" href="https://docs.docker.com/compose/reference/"  target="_blank" rel="noopener"
+    >https://docs.docker.com/compose/reference/</a></p>
+<p>基本语法如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">docker compose <span class="o">[</span>OPTIONS<span class="o">]</span> <span class="o">[</span>COMMAND<span class="o">]</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>其中，OPTIONS和COMMAND都是可选参数，比较常见的有：</p>
+<div class="table-wrapper"><table>
+  <thead>
+      <tr>
+          <th style="text-align: center"><strong>类型</strong></th>
+          <th style="text-align: center"><strong>参数或指令</strong></th>
+          <th style="text-align: center"><strong>说明</strong></th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: center">Options</td>
+          <td style="text-align: center">-f</td>
+          <td style="text-align: center">指定compose文件的路径和名称</td>
+      </tr>
+      <tr>
+          <td style="text-align: center"></td>
+          <td style="text-align: center">-p</td>
+          <td style="text-align: center">指定project名称。project就是当前compose文件中设置的多个service的集合，是逻辑概念</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">Commands</td>
+          <td style="text-align: center">up</td>
+          <td style="text-align: center">创建并启动所有service容器</td>
+      </tr>
+      <tr>
+          <td style="text-align: center"></td>
+          <td style="text-align: center">down</td>
+          <td style="text-align: center">停止并移除所有容器、网络</td>
+      </tr>
+      <tr>
+          <td style="text-align: center"></td>
+          <td style="text-align: center">ps</td>
+          <td style="text-align: center">列出所有启动的容器</td>
+      </tr>
+      <tr>
+          <td style="text-align: center"></td>
+          <td style="text-align: center">logs</td>
+          <td style="text-align: center">查看指定容器的日志</td>
+      </tr>
+      <tr>
+          <td style="text-align: center"></td>
+          <td style="text-align: center">stop</td>
+          <td style="text-align: center">停止容器</td>
+      </tr>
+      <tr>
+          <td style="text-align: center"></td>
+          <td style="text-align: center">start</td>
+          <td style="text-align: center">启动容器</td>
+      </tr>
+      <tr>
+          <td style="text-align: center"></td>
+          <td style="text-align: center">restart</td>
+          <td style="text-align: center">重启容器</td>
+      </tr>
+      <tr>
+          <td style="text-align: center"></td>
+          <td style="text-align: center">top</td>
+          <td style="text-align: center">查看运行的进程</td>
+      </tr>
+      <tr>
+          <td style="text-align: center"></td>
+          <td style="text-align: center">exec</td>
+          <td style="text-align: center">在指定的运行中容器中执行命令</td>
+      </tr>
+  </tbody>
+</table></div>
+<p>教学演示：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1"># 1.进入root目录</span>
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> /root
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 2.删除旧容器</span>
+</span></span><span class="line"><span class="cl">docker rm -f <span class="k">$(</span>docker ps -qa<span class="k">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 3.删除hmall镜像</span>
+</span></span><span class="line"><span class="cl">docker rmi hmall
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 4.清空MySQL数据</span>
+</span></span><span class="line"><span class="cl">rm -rf mysql/data
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 5.启动所有, -d 参数是后台启动</span>
+</span></span><span class="line"><span class="cl">docker compose up -d
+</span></span><span class="line"><span class="cl"><span class="c1"># 结果：</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span>+<span class="o">]</span> Building 15.5s <span class="o">(</span>8/8<span class="o">)</span> <span class="nv">FINISHED</span>
+</span></span><span class="line"><span class="cl"> <span class="o">=</span>&gt; <span class="o">[</span>internal<span class="o">]</span> load build definition from Dockerfile                                    0.0s
+</span></span><span class="line"><span class="cl"> <span class="o">=</span>&gt; <span class="o">=</span>&gt; transferring dockerfile: 358B                                                    0.0s
+</span></span><span class="line"><span class="cl"> <span class="o">=</span>&gt; <span class="o">[</span>internal<span class="o">]</span> load .dockerignore                                                       0.0s
+</span></span><span class="line"><span class="cl"> <span class="o">=</span>&gt; <span class="o">=</span>&gt; transferring context: 2B                                                         0.0s
+</span></span><span class="line"><span class="cl"> <span class="o">=</span>&gt; <span class="o">[</span>internal<span class="o">]</span> load metadata <span class="k">for</span> docker.io/library/openjdk:11.0-jre-buster             15.4s
+</span></span><span class="line"><span class="cl"> <span class="o">=</span>&gt; <span class="o">[</span>1/3<span class="o">]</span> FROM docker.io/library/openjdk:11.0-jre-buster@sha256:3546a17e6fb4ff4fa681c3  0.0s
+</span></span><span class="line"><span class="cl"> <span class="o">=</span>&gt; <span class="o">[</span>internal<span class="o">]</span> load build context                                                       0.0s
+</span></span><span class="line"><span class="cl"> <span class="o">=</span>&gt; <span class="o">=</span>&gt; transferring context: 98B                                                        0.0s
+</span></span><span class="line"><span class="cl"> <span class="o">=</span>&gt; CACHED <span class="o">[</span>2/3<span class="o">]</span> RUN ln -snf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime <span class="o">&amp;&amp;</span> <span class="nb">echo</span>   0.0s
+</span></span><span class="line"><span class="cl"> <span class="o">=</span>&gt; CACHED <span class="o">[</span>3/3<span class="o">]</span> COPY hm-service.jar /app.jar                                           0.0s
+</span></span><span class="line"><span class="cl"> <span class="o">=</span>&gt; exporting to image                                                                  0.0s
+</span></span><span class="line"><span class="cl"> <span class="o">=</span>&gt; <span class="o">=</span>&gt; exporting layers                                                                 0.0s
+</span></span><span class="line"><span class="cl"> <span class="o">=</span>&gt; <span class="o">=</span>&gt; writing image sha256:32eebee16acde22550232f2eb80c69d2ce813ed099640e4cfed2193f71  0.0s
+</span></span><span class="line"><span class="cl"> <span class="o">=</span>&gt; <span class="o">=</span>&gt; naming to docker.io/library/root-hmall                                           0.0s
+</span></span><span class="line"><span class="cl"><span class="o">[</span>+<span class="o">]</span> Running 4/4
+</span></span><span class="line"><span class="cl"> ✔ Network hmall    Created                                                             0.2s
+</span></span><span class="line"><span class="cl"> ✔ Container mysql  Started                                                             0.5s
+</span></span><span class="line"><span class="cl"> ✔ Container hmall  Started                                                             0.9s
+</span></span><span class="line"><span class="cl"> ✔ Container nginx  Started                                                             1.5s
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 6.查看镜像</span>
+</span></span><span class="line"><span class="cl">docker compose images
+</span></span><span class="line"><span class="cl"><span class="c1"># 结果</span>
+</span></span><span class="line"><span class="cl">CONTAINER           REPOSITORY          TAG                 IMAGE ID            SIZE
+</span></span><span class="line"><span class="cl">hmall               root-hmall          latest              32eebee16acd        362MB
+</span></span><span class="line"><span class="cl">mysql               mysql               latest              3218b38490ce        516MB
+</span></span><span class="line"><span class="cl">nginx               nginx               latest              605c77e624dd        141MB
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 7.查看容器</span>
+</span></span><span class="line"><span class="cl">docker compose ps
+</span></span><span class="line"><span class="cl"><span class="c1"># 结果</span>
+</span></span><span class="line"><span class="cl">NAME                IMAGE               COMMAND                  SERVICE             CREATED             STATUS              PORTS
+</span></span><span class="line"><span class="cl">hmall               root-hmall          <span class="s2">&#34;java -jar /app.jar&#34;</span>     hmall               <span class="m">54</span> seconds ago      Up <span class="m">52</span> seconds       0.0.0.0:8080-&gt;8080/tcp, :::8080-&gt;8080/tcp
+</span></span><span class="line"><span class="cl">mysql               mysql               <span class="s2">&#34;docker-entrypoint.s…&#34;</span>   mysql               <span class="m">54</span> seconds ago      Up <span class="m">53</span> seconds       0.0.0.0:3306-&gt;3306/tcp, :::3306-&gt;3306/tcp, 33060/tcp
+</span></span><span class="line"><span class="cl">nginx               nginx               <span class="s2">&#34;/docker-entrypoint.…&#34;</span>   nginx               <span class="m">54</span> seconds ago      Up <span class="m">52</span> seconds       80/tcp, 0.0.0.0:18080-18081-&gt;18080-18081/tcp, :::18080-18081-&gt;18080-18081/tcp
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>打开浏览器，访问：http://yourIp:18080</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/docker/">Docker</a>
+        
+            <a href="/tags/java/">Java</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">相关文章</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="has-image">
+    <a href="/archives/docker%E7%AF%873docker%E5%9F%BA%E7%A1%80/">
+        
+        
+            <div class="article-image">
+                <img src="/archives/docker%E7%AF%873docker%E5%9F%BA%E7%A1%80/img/image.7e129d3222869fc6d0cdc3668e227de8.png" 
+                        width="1000" 
+                        height="250" 
+                        loading="lazy"
+                        alt="Featured image of post 【docker篇】3、docker基础"
+                        
+                        data-hash="md5-fhKdMiKGn8bQzcNmjiJ96A==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">【docker篇】3、docker基础</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
+    <a href="/archives/docker%E7%AF%872%E5%AE%89%E8%A3%85mysql/">
+        
+        
+            <div class="article-image">
+                <img src="/archives/docker%E7%AF%872%E5%AE%89%E8%A3%85mysql/img/image.985ac8318f26ebaf31671cfd58942e02.png" 
+                        width="1000" 
+                        height="250" 
+                        loading="lazy"
+                        alt="Featured image of post 【docker篇】2、安装Mysql"
+                        
+                        data-hash="md5-mFrIMY8m668xZxz9WJQuAg==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">【docker篇】2、安装Mysql</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
+    <a href="/archives/docker%E7%AF%871%E5%AE%89%E8%A3%85docker/">
+        
+        
+            <div class="article-image">
+                <img src="/archives/docker%E7%AF%871%E5%AE%89%E8%A3%85docker/img/image.7e129d3222869fc6d0cdc3668e227de8.png" 
+                        width="1000" 
+                        height="250" 
+                        loading="lazy"
+                        alt="Featured image of post 【docker篇】1、安装Docker"
+                        
+                        data-hash="md5-fhKdMiKGn8bQzcNmjiJ96A==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">【docker篇】1、安装Docker</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    <script
+    src="https://giscus.app/client.js"
+    data-repo="XXL999227/XXL999227.github.io"
+    data-repo-id="R_kgDOINqX4g"
+    data-category="General"
+    data-category-id="DIC_kwDOINqX4s4CiTUd"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="top"
+    data-theme="light"
+    data-lang="zh-CN"
+    crossorigin="anonymous"
+    async
+></script>
+<script>
+    function setGiscusTheme(theme) {
+        let giscus = document.querySelector("iframe.giscus-frame");
+        if (giscus) {
+            giscus.contentWindow.postMessage(
+                {
+                    giscus: {
+                        setConfig: {
+                            theme: theme,
+                        },
+                    },
+                },
+                "https://giscus.app"
+            );
+        }
+    }
+
+    (function () {
+        addEventListener("message", (e) => {
+            if (event.origin !== "https://giscus.app") return;
+            handler();
+        });
+        window.addEventListener("onColorSchemeChange", handler);
+
+        function handler() {
+            if (document.documentElement.dataset.scheme === "light") {
+                setGiscusTheme('light');
+            } else {
+                setGiscusTheme('dark_dimmed');
+            }
+        }
+    })();
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2023 - 
+        
+        2024 Powered by 潇潇
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.27.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+<script>
+    
+    const cssPath = "https://xxl999227.github.io/waifu/waifu.css";
+    const tipsJsonPath = "https://xxl999227.github.io/waifu/waifu-tips.json";
+    const myTipsJsonPath = "https://xxl999227.github.io/waifu/my-waifu-tips.js";
+    const gamePath = "https://xxl999227.github.io/waifu/asteroids.js";
+    
+    const live2d_path = "https://fastly.jsdelivr.net/gh/stevenjoezhang/live2d-widget@latest/";
+    const live2dMinJsPath = "https://xxl999227.github.io/waifu/live2d.min.js";
+
+    
+    function loadExternalResource(url, type) {
+        return new Promise((resolve, reject) => {
+            let tag;
+            if (type === "css") {
+                tag = document.createElement("link");
+                tag.rel = "stylesheet";
+                tag.href = url;
+            }
+            else if (type === "js") {
+                tag = document.createElement("script");
+                tag.src = url;
+            }
+            if (tag) {
+                tag.onload = () => resolve(url);
+                tag.onerror = () => reject(url);
+                document.head.appendChild(tag);
+            }
+        });
+    }
+
+    
+    if (screen.width >= 768) {
+        Promise.all([
+            loadExternalResource(cssPath, "css"),
+            loadExternalResource(live2dMinJsPath, "js"),
+            loadExternalResource(myTipsJsonPath, "js")
+        ]).then(() => {
+            
+            initWidget({
+                waifuPath: tipsJsonPath,
+                gamePath: gamePath,
+                cdnPath: "https://cdn.jsdelivr.net/gh/XXL999227/static-resource@v1.0.0",
+                tools: ["hitokoto", "asteroids", "switch-model", "switch-texture", "photo", "quit"]
+             
+            });
+            
+            initWaifuMouseEvent();
+        });
+    }
+
+    function initWaifuMouseEvent() {
+        const waifu = document.getElementById("waifu");
+        let isDown = false;
+        let waifuLeft;
+        let mouseLeft;
+        let waifuTop;
+        let mouseTop;
+        
+        waifu.onmousedown = function (e) {
+            isDown = true;
+            
+            waifuLeft = waifu.offsetLeft;
+            mouseLeft = e.clientX;
+            
+            waifuTop = waifu.offsetTop;
+            mouseTop = e.clientY;
+        }
+        
+        window.onmousemove = function (e) {
+            if (!isDown) {
+                return;
+            }
+            
+            let currentLeft = waifuLeft + (e.clientX - mouseLeft);
+            if (currentLeft < 0) {
+                currentLeft = 0;
+            } else if (currentLeft > window.innerWidth - 300) {
+                currentLeft = window.innerWidth - 300;
+            }
+            waifu.style.left = currentLeft  + "px";
+            
+            let currentTop = waifuTop + (e.clientY - mouseTop);
+            if (currentTop < 30) {
+                currentTop = 30
+            } else if (currentTop > window.innerHeight - 290) {
+                currentTop = window.innerHeight - 290
+            }
+            waifu.style.top = currentTop + "px";
+        }
+        
+        window.onmouseup = function (e) {
+            isDown = false;
+        }
+    }
+</script>
+
+<script src= https://xxl999227.github.io/background/particles/particles.js></script>
+
+<link rel="stylesheet" href= https://xxl999227.github.io/background/particles/style.css>
+
+
+<div id="particles-js"></div>
+
+<script>
+    
+
+    particlesJS.load('particles-js', "https://xxl999227.github.io/background/particles/particlesjs-config.json", function() {
+        console.log('particles.js loaded - callback');
+    });
+</script>
+    </body>
+</html>
