@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="简单介绍下kubernetes的组件和概念">
+<title>【kubernetes】kubernetes介绍</title>
+
+<link rel='canonical' href='https://xxl999227.github.io/archives/kuberneteskubernetes%E4%BB%8B%E7%BB%8D/'>
+
+<link rel="stylesheet" href="/scss/style.min.d91c2070e085e35f1fd5131bcadf95da720496f3d8c0dd302289c6e1955ee051.css"><meta property='og:title' content="【kubernetes】kubernetes介绍">
+<meta property='og:description' content="简单介绍下kubernetes的组件和概念">
+<meta property='og:url' content='https://xxl999227.github.io/archives/kuberneteskubernetes%E4%BB%8B%E7%BB%8D/'>
+<meta property='og:site_name' content='潇潇’s blog'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='kubernetes' /><meta property='article:published_time' content='2024-01-28T22:27:57&#43;08:00'/><meta property='article:modified_time' content='2024-01-28T22:27:57&#43;08:00'/><meta property='og:image' content='https://xxl999227.github.io/archives/kuberneteskubernetes%E4%BB%8B%E7%BB%8D/img/image.png' />
+<meta name="twitter:title" content="【kubernetes】kubernetes介绍">
+<meta name="twitter:description" content="简单介绍下kubernetes的组件和概念"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://xxl999227.github.io/archives/kuberneteskubernetes%E4%BB%8B%E7%BB%8D/img/image.png' />
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu6975665600438320786.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">❤️‍</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">潇潇’s blog</a></h1>
+            <h2 class="site-description">欢迎来到我的网站，此博客由【Hugo &#43; Stack】来进行搭建，主要分享个人生活和学习笔记</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://xxl999227.github.io/'
+                        target="_blank"
+                        title="Gitee"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-home-2"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l-2 0l9 -9l9 9l-2 0" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" /><path d="M10 12h4v4h-4z" /></svg>
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://github.com/XXL999227'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%85%B3%E4%BA%8E/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%8F%8B%E6%83%85%E9%93%BE%E6%8E%A5/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>友情链接</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span class="switch-model">暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+        <button class="back-to-top" id="scrollToTop" style="
+            position: fixed; 
+            bottom: 20px; 
+            width: 40px; 
+            height: 40px; 
+            border-radius: 50%; 
+            background-color: white; 
+            border: 1px solid #ccc; 
+            display: none; /* 初始隐藏 */
+            align-items: center; 
+            justify-content: center;
+            cursor: pointer;
+            font-size: 20px;
+            color: #888;
+        ">
+            ↑
+        </button>
+        
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#font-stylecolorrgb35-38-59应用部署方式演变font"><font style="color:rgb(35, 38, 59);">应用部署方式演变</font></a></li>
+    <li><a href="#font-stylecolorrgb35-38-59kubernetes简介font"><font style="color:rgb(35, 38, 59);">kubernetes简介</font></a></li>
+    <li><a href="#font-stylecolorrgb35-38-59kubernetes组件font"><font style="color:rgb(35, 38, 59);">kubernetes组件</font></a></li>
+    <li><a href="#font-stylecolorrgb35-38-59kubernetes概念font"><font style="color:rgb(35, 38, 59);">kubernetes概念</font></a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+<script>
+    
+    const scrollToTopButton = document.getElementById('scrollToTop');
+
+    window.addEventListener('scroll', function() {
+        if (window.scrollY > 0) {
+            scrollToTopButton.style.display = 'flex';
+        } else {
+            scrollToTopButton.style.display = 'none';
+        }
+    });
+
+    scrollToTopButton.addEventListener('click', function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+</script>
+
+
+            <main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+        <div class="article-image">
+            <a href="/archives/kuberneteskubernetes%E4%BB%8B%E7%BB%8D/">
+                <img src="/archives/kuberneteskubernetes%E4%BB%8B%E7%BB%8D/img/image.png"
+                        
+                        width="1000" 
+                        height="250" 
+                        loading="lazy"
+                        alt="Featured image of post 【kubernetes】kubernetes介绍" />
+                
+            </a>
+        </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/kubernetes/" style="background-color: #30b8eebf; color: #fff;">
+                Kubernetes
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/archives/kuberneteskubernetes%E4%BB%8B%E7%BB%8D/">【kubernetes】kubernetes介绍</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            简单介绍下kubernetes的组件和概念
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">
+                    创建时间：2024-01-28</time>
+                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-clock-hour-4"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M12 12l3 2" /><path d="M12 7v5" /></svg>
+                <time class="article-time--lastUpdated">
+                    更新时间：2024-01-28</time>
+                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-file-word"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2" /><path d="M9 12l1.333 5l1.667 -4l1.667 4l1.333 -5" /></svg>
+                <time class="article-time--word">
+                    字数总计：2004</time>
+            </div>
+        
+
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h2 id="font-stylecolorrgb35-38-59应用部署方式演变font"><font style="color:rgb(35, 38, 59);">应用部署方式演变</font>
+</h2><p><font style="color:rgb(35, 38, 59);">在部署应用程序的方式上，主要经历了三个时代：</font></p>
+<ul>
+<li><strong><font style="color:rgb(35, 38, 59);">传统部署</font></strong><font style="color:rgb(35, 38, 59);">：互联网早期，会直接将应用程序部署在物理机上</font></li>
+</ul>
+<p><font style="color:rgb(85, 85, 85);background-color:rgb(247, 247, 247) !important;">优点：简单，不需要其它技术的参与</font></p>
+<p><font style="color:rgb(85, 85, 85);background-color:rgb(247, 247, 247) !important;">缺点：不能为应用程序定义资源使用边界，很难合理地分配计算资源，而且程序之间容易产生影响</font></p>
+<ul>
+<li><strong><font style="color:rgb(35, 38, 59);">虚拟化部署</font></strong><font style="color:rgb(35, 38, 59);">：可以在一台物理机上运行多个虚拟机，每个虚拟机都是独立的一个环境</font></li>
+</ul>
+<p><font style="color:rgb(85, 85, 85);background-color:rgb(247, 247, 247) !important;">优点：程序环境不会相互产生影响，提供了一定程度的安全性</font></p>
+<p><font style="color:rgb(85, 85, 85);background-color:rgb(247, 247, 247) !important;">缺点：增加了操作系统，浪费了部分资源</font></p>
+<ul>
+<li><strong><font style="color:rgb(35, 38, 59);">容器化部署</font></strong><font style="color:rgb(35, 38, 59);">：与虚拟化类似，但是共享了操作系统</font></li>
+</ul>
+<p><font style="color:rgb(85, 85, 85);background-color:rgb(247, 247, 247) !important;">优点：可以保证每个容器拥有自己的文件系统、CPU、内存、进程空间等</font></p>
+<p><font style="color:rgb(85, 85, 85);background-color:rgb(247, 247, 247) !important;">运行应用程序所需要的资源都被容器包装，并和底层基础架构解耦</font></p>
+<p><font style="color:rgb(85, 85, 85);background-color:rgb(247, 247, 247) !important;">容器化的应用程序可以跨云服务商、跨Linux操作系统发行版进行部署</font></p>
+<p><img src="/archives/kuberneteskubernetes%E4%BB%8B%E7%BB%8D/img/image-1.png"
+	width="937"
+	height="352"
+	
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="266"
+		data-flex-basis="638px"
+	
+></p>
+<p><font style="color:rgb(35, 38, 59);">容器化部署方式给带来很多的便利，但是也会出现一些问题，比如说：</font></p>
+<ul>
+<li><font style="color:rgb(35, 38, 59);">一个容器故障停机了，怎么样让另外一个容器立刻启动去替补停机的容器</font></li>
+<li><font style="color:rgb(35, 38, 59);">当并发访问量变大的时候，怎么样做到横向扩展容器数量</font></li>
+</ul>
+<p><font style="color:rgb(35, 38, 59);">这些容器管理的问题统称为</font><strong><font style="color:rgb(35, 38, 59);">容器编排</font></strong><font style="color:rgb(35, 38, 59);">问题，为了解决这些容器编排问题，就产生了一些容器编排的软件：</font></p>
+<ul>
+<li><strong><font style="color:rgb(35, 38, 59);">Swarm</font></strong><font style="color:rgb(35, 38, 59);">：Docker自己的容器编排工具</font></li>
+<li><strong><font style="color:rgb(35, 38, 59);">Mesos</font></strong><font style="color:rgb(35, 38, 59);">：Apache的一个资源统一管控的工具，需要和Marathon结合使用</font></li>
+<li><strong><font style="color:rgb(35, 38, 59);">Kubernetes</font></strong><font style="color:rgb(35, 38, 59);">：Google开源的的容器编排工具</font></li>
+</ul>
+<p><img src="/archives/kuberneteskubernetes%E4%BB%8B%E7%BB%8D/img/image-2.png"
+	width="593"
+	height="272"
+	
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="218"
+		data-flex-basis="523px"
+	
+></p>
+<h2 id="font-stylecolorrgb35-38-59kubernetes简介font"><font style="color:rgb(35, 38, 59);">kubernetes简介</font>
+</h2><p><img src="/archives/kuberneteskubernetes%E4%BB%8B%E7%BB%8D/img/image-3.png"
+	width="541"
+	height="281"
+	
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="192"
+		data-flex-basis="462px"
+	
+></p>
+<p><font style="color:rgb(35, 38, 59);"></font></p>
+<p><font style="color:rgb(35, 38, 59);">kubernetes，是一个全新的基于容器技术的分布式架构领先方案，是谷歌严格保密十几年的秘密武器&mdash;-Borg系统的一个开源版本，于2014年9月发布第一个版本，2015年7月发布第一个正式版本。</font></p>
+<p><font style="color:rgb(35, 38, 59);">kubernetes的本质是</font><strong><font style="color:rgb(35, 38, 59);">一组服务器集群</font></strong><font style="color:rgb(35, 38, 59);">，它可以在集群的每个节点上运行特定的程序，来对节点中的容器进行管理。目的是实现资源管理的自动化，主要提供了如下的主要功能：</font></p>
+<ul>
+<li><strong><font style="color:rgb(35, 38, 59);">自我修复</font></strong><font style="color:rgb(35, 38, 59);">：一旦某一个容器崩溃，能够在1秒中左右迅速启动新的容器</font></li>
+<li><strong><font style="color:rgb(35, 38, 59);">弹性伸缩</font></strong><font style="color:rgb(35, 38, 59);">：可以根据需要，自动对集群中正在运行的容器数量进行调整</font></li>
+<li><strong><font style="color:rgb(35, 38, 59);">服务发现</font></strong><font style="color:rgb(35, 38, 59);">：服务可以通过自动发现的形式找到它所依赖的服务</font></li>
+<li><strong><font style="color:rgb(35, 38, 59);">负载均衡</font></strong><font style="color:rgb(35, 38, 59);">：如果一个服务起动了多个容器，能够自动实现请求的负载均衡</font></li>
+<li><strong><font style="color:rgb(35, 38, 59);">版本回退</font></strong><font style="color:rgb(35, 38, 59);">：如果发现新发布的程序版本有问题，可以立即回退到原来的版本</font></li>
+<li><strong><font style="color:rgb(35, 38, 59);">存储编排</font></strong><font style="color:rgb(35, 38, 59);">：可以根据容器自身的需求自动创建存储卷</font></li>
+</ul>
+<p><img src="/archives/kuberneteskubernetes%E4%BB%8B%E7%BB%8D/img/image-4.png"
+	width="937"
+	height="506"
+	
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="185"
+		data-flex-basis="444px"
+	
+></p>
+<h2 id="font-stylecolorrgb35-38-59kubernetes组件font"><font style="color:rgb(35, 38, 59);">kubernetes组件</font>
+</h2><p><font style="color:rgb(35, 38, 59);">一个kubernetes集群主要是由</font><strong><font style="color:rgb(35, 38, 59);">控制节点(master)</font></strong><font style="color:rgb(35, 38, 59);">、</font><strong><font style="color:rgb(35, 38, 59);">工作节点(node)</font></strong><font style="color:rgb(35, 38, 59);">构成，每个节点上都会安装不同的组件。</font></p>
+<p><strong><font style="color:rgb(35, 38, 59);">master：集群的控制平面，负责集群的决策 ( 管理 )</font></strong></p>
+<p><strong><font style="color:rgb(85, 85, 85);background-color:rgb(247, 247, 247) !important;">ApiServer</font></strong><font style="color:rgb(85, 85, 85);background-color:rgb(247, 247, 247) !important;"> : 资源操作的唯一入口，接收用户输入的命令，提供认证、授权、API注册和发现等机制</font></p>
+<p><strong><font style="color:rgb(85, 85, 85);background-color:rgb(247, 247, 247) !important;">Scheduler</font></strong><font style="color:rgb(85, 85, 85);background-color:rgb(247, 247, 247) !important;"> </font><font style="color:rgb(85, 85, 85);background-color:rgb(247, 247, 247) !important;">: 负责集群资源调度，按照预定的调度策略将Pod调度到相应的node节点上</font></p>
+<p><strong><font style="color:rgb(85, 85, 85);background-color:rgb(247, 247, 247) !important;">ControllerManager</font></strong><font style="color:rgb(85, 85, 85);background-color:rgb(247, 247, 247) !important;"> </font><font style="color:rgb(85, 85, 85);background-color:rgb(247, 247, 247) !important;">: 负责维护集群的状态，比如程序部署安排、故障检测、自动扩展、滚动更新等</font></p>
+<p>**<font style="color:rgb(85, 85, 85);background-color:rgb(247, 247, 247) !important;">Etcd</font>****<font style="color:rgb(85, 85, 85);background-color:rgb(247, 247, 247) !important;"> &lt;/fo<font style="color:rgb(85, 85, 85);background-color:rgb(247, 247, 247) !important;">：负责存储集群中各种资源对象的信息</font></p>
+<p><strong><font style="color:rgb(35, 38, 59);">node：集群的数据平面，负责为容器提供运行环境 ( 干活 )</font></strong></p>
+<p><strong><font style="color:rgb(85, 85, 85);background-color:rgb(247, 247, 247) !important;">Kubelet</font></strong><font style="color:rgb(85, 85, 85);background-color:rgb(247, 247, 247) !important;"> : 负责维护容器的生命周期，即通过控制docker，来创建、更新、销毁容器</font></p>
+<p><strong><font style="color:rgb(85, 85, 85);background-color:rgb(247, 247, 247) !important;">KubeProxy</font></strong><font style="color:rgb(85, 85, 85);background-color:rgb(247, 247, 247) !important;"> </font><font style="color:rgb(85, 85, 85);background-color:rgb(247, 247, 247) !important;">: 负责提供集群内部的服务发现和负载均衡</font></p>
+<p><strong><font style="color:rgb(85, 85, 85);background-color:rgb(247, 247, 247) !important;">Docker</font></strong><font style="color:rgb(85, 85, 85);background-color:rgb(247, 247, 247) !important;"> </font><font style="color:rgb(85, 85, 85);background-color:rgb(247, 247, 247) !important;">: 负责节点上容器的各种操作</font></p>
+<p><img src="/archives/kuberneteskubernetes%E4%BB%8B%E7%BB%8D/img/image-5.png"
+	width="937"
+	height="486"
+	
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="192"
+		data-flex-basis="462px"
+	
+></p>
+<p><font style="color:rgb(35, 38, 59);">下面，以部署一个nginx服务来说明kubernetes系统各个组件调用关系：</font></p>
+<ol>
+<li><font style="color:rgb(35, 38, 59);">首先要明确，一旦kubernetes环境启动之后，master和node都会将自身的信息存储到etcd数据库中</font></li>
+<li><font style="color:rgb(35, 38, 59);">一个nginx服务的安装请求会首先被发送到master节点的apiServer组件</font></li>
+<li><font style="color:rgb(35, 38, 59);">apiServer组件会调用scheduler组件来决定到底应该把这个服务安装到哪个node节点上</font><font style="color:rgb(35, 38, 59);">在此时，它会从etcd中读取各个node节点的信息，然后按照一定的算法进行选择，并将结果告知apiServer</font></li>
+<li><font style="color:rgb(35, 38, 59);">apiServer调用controller-manager去调度Node节点安装nginx服务</font></li>
+<li><font style="color:rgb(35, 38, 59);">kubelet接收到指令后，会通知docker，然后由docker来启动一个nginx的pod</font><font style="color:rgb(35, 38, 59);">pod是kubernetes的最小操作单元，容器必须跑在pod中至此，</font></li>
+<li><font style="color:rgb(35, 38, 59);">一个nginx服务就运行了，如果需要访问nginx，就需要通过kube-proxy来对pod产生访问的代理</font></li>
+</ol>
+<p><font style="color:rgb(35, 38, 59);">这样，外界用户就可以访问集群中的nginx服务了</font></p>
+<h2 id="font-stylecolorrgb35-38-59kubernetes概念font"><font style="color:rgb(35, 38, 59);">kubernetes概念</font>
+</h2><ul>
+<li>
+<p><strong><font style="color:rgb(35, 38, 59);">Master</font></strong><font style="color:rgb(35, 38, 59);">：集群控制节点，每个集群需要至少一个master节点负责集群的管控</font></p>
+</li>
+<li>
+<p><strong><font style="color:rgb(35, 38, 59);">Node</font></strong><font style="color:rgb(35, 38, 59);">：工作负载节点，由master分配容器到这些node工作节点上，然后node节点上的docker负责容器的运行</font></p>
+</li>
+<li>
+<p><strong><font style="color:rgb(35, 38, 59);">Pod</font></strong><font style="color:rgb(35, 38, 59);">：kubernetes的最小控制单元，容器都是运行在pod中的，一个pod中可以有1个或者多个容器</font></p>
+</li>
+<li>
+<p><strong><font style="color:rgb(35, 38, 59);">Controller</font></strong><font style="color:rgb(35, 38, 59);">：控制器，通过它来实现对pod的管理，比如启动pod、停止pod、伸缩pod的数量等等</font></p>
+</li>
+<li>
+<p><strong><font style="color:rgb(35, 38, 59);">Service</font></strong><font style="color:rgb(35, 38, 59);">：pod对外服务的统一入口，下面可以维护者同一类的多个pod</font></p>
+</li>
+<li>
+<p><strong><font style="color:rgb(35, 38, 59);">Label</font></strong><font style="color:rgb(35, 38, 59);">：标签，用于对pod进行分类，同一类pod会拥有相同的标签</font></p>
+</li>
+<li>
+<p><strong><font style="color:rgb(35, 38, 59);">NameSpace</font></strong><font style="color:rgb(35, 38, 59);">：命名空间，用来隔离pod的运行环境</font></p>
+</li>
+</ul>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/kubernetes/">Kubernetes</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    <script
+    src="https://giscus.app/client.js"
+    data-repo="XXL999227/XXL999227.github.io"
+    data-repo-id="R_kgDOINqX4g"
+    data-category="General"
+    data-category-id="DIC_kwDOINqX4s4CiTUd"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="top"
+    data-theme="light"
+    data-lang="zh-CN"
+    crossorigin="anonymous"
+    async
+></script>
+<script>
+    function setGiscusTheme(theme) {
+        let giscus = document.querySelector("iframe.giscus-frame");
+        if (giscus) {
+            giscus.contentWindow.postMessage(
+                {
+                    giscus: {
+                        setConfig: {
+                            theme: theme,
+                        },
+                    },
+                },
+                "https://giscus.app"
+            );
+        }
+    }
+
+    (function () {
+        addEventListener("message", (e) => {
+            if (event.origin !== "https://giscus.app") return;
+            handler();
+        });
+        window.addEventListener("onColorSchemeChange", handler);
+
+        function handler() {
+            if (document.documentElement.dataset.scheme === "light") {
+                setGiscusTheme('light');
+            } else {
+                setGiscusTheme('dark_dimmed');
+            }
+        }
+    })();
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2023 - 
+        
+        2024 Powered by 潇潇
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.27.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+<script>
+    
+    const cssPath = "https://xxl999227.github.io/waifu/waifu.css";
+    const tipsJsonPath = "https://xxl999227.github.io/waifu/waifu-tips.json";
+    const myTipsJsonPath = "https://xxl999227.github.io/waifu/my-waifu-tips.js";
+    const gamePath = "https://xxl999227.github.io/waifu/asteroids.js";
+    
+    const live2d_path = "https://fastly.jsdelivr.net/gh/stevenjoezhang/live2d-widget@latest/";
+    const live2dMinJsPath = "https://xxl999227.github.io/waifu/live2d.min.js";
+
+    
+    function loadExternalResource(url, type) {
+        return new Promise((resolve, reject) => {
+            let tag;
+            if (type === "css") {
+                tag = document.createElement("link");
+                tag.rel = "stylesheet";
+                tag.href = url;
+            }
+            else if (type === "js") {
+                tag = document.createElement("script");
+                tag.src = url;
+            }
+            if (tag) {
+                tag.onload = () => resolve(url);
+                tag.onerror = () => reject(url);
+                document.head.appendChild(tag);
+            }
+        });
+    }
+
+    
+    if (screen.width >= 768) {
+        Promise.all([
+            loadExternalResource(cssPath, "css"),
+            loadExternalResource(live2dMinJsPath, "js"),
+            loadExternalResource(myTipsJsonPath, "js")
+        ]).then(() => {
+            
+            initWidget({
+                waifuPath: tipsJsonPath,
+                gamePath: gamePath,
+                cdnPath: "https://cdn.jsdelivr.net/gh/XXL999227/static-resource@v1.0.0",
+                tools: ["hitokoto", "asteroids", "switch-model", "switch-texture", "photo", "quit"]
+             
+            });
+            
+            initWaifuMouseEvent();
+        });
+    }
+
+    function initWaifuMouseEvent() {
+        const waifu = document.getElementById("waifu");
+        let isDown = false;
+        let waifuLeft;
+        let mouseLeft;
+        let waifuTop;
+        let mouseTop;
+        
+        waifu.onmousedown = function (e) {
+            isDown = true;
+            
+            waifuLeft = waifu.offsetLeft;
+            mouseLeft = e.clientX;
+            
+            waifuTop = waifu.offsetTop;
+            mouseTop = e.clientY;
+        }
+        
+        window.onmousemove = function (e) {
+            if (!isDown) {
+                return;
+            }
+            
+            let currentLeft = waifuLeft + (e.clientX - mouseLeft);
+            if (currentLeft < 0) {
+                currentLeft = 0;
+            } else if (currentLeft > window.innerWidth - 300) {
+                currentLeft = window.innerWidth - 300;
+            }
+            waifu.style.left = currentLeft  + "px";
+            
+            let currentTop = waifuTop + (e.clientY - mouseTop);
+            if (currentTop < 30) {
+                currentTop = 30
+            } else if (currentTop > window.innerHeight - 290) {
+                currentTop = window.innerHeight - 290
+            }
+            waifu.style.top = currentTop + "px";
+        }
+        
+        window.onmouseup = function (e) {
+            isDown = false;
+        }
+    }
+</script>
+
+<script src= https://xxl999227.github.io/background/particles/particles.js></script>
+
+<link rel="stylesheet" href= https://xxl999227.github.io/background/particles/style.css>
+
+
+<div id="particles-js"></div>
+
+<script>
+    
+
+    particlesJS.load('particles-js', "https://xxl999227.github.io/background/particles/particlesjs-config.json", function() {
+        console.log('particles.js loaded - callback');
+    });
+</script>
+    </body>
+</html>
