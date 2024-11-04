@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>Mysql on 潇潇’s blog</title>
+        <link>https://xxl999227.github.io/categories/mysql/</link>
+        <description>Recent content in Mysql on 潇潇’s blog</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>zh-cn</language>
+        <copyright>Powered by 潇潇</copyright>
+        <lastBuildDate>Wed, 17 Jan 2024 21:33:14 +0800</lastBuildDate><atom:link href="https://xxl999227.github.io/categories/mysql/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>【docker篇】2、安装Mysql</title>
+        <link>https://xxl999227.github.io/archives/docker%E7%AF%872%E5%AE%89%E8%A3%85mysql/</link>
+        <pubDate>Wed, 17 Jan 2024 21:33:14 +0800</pubDate>
+        
+        <guid>https://xxl999227.github.io/archives/docker%E7%AF%872%E5%AE%89%E8%A3%85mysql/</guid>
+        <description>&lt;img src="https://xxl999227.github.io/archives/docker%E7%AF%872%E5%AE%89%E8%A3%85mysql/img/image.png" alt="Featured image of post 【docker篇】2、安装Mysql" /&gt;&lt;h2 id=&#34;部署mysql&#34;&gt;部署MySQL
+&lt;/h2&gt;&lt;p&gt;首先，我们利用Docker来安装一个MySQL软件，大家可以对比一下之前传统的安装方式，看看哪个效率更高一些。&lt;/p&gt;
+&lt;p&gt;如果是利用传统方式部署MySQL，大概的步骤有：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;搜索并下载MySQL安装包&lt;/li&gt;
+&lt;li&gt;上传至Linux环境&lt;/li&gt;
+&lt;li&gt;编译和配置环境&lt;/li&gt;
+&lt;li&gt;安装&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;而使用Docker安装，仅仅需要一步即可，在命令行输入下面的命令（建议采用CV大法）：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-plain&#34; data-lang=&#34;plain&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;docker run -d \
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  --name mysql \
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  -p 3306:3306 \
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  -e TZ=Asia/Shanghai \
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  -e MYSQL_ROOT_PASSWORD=123456 \
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  mysql
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;运行效果如图：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://xxl999227.github.io/archives/docker%E7%AF%872%E5%AE%89%E8%A3%85mysql/img/image-1.png&#34;
+	width=&#34;937&#34;
+	height=&#34;517&#34;
+	
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;181&#34;
+		data-flex-basis=&#34;434px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;MySQL安装完毕！通过任意客户端工具即可连接到MySQL.&lt;/p&gt;
+&lt;p&gt;大家可以发现，当我们执行命令后，Docker做的第一件事情，是去自动搜索并下载了MySQL，然后会自动运行MySQL，我们完全不用插手，是不是非常方便。&lt;/p&gt;
+&lt;p&gt;而且，这种安装方式你完全不用考虑运行的操作系统环境，它不仅仅在CentOS系统是这样，在Ubuntu系统、macOS系统、甚至是装了WSL的Windows下，都可以使用这条命令来安装MySQL。&lt;/p&gt;
+&lt;p&gt;要知道，&lt;strong&gt;不同操作系统下其安装包、运行环境是都不相同的&lt;/strong&gt;！如果是&lt;strong&gt;手动安装，必须手动解决安装包不同、环境不同的、配置不同的问题&lt;/strong&gt;！&lt;/p&gt;
+&lt;p&gt;而使用Docker，这些完全不用考虑。就是因为Docker会自动搜索并下载MySQL。注意：这里下载的不是安装包，而是&lt;strong&gt;镜像。&lt;strong&gt;镜像中不仅包含了MySQL本身，还包含了其运行所需要的环境、配置、系统级函数库。因此它在运行时就有自己独立的环境，就可以跨系统运行，也不需要手动再次配置环境了。这套独立运行的隔离环境我们称为&lt;/strong&gt;容器&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;说明：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;镜像：英文是image&lt;/li&gt;
+&lt;li&gt;容器：英文是container&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;font style=&#34;background-color:rgb(255,245,235);&#34;&gt;因此，Docker安装软件的过程，就是自动搜索下载镜像，然后创建并运行容器的过程。&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;Docker会根据命令中的镜像名称自动搜索并下载镜像，那么问题来了，它是去哪里搜索和下载镜像的呢？这些镜像又是谁制作的呢？&lt;/p&gt;
+&lt;p&gt;Docker官方提供了一个专门管理、存储镜像的网站，并对外开放了镜像上传、下载的权利。Docker官方提供了一些基础镜像，然后各大软件公司又在基础镜像基础上，制作了自家软件的镜像，全部都存放在这个网站。这个网站就成了Docker镜像交流的社区：&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://hub.docker.com/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://hub.docker.com/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;基本上我们常用的各种软件都能在这个网站上找到，我们甚至可以自己制作镜像上传上去。&lt;/p&gt;
+&lt;p&gt;像这种提供存储、管理Docker镜像的服务器，被称为DockerRegistry，可以翻译为镜像仓库。DockerHub网站是官方仓库，阿里云、华为云会提供一些第三方仓库，我们也可以自己搭建私有的镜像仓库。&lt;/p&gt;
+&lt;p&gt;官方仓库在国外，下载速度较慢，一般我们都会使用第三方仓库提供的镜像加速功能，提高下载速度。而企业内部的机密项目，往往会采用私有镜像仓库。&lt;/p&gt;
+&lt;p&gt;总之，镜像的来源有两种：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;基于官方基础镜像自己制作&lt;/li&gt;
+&lt;li&gt;直接去DockerRegistry下载&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;&lt;font style=&#34;background-color:rgb(255,245,235);&#34;&gt;总结一下&lt;/font&gt;&lt;/strong&gt;&lt;font style=&#34;background-color:rgb(255,245,235);&#34;&gt;：&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;&lt;font style=&#34;background-color:rgb(255,245,235);&#34;&gt;Docker本身包含一个后台服务，我们可以利用Docker命令告诉Docker服务，帮助我们快速部署指定的应用。Docker服务部署应用时，首先要去搜索并下载应用对应的镜像，然后根据镜像创建并允许容器，应用就部署完成了。&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;用一幅图表示如下：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://xxl999227.github.io/archives/docker%E7%AF%872%E5%AE%89%E8%A3%85mysql/img/image-2.png&#34;
+	width=&#34;1227&#34;
+	height=&#34;615&#34;
+	
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;199&#34;
+		data-flex-basis=&#34;478px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;命令解读&#34;&gt;命令解读
+&lt;/h2&gt;&lt;p&gt;利用Docker快速的安装了MySQL，非常的方便，不过我们执行的命令到底是什么意思呢？&lt;/p&gt;
+&lt;p&gt;其实是一行命令，用 \ 做了换行&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;docker run -d &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;  --name mysql &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;  -p 3306:3306 &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;  -e &lt;span class=&#34;nv&#34;&gt;TZ&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;Asia/Shanghai &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;  -e &lt;span class=&#34;nv&#34;&gt;MYSQL_ROOT_PASSWORD&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;123&lt;/span&gt; &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;  mysql
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;解读：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;docker run -d ：创建并运行一个容器，-d则是让容器以后台进程运行，基本上都是搭配-d使用&lt;/li&gt;
+&lt;li&gt;&amp;ndash;name mysql  : 给容器起个名字叫mysql，可以叫别的&lt;/li&gt;
+&lt;li&gt;-p 3306:3306 : 设置端口映射。
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;容器是隔离环境&lt;/strong&gt;，外界不可访问。但是可以&lt;strong&gt;将&lt;strong&gt;&lt;strong&gt;宿主机&lt;/strong&gt;&lt;/strong&gt;端口****映射容器内到端口&lt;/strong&gt;，当访问宿主机指定端口时，就是在访问容器内的端口了。&lt;/li&gt;
+&lt;li&gt;容器内端口往往是由容器内的进程决定，例如MySQL进程默认端口是3306，因此容器内端口一定是3306；而宿主机端口则可以任意指定，一般与容器内保持一致。&lt;/li&gt;
+&lt;li&gt;格式： -p 宿主机端口:容器内端口，示例中就是将宿主机的3306映射到容器内的3306端口&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;-e TZ=Asia/Shanghai : 配置容器内进程运行时的一些参数
+&lt;ul&gt;
+&lt;li&gt;格式：-e KEY=VALUE，KEY和VALUE都由容器内进程决定&lt;/li&gt;
+&lt;li&gt;案例中，TZ=Asia/Shanghai是设置时区；MYSQL_ROOT_PASSWORD=123是设置MySQL默认密码&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;mysql : 设置&lt;strong&gt;镜像&lt;/strong&gt;名称，Docker会根据这个名字搜索并下载镜像
+&lt;ul&gt;
+&lt;li&gt;格式：REPOSITORY:TAG，例如mysql:8.0，其中REPOSITORY可以理解为镜像名，TAG是版本号&lt;/li&gt;
+&lt;li&gt;在未指定TAG的情况下，默认是最新版本，也就是mysql:latest&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;镜像的名称不是随意的，而是要到DockerRegistry中寻找，镜像运行时的配置也不是随意的，要参考镜像的帮助文档，这些在DockerHub网站或者软件的官方网站中都能找到。&lt;/p&gt;
+&lt;p&gt;如果我们要安装其它软件，也可以到DockerRegistry中寻找对应的镜像名称和版本，阅读相关配置即可。&lt;/p&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>

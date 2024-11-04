@@ -24,28 +24,44 @@
         <description>&lt;img src="https://xxl999227.github.io/categories/%E5%8D%9A%E5%AE%A2/hutomo-abrianto-l2jk-uxb1BY-unsplash.jpg" alt="Featured image of post 博客" /&gt;</description>
         </item>
         <item>
+        <title>Docker</title>
+        <link>https://xxl999227.github.io/categories/docker/</link>
+        <pubDate>Mon, 22 Jan 2024 23:50:51 +0800</pubDate>
+        
+        <guid>https://xxl999227.github.io/categories/docker/</guid>
+        <description>&lt;img src="https://xxl999227.github.io/categories/docker/docker-logo.png" alt="Featured image of post Docker" /&gt;</description>
+        </item>
+        <item>
         <title>Java</title>
         <link>https://xxl999227.github.io/categories/java/</link>
         <pubDate>Mon, 22 Jan 2024 23:50:51 +0800</pubDate>
         
         <guid>https://xxl999227.github.io/categories/java/</guid>
-        <description></description>
+        <description>&lt;img src="https://xxl999227.github.io/categories/java/java-logo.png" alt="Featured image of post Java" /&gt;</description>
         </item>
         <item>
-        <title>教程</title>
-        <link>https://xxl999227.github.io/categories/%E6%95%99%E7%A8%8B/</link>
-        <pubDate>Mon, 22 Jan 2024 23:50:51 +0800</pubDate>
+        <title>Mysql</title>
+        <link>https://xxl999227.github.io/categories/mysql/</link>
+        <pubDate>Wed, 17 Jan 2024 21:33:14 +0800</pubDate>
         
-        <guid>https://xxl999227.github.io/categories/%E6%95%99%E7%A8%8B/</guid>
-        <description></description>
+        <guid>https://xxl999227.github.io/categories/mysql/</guid>
+        <description>&lt;img src="https://xxl999227.github.io/categories/mysql/mysql-logo.png" alt="Featured image of post Mysql" /&gt;</description>
         </item>
         <item>
-        <title>技术</title>
-        <link>https://xxl999227.github.io/categories/%E6%8A%80%E6%9C%AF/</link>
-        <pubDate>Thu, 18 Jan 2024 21:50:56 +0800</pubDate>
+        <title>Kubernetes</title>
+        <link>https://xxl999227.github.io/categories/kubernetes/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
-        <guid>https://xxl999227.github.io/categories/%E6%8A%80%E6%9C%AF/</guid>
-        <description></description>
+        <guid>https://xxl999227.github.io/categories/kubernetes/</guid>
+        <description>&lt;img src="https://xxl999227.github.io/categories/kubernetes/kubernetes-logo.png" alt="Featured image of post Kubernetes" /&gt;</description>
+        </item>
+        <item>
+        <title>Redis</title>
+        <link>https://xxl999227.github.io/categories/redis/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://xxl999227.github.io/categories/redis/</guid>
+        <description>&lt;img src="https://xxl999227.github.io/categories/redis/redis-logo.png" alt="Featured image of post Redis" /&gt;</description>
         </item>
         
     </channel>
