@@ -1,0 +1,1498 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="前置知识点 目前生产部署Kubernetes 集群主要有两种方式：\nkubeadm\nKubeadm 是一个K8s 部署工具，提供kubeadm init 和kubeadm join，用于快速部署Kubernetes 集群。\n">
+<title>【kubernetes】2、集群环境搭建k8s(kubeadm方式)</title>
+
+<link rel='canonical' href='https://xxl999227.github.io/archives/kubernetes2%E9%9B%86%E7%BE%A4%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BAk8skubeadm%E6%96%B9%E5%BC%8F/'>
+
+<link rel="stylesheet" href="/scss/style.min.d91c2070e085e35f1fd5131bcadf95da720496f3d8c0dd302289c6e1955ee051.css"><meta property='og:title' content="【kubernetes】2、集群环境搭建k8s(kubeadm方式)">
+<meta property='og:description' content="前置知识点 目前生产部署Kubernetes 集群主要有两种方式：\nkubeadm\nKubeadm 是一个K8s 部署工具，提供kubeadm init 和kubeadm join，用于快速部署Kubernetes 集群。\n">
+<meta property='og:url' content='https://xxl999227.github.io/archives/kubernetes2%E9%9B%86%E7%BE%A4%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BAk8skubeadm%E6%96%B9%E5%BC%8F/'>
+<meta property='og:site_name' content='潇潇’s blog'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='kubernetes' /><meta property='article:tag' content='环境搭建' /><meta property='article:published_time' content='2024-02-04T18:19:44&#43;08:00'/><meta property='article:modified_time' content='2024-02-04T18:19:44&#43;08:00'/>
+<meta name="twitter:title" content="【kubernetes】2、集群环境搭建k8s(kubeadm方式)">
+<meta name="twitter:description" content="前置知识点 目前生产部署Kubernetes 集群主要有两种方式：\nkubeadm\nKubeadm 是一个K8s 部署工具，提供kubeadm init 和kubeadm join，用于快速部署Kubernetes 集群。\n">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu6975665600438320786.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">❤️‍</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">潇潇’s blog</a></h1>
+            <h2 class="site-description">欢迎来到我的网站，此博客由【Hugo &#43; Stack】来进行搭建，主要分享个人生活和学习笔记</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://xxl999227.github.io/'
+                        target="_blank"
+                        title="Gitee"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-home-2"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l-2 0l9 -9l9 9l-2 0" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" /><path d="M10 12h4v4h-4z" /></svg>
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://github.com/XXL999227'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%85%B3%E4%BA%8E/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%8F%8B%E6%83%85%E9%93%BE%E6%8E%A5/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>友情链接</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span class="switch-model">暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+        <button class="back-to-top" id="scrollToTop" style="
+            position: fixed; 
+            bottom: 20px; 
+            width: 40px; 
+            height: 40px; 
+            border-radius: 50%; 
+            background-color: white; 
+            border: 1px solid #ccc; 
+            display: none; /* 初始隐藏 */
+            align-items: center; 
+            justify-content: center;
+            cursor: pointer;
+            font-size: 20px;
+            color: #888;
+        ">
+            ↑
+        </button>
+        
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#font-stylecolorrgb35-38-59前置知识点font"><font style="color:rgb(35, 38, 59);">前置知识点</font></a></li>
+    <li><a href="#font-stylecolorrgb35-38-59kubeadm-部署方式介绍font"><font style="color:rgb(35, 38, 59);">kubeadm 部署方式介绍</font></a></li>
+    <li><a href="#font-stylecolorrgb35-38-59安装要求font"><font style="color:rgb(35, 38, 59);">安装要求</font></a></li>
+    <li><a href="#font-stylecolorrgb35-38-5924-最终目标font"><font style="color:rgb(35, 38, 59);">2.4 最终目标</font></a></li>
+    <li><a href="#font-stylecolorrgb35-38-59准备环境font"><font style="color:rgb(35, 38, 59);">准备环境</font></a></li>
+    <li><a href="#font-stylecolorrgb35-38-59系统初始化font"><font style="color:rgb(35, 38, 59);">系统初始化</font></a>
+      <ol>
+        <li><a href="#font-stylecolorrgb35-38-59设置-host-文件的相互解析所有节点都要操作font"><font style="color:rgb(35, 38, 59);">设置 Host 文件的相互解析（所有节点都要操作）</font></a></li>
+        <li><a href="#font-stylecolorrgb35-38-59禁用-iptables-和firewalld服务所有节点都要操作font"><font style="color:rgb(35, 38, 59);">禁用 Iptables 和firewalld服务（所有节点都要操作）</font></a></li>
+        <li><a href="#font-stylecolorrgb35-38-59禁用-selinux-和swap分区所有节点都要操作font"><font style="color:rgb(35, 38, 59);">禁用 SELINUX 和swap分区（所有节点都要操作）</font></a></li>
+        <li><a href="#font-stylecolorrgb35-38-59修改linux内核参数所有节点都要操作font"><font style="color:rgb(35, 38, 59);">修改linux内核参数（所有节点都要操作）</font></a></li>
+        <li><a href="#font-stylecolorrgb35-38-59时间同步所有节点都要操作font"><font style="color:rgb(35, 38, 59);">时间同步（所有节点都要操作）</font></a></li>
+        <li><a href="#font-stylecolorrgb35-38-59配置ipvs所有节点都要操作font"><font style="color:rgb(35, 38, 59);">配置ipvs（所有节点都要操作）</font></a></li>
+        <li><a href="#重启机器">重启机器</a></li>
+        <li><a href="#font-stylecolorrgb35-38-59安装-docker--版本20108所有节点都要操作font"><font style="color:rgb(35, 38, 59);">安装 Docker  版本20.10.8（所有节点都要操作）</font></a></li>
+        <li><a href="#font-stylecolorrgb35-38-59安装-kubelet-kubeadm-kubectl-指定版本12110-所有节点都要操作font"><font style="color:rgb(35, 38, 59);">安装 kubelet kubeadm kubectl 指定版本1.21.10 （所有节点都要操作）</font></a></li>
+        <li><a href="#下载-kubernetes-所需镜像">下载 Kubernetes 所需镜像</a></li>
+      </ol>
+    </li>
+    <li><a href="#font-stylecolorrgb35-38-59部署kubernetes-masterfont"><font style="color:rgb(35, 38, 59);">部署Kubernetes Master</font></a>
+      <ol>
+        <li><a href="#font-stylecolorrgb35-38-59初始化主节点主节点操作font"><font style="color:rgb(35, 38, 59);">初始化主节点（主节点操作）</font></a></li>
+        <li><a href="#font-stylecolorrgb35-38-59其余工作节点加入主节点font"><font style="color:rgb(35, 38, 59);">其余工作节点加入主节点</font></a></li>
+        <li><a href="#font-stylecolorrgb35-38-59部署网络font"><font style="color:rgb(35, 38, 59);">部署网络</font></a></li>
+        <li><a href="#至此kubernetes安装完成">至此，Kubernetes安装完成</a></li>
+        <li><a href="#让工作节点也能使用kubectl">让工作节点也能使用kubectl</a></li>
+      </ol>
+    </li>
+    <li><a href="#font-stylecolorrgb35-38-59测试kubernetes-集群font"><font style="color:rgb(35, 38, 59);">测试kubernetes 集群</font></a>
+      <ol>
+        <li><a href="#font-stylecolorrgb35-38-59部署nginx-测试font"><font style="color:rgb(35, 38, 59);">部署nginx 测试</font></a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+<script>
+    
+    const scrollToTopButton = document.getElementById('scrollToTop');
+
+    window.addEventListener('scroll', function() {
+        if (window.scrollY > 0) {
+            scrollToTopButton.style.display = 'flex';
+        } else {
+            scrollToTopButton.style.display = 'none';
+        }
+    });
+
+    scrollToTopButton.addEventListener('click', function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+</script>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/kubernetes/" style="background-color: #30b8eebf; color: #fff;">
+                Kubernetes
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/archives/kubernetes2%E9%9B%86%E7%BE%A4%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BAk8skubeadm%E6%96%B9%E5%BC%8F/">【kubernetes】2、集群环境搭建k8s(kubeadm方式)</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">
+                    创建时间：2024-02-04</time>
+                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-clock-hour-4"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M12 12l3 2" /><path d="M12 7v5" /></svg>
+                <time class="article-time--lastUpdated">
+                    更新时间：2024-02-04</time>
+                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-file-word"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2" /><path d="M9 12l1.333 5l1.667 -4l1.667 4l1.333 -5" /></svg>
+                <time class="article-time--word">
+                    字数总计：3501</time>
+            </div>
+        
+
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h2 id="font-stylecolorrgb35-38-59前置知识点font"><font style="color:rgb(35, 38, 59);">前置知识点</font>
+</h2><p><font style="color:rgb(35, 38, 59);">目前生产部署Kubernetes 集群主要有两种方式：</font></p>
+<p><strong><font style="color:rgb(35, 38, 59);">kubeadm</font></strong></p>
+<p><font style="color:rgb(35, 38, 59);">Kubeadm 是一个K8s 部署工具，提供kubeadm init 和kubeadm join，用于快速部署Kubernetes 集群。</font></p>
+<p><font style="color:rgb(35, 38, 59);">官方地址：</font><a class="link" href="https://kubernetes.io/docs/reference/setup-tools/kubeadm/kubeadm/"  target="_blank" rel="noopener"
+    >https://kubernetes.io/docs/reference/setup-tools/kubeadm/kubeadm/</a></p>
+<p><strong><font style="color:rgb(35, 38, 59);">二进制包</font></strong></p>
+<p><font style="color:rgb(35, 38, 59);">从github 下载发行版的二进制包，手动部署每个组件，组成Kubernetes 集群。</font></p>
+<p><font style="color:rgb(35, 38, 59);">Kubeadm 降低部署门槛，但屏蔽了很多细节，遇到问题很难排查。如果想更容易可控，推荐使用二进制包部署Kubernetes 集群，虽然手动部署麻烦点，期间可以学习很多工作原理，也利于后期维护。</font></p>
+<p><img src="/archives/kubernetes2%E9%9B%86%E7%BE%A4%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BAk8skubeadm%E6%96%B9%E5%BC%8F/img/image.png"
+	width="937"
+	height="372"
+	
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="251"
+		data-flex-basis="604px"
+	
+></p>
+<h2 id="font-stylecolorrgb35-38-59kubeadm-部署方式介绍font"><font style="color:rgb(35, 38, 59);">kubeadm 部署方式介绍</font>
+</h2><p><font style="color:rgb(35, 38, 59);">kubeadm 是官方社区推出的一个用于快速部署kubernetes 集群的工具，这个工具能通过两条指令完成一个kubernetes 集群的部署：</font></p>
+<ul>
+<li><font style="color:rgb(35, 38, 59);">创建一个Master 节点kubeadm init</font></li>
+<li><font style="color:rgb(35, 38, 59);">将Node 节点加入到当前集群中$ kubeadm join &lt;Master 节点的IP 和端口&gt;</font></li>
+</ul>
+<h2 id="font-stylecolorrgb35-38-59安装要求font"><font style="color:rgb(35, 38, 59);">安装要求</font>
+</h2><p><font style="color:rgb(35, 38, 59);">在开始之前，部署Kubernetes 集群机器需要满足以下几个条件：</font></p>
+<ul>
+<li><font style="color:rgb(35, 38, 59);">一台或多台机器，操作系统CentOS7.x-86_x64，</font><font style="color:#DF2A3F;">版本需要大于7.5</font><font style="color:rgb(35, 38, 59);">，否则会出现问题，例如节点加入不到集群</font></li>
+<li><font style="color:rgb(35, 38, 59);">硬件配置：2GB 或更多RAM，2 个CPU 或更多CPU，硬盘30GB 或更多</font></li>
+<li><font style="color:rgb(35, 38, 59);">集群中所有机器之间网络互通</font></li>
+<li><font style="color:rgb(35, 38, 59);">可以访问外网，需要拉取镜像</font></li>
+<li><font style="color:rgb(35, 38, 59);">禁止swap 分区</font></li>
+</ul>
+<h2 id="font-stylecolorrgb35-38-5924-最终目标font"><font style="color:rgb(35, 38, 59);">2.4 最终目标</font>
+</h2><ul>
+<li><font style="color:rgb(35, 38, 59);">在所有节点上安装Docker 和kubeadm</font></li>
+<li><font style="color:rgb(35, 38, 59);">部署Kubernetes Master</font></li>
+<li><font style="color:rgb(35, 38, 59);">部署容器网络插件</font></li>
+<li><font style="color:rgb(35, 38, 59);">部署Kubernetes Node，将节点加入Kubernetes 集群中</font></li>
+<li><font style="color:rgb(35, 38, 59);">部署Dashboard Web 页面，可视化查看Kubernetes 资源</font></li>
+</ul>
+<h2 id="font-stylecolorrgb35-38-59准备环境font"><font style="color:rgb(35, 38, 59);">准备环境</font>
+</h2><p><font style="color:rgb(35, 38, 59);"></font></p>
+<p><img src="/archives/kubernetes2%E9%9B%86%E7%BE%A4%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BAk8skubeadm%E6%96%B9%E5%BC%8F/img/image-1.png"
+	width="662"
+	height="455"
+	
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="145"
+		data-flex-basis="349px"
+	
+></p>
+<div class="table-wrapper"><table>
+  <thead>
+      <tr>
+          <th style="text-align: left"><font style="color:rgb(34, 34, 34);">角色</font></th>
+          <th><font style="color:rgb(34, 34, 34);">IP地址</font></th>
+          <th style="text-align: left"><font style="color:rgb(34, 34, 34);">组件</font></th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><font style="color:rgb(34, 34, 34);">master</font></td>
+          <td><font style="color:rgb(34, 34, 34);">192.168.79.100</font></td>
+          <td style="text-align: left"><font style="color:rgb(34, 34, 34);">docker，kubectl，kubeadm，kubelet</font></td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><font style="color:rgb(34, 34, 34);">node1</font></td>
+          <td><font style="color:rgb(34, 34, 34);">192.168.79.101</font></td>
+          <td style="text-align: left"><font style="color:rgb(34, 34, 34);">docker，kubectl，kubeadm，kubelet</font></td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><font style="color:rgb(34, 34, 34);">node2</font></td>
+          <td><font style="color:rgb(34, 34, 34);">192.168.79.102</font></td>
+          <td style="text-align: left"><font style="color:rgb(34, 34, 34);">docker，kubectl，kubeadm，kubelet</font></td>
+      </tr>
+  </tbody>
+</table></div>
+<p><strong><font style="color:#DF2A3F;">虚拟机准备和网络设置参考：</font></strong>[6-环境搭建&ndash;主机安装_哔哩哔哩_bilibili]</p>
+
+
+
+
+
+
+    
+
+
+<div class="video-wrapper">
+    <iframe src="https://player.bilibili.com/player.html?as_wide=1&amp;high_quality=1&amp;page=6&bvid=BV1Qv41167ck"
+            scrolling="no"
+            frameborder="no"
+            framespacing="0"
+            allowfullscreen="true"
+    >
+    </iframe>
+</div>
+
+<h2 id="font-stylecolorrgb35-38-59系统初始化font"><font style="color:rgb(35, 38, 59);">系统初始化</font>
+</h2><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1">#先查看版本，必须要大于centos7.5</span>
+</span></span><span class="line"><span class="cl">cat /etc/redhat-release
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="font-stylecolorrgb35-38-59设置-host-文件的相互解析所有节点都要操作font"><font style="color:rgb(35, 38, 59);">设置 Host 文件的相互解析（所有节点都要操作）</font>
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">cat <span class="s">&lt;&lt;EOF&gt;&gt; /etc/hosts
+</span></span></span><span class="line"><span class="cl"><span class="s">192.168.79.100 master
+</span></span></span><span class="line"><span class="cl"><span class="s">192.168.79.101 node1
+</span></span></span><span class="line"><span class="cl"><span class="s">192.168.79.102 node2
+</span></span></span><span class="line"><span class="cl"><span class="s">EOF</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#执行完后可以查看一下</span>
+</span></span><span class="line"><span class="cl">vi /etc/hosts
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 出现如下提示则成功</span>
+</span></span><span class="line"><span class="cl">127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+</span></span><span class="line"><span class="cl">::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+</span></span><span class="line"><span class="cl">192.168.79.100 master
+</span></span><span class="line"><span class="cl">192.168.79.101 node1
+</span></span><span class="line"><span class="cl">192.168.79.102 node2
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong><font style="color:#ED740C;">然后在任意一台机器上ping master或者ping node1或者ping node2都能通</font></strong></p>
+<h3 id="font-stylecolorrgb35-38-59禁用-iptables-和firewalld服务所有节点都要操作font"><font style="color:rgb(35, 38, 59);">禁用 Iptables 和firewalld服务（所有节点都要操作）</font>
+</h3><p>k8和docker运行过程中会产生大量<font style="color:rgb(35, 38, 59);">Iptables</font>规则，避免与系统规则混淆，先禁用</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1">#禁用</span>
+</span></span><span class="line"><span class="cl">systemctl stop firewalld
+</span></span><span class="line"><span class="cl"><span class="c1">#关闭开机自启动</span>
+</span></span><span class="line"><span class="cl">systemctl disable firewalld
+</span></span><span class="line"><span class="cl"><span class="c1">#本系统其实没有iptables</span>
+</span></span><span class="line"><span class="cl">systemctl stop iptables
+</span></span><span class="line"><span class="cl">systemctl disable iptables
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="font-stylecolorrgb35-38-59禁用-selinux-和swap分区所有节点都要操作font"><font style="color:rgb(35, 38, 59);">禁用 SELINUX 和swap分区（所有节点都要操作）</font>
+</h3><p>linux的一个安全服务，如果不关闭容易遇到奇葩问题</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1">#setenforce 0只能暂时关闭，需要将/etc/selinux/config中的SELINUX选项改为disabled</span>
+</span></span><span class="line"><span class="cl">setenforce <span class="m">0</span> <span class="o">&amp;&amp;</span> sed -i <span class="s1">&#39;s/^SELINUX=.*/SELINUX=disabled/&#39;</span> /etc/selinux/config
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>swap分区指的是虚拟内存分区,它的作用是在物理内存使用完之后,将磁盘空间虚拟成内存来使用</p>
+<p>启用swap设备会对系统的性能产生非常负面的影响,因此kubernetes要求每个节点都要禁用swap设备</p>
+<p>但是如果因为某些原因确实不能关闭swap分区,就需要在集群安装过程中通过明确的参数进行配置说明</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1">#swapoff -a只能暂时关闭，需要注释掉/etc/fstab中最后一行</span>
+</span></span><span class="line"><span class="cl">swapoff -a <span class="o">&amp;&amp;</span> sed -i <span class="s1">&#39;/ swap / s/^\(.*\)$/#\1/g&#39;</span> /etc/fstab
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="font-stylecolorrgb35-38-59修改linux内核参数所有节点都要操作font"><font style="color:rgb(35, 38, 59);">修改linux内核参数（所有节点都要操作）</font>
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1">#加载网桥过滤模块</span>
+</span></span><span class="line"><span class="cl">modprobe br_netfilter
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#在当前路径下生成kubernetes.conf文件，编辑内核参数，添加网桥过滤和地址转发功能，</span>
+</span></span><span class="line"><span class="cl">cat <span class="s">&lt;&lt;EOF&gt; kubernetes.conf 
+</span></span></span><span class="line"><span class="cl"><span class="s">net.bridge.bridge-nf-call-iptables=1
+</span></span></span><span class="line"><span class="cl"><span class="s">net.bridge.bridge-nf-call-ip6tables=1
+</span></span></span><span class="line"><span class="cl"><span class="s">net.ipv4.ip_forward=1
+</span></span></span><span class="line"><span class="cl"><span class="s">EOF</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#拷贝文件到指定目录</span>
+</span></span><span class="line"><span class="cl">cp kubernetes.conf /etc/sysctl.d/kubernetes.conf
+</span></span><span class="line"><span class="cl"><span class="c1">#重新加载配置</span>
+</span></span><span class="line"><span class="cl">sysctl -p /etc/sysctl.d/kubernetes.conf
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="font-stylecolorrgb35-38-59时间同步所有节点都要操作font"><font style="color:rgb(35, 38, 59);">时间同步（所有节点都要操作）</font>
+</h3><ul>
+<li>Kubernetes 要求集群中的节点时间必须精确一致，所以在每个节点上添加时间同步，这里直接用chronyd服务从网络同步时间</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1">#启动服务</span>
+</span></span><span class="line"><span class="cl">systemctl start chronyd
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#设置开机自启</span>
+</span></span><span class="line"><span class="cl">systemctl <span class="nb">enable</span> chronyd
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#验证</span>
+</span></span><span class="line"><span class="cl">date
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="font-stylecolorrgb35-38-59配置ipvs所有节点都要操作font"><font style="color:rgb(35, 38, 59);">配置ipvs（所有节点都要操作）</font>
+</h3><p><font style="color:rgb(38, 38, 38);">在 Kubernetes 中 service 有两种代理模型，一种是基于 iptables ，另一种是基于 ipvs 的。ipvs 的性能要高于 iptables 的，但是如果要使用它，需要手动载入 ipvs 模块。<br>
+</font><font style="color:rgb(38, 38, 38);">●在三台机器安装 ipset 和 ipvsadm ：</font></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1">#安装 ipset 和 ipvsadm </span>
+</span></span><span class="line"><span class="cl">yum -y install ipset ipvsadm
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1">#生成脚本文件</span>
+</span></span><span class="line"><span class="cl">cat <span class="s">&lt;&lt;EOF&gt; /etc/sysconfig/modules/ipvs.modules 
+</span></span></span><span class="line"><span class="cl"><span class="s">#!/bin/bash
+</span></span></span><span class="line"><span class="cl"><span class="s">modprobe -- ip_vs
+</span></span></span><span class="line"><span class="cl"><span class="s">modprobe -- ip_vs_rr
+</span></span></span><span class="line"><span class="cl"><span class="s">modprobe -- ip_vs_wrr
+</span></span></span><span class="line"><span class="cl"><span class="s">modprobe -- ip_vs_sh
+</span></span></span><span class="line"><span class="cl"><span class="s">modprobe -- nf_conntrack_ipv4
+</span></span></span><span class="line"><span class="cl"><span class="s">EOF</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#授权脚本文件，执行，然后查看结果</span>
+</span></span><span class="line"><span class="cl">chmod <span class="m">755</span> /etc/sysconfig/modules/ipvs.modules <span class="o">&amp;&amp;</span> bash /etc/sysconfig/modules/ipvs.modules <span class="o">&amp;&amp;</span> lsmod <span class="p">|</span> grep -e ip_vs -e nf_conntrack_ipv4
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="重启机器">重启机器
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">reboot
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#重启后查看配置是否生效，出现disable则ok</span>
+</span></span><span class="line"><span class="cl">getenforce
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#swap分区相关都是0则ok</span>
+</span></span><span class="line"><span class="cl">free -m
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="font-stylecolorrgb35-38-59安装-docker--版本20108所有节点都要操作font"><font style="color:rgb(35, 38, 59);">安装 Docker  版本20.10.8（所有节点都要操作）</font>
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1">#先配置阿里云的镜像源</span>
+</span></span><span class="line"><span class="cl">yum-config-manager --add-repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#查看存储库中 Docker 的版本</span>
+</span></span><span class="line"><span class="cl">yum list docker-ce --showduplicates <span class="p">|</span> sort -r
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#安装指定版本的 Docker（v20.10）</span>
+</span></span><span class="line"><span class="cl">yum -y install docker-ce-3:20.10.8-3.el7.x86_64 docker-ce-cli-1:20.10.8-3.el7.x86_64 containerd.io
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">## 创建 /etc/docker 目录</span>
+</span></span><span class="line"><span class="cl">mkdir /etc/docker
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">cat &gt; /etc/docker/daemon.json <span class="s">&lt;&lt;EOF
+</span></span></span><span class="line"><span class="cl"><span class="s">{
+</span></span></span><span class="line"><span class="cl"><span class="s">&#34;exec-opts&#34;: [&#34;native.cgroupdriver=systemd&#34;],
+</span></span></span><span class="line"><span class="cl"><span class="s">&#34;registry-mirrors&#34;: [&#34;https://7u7aivp6.mirror.aliyuncs.com&#34;]
+</span></span></span><span class="line"><span class="cl"><span class="s">}
+</span></span></span><span class="line"><span class="cl"><span class="s">EOF</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 由于没有启动过docker，所以无需重载配置文件 systemctl daemon-reload</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#启动docker并设置开机自启动</span>
+</span></span><span class="line"><span class="cl">systemctl start docker <span class="o">&amp;&amp;</span> systemctl <span class="nb">enable</span> docker
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="font-stylecolorrgb35-38-59安装-kubelet-kubeadm-kubectl-指定版本12110-所有节点都要操作font"><font style="color:rgb(35, 38, 59);">安装 kubelet kubeadm kubectl 指定版本1.21.10 （所有节点都要操作）</font>
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1">#配置kubernetes镜像源</span>
+</span></span><span class="line"><span class="cl">cat <span class="s">&lt;&lt;EOF &gt; /etc/yum.repos.d/kubernetes.repo
+</span></span></span><span class="line"><span class="cl"><span class="s">[kubernetes]
+</span></span></span><span class="line"><span class="cl"><span class="s">name=Kubernetes
+</span></span></span><span class="line"><span class="cl"><span class="s">baseurl=http://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64
+</span></span></span><span class="line"><span class="cl"><span class="s">enabled=1
+</span></span></span><span class="line"><span class="cl"><span class="s">gpgcheck=0
+</span></span></span><span class="line"><span class="cl"><span class="s">repo_gpgcheck=0
+</span></span></span><span class="line"><span class="cl"><span class="s">gpgkey=http://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg
+</span></span></span><span class="line"><span class="cl"><span class="s">http://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
+</span></span></span><span class="line"><span class="cl"><span class="s">EOF</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#安装kubelet kubeadm kubectl 指定版本</span>
+</span></span><span class="line"><span class="cl">yum install -y kubelet-1.21.10 kubeadm-1.21.10 kubectl-1.21.10
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#为了实现 Docker 使用的 cgroup drvier 和 kubelet 使用的 cgroup drver 一致，</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#建议修改 /etc/sysconfig/kubelet 文件的内容：</span>
+</span></span><span class="line"><span class="cl">vim /etc/sysconfig/kubelet
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 修改</span>
+</span></span><span class="line"><span class="cl"><span class="nv">KUBELET_EXTRA_ARGS</span><span class="o">=</span><span class="s2">&#34;--cgroup-driver=systemd&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">KUBE_PROXY_MODE</span><span class="o">=</span><span class="s2">&#34;ipvs&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#设置开机自启，由于没有生成配置文件，集群初始化后自动启动：</span>
+</span></span><span class="line"><span class="cl">systemctl <span class="nb">enable</span> kubelet
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="下载-kubernetes-所需镜像">下载 Kubernetes 所需镜像
+</h3><p><font style="color:rgb(38, 38, 38);">查看 Kubernetes 安装所需镜像：</font></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">kubeadm config images list
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>:::color2
+从阿里云拉取所需的七个镜像</p>
+<p>:::</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/kube-apiserver:v1.21.10
+</span></span><span class="line"><span class="cl">docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/kube-controller-manager:v1.21.10
+</span></span><span class="line"><span class="cl">docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/kube-scheduler:v1.21.10
+</span></span><span class="line"><span class="cl">docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/kube-proxy:v1.21.10
+</span></span><span class="line"><span class="cl">docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/pause:3.4.1
+</span></span><span class="line"><span class="cl">docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/etcd:3.4.13-0
+</span></span><span class="line"><span class="cl">docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/coredns:v1.8.0
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1">#查看镜像，这时可以看到镜像的tag不对，需要改为kubernetes的tag，方便后续使用</span>
+</span></span><span class="line"><span class="cl">docker images
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#给镜像重新打tag</span>
+</span></span><span class="line"><span class="cl">docker tag registry.cn-hangzhou.aliyuncs.com/google_containers/kube-apiserver:v1.21.10 k8s.gcr.io/kube-apiserver:v1.21.10 <span class="o">&amp;&amp;</span>
+</span></span><span class="line"><span class="cl">docker tag registry.cn-hangzhou.aliyuncs.com/google_containers/kube-controller-manager:v1.21.10 k8s.gcr.io/kube-controller-manager:v1.21.10 <span class="o">&amp;&amp;</span>
+</span></span><span class="line"><span class="cl">docker tag registry.cn-hangzhou.aliyuncs.com/google_containers/kube-scheduler:v1.21.10 k8s.gcr.io/kube-scheduler:v1.21.10 <span class="o">&amp;&amp;</span>
+</span></span><span class="line"><span class="cl">docker tag registry.cn-hangzhou.aliyuncs.com/google_containers/kube-proxy:v1.21.10 k8s.gcr.io/kube-proxy:v1.21.10 <span class="o">&amp;&amp;</span>
+</span></span><span class="line"><span class="cl">docker tag registry.cn-hangzhou.aliyuncs.com/google_containers/pause:3.4.1 k8s.gcr.io/pause:3.4.1 <span class="o">&amp;&amp;</span>
+</span></span><span class="line"><span class="cl">docker tag registry.cn-hangzhou.aliyuncs.com/google_containers/etcd:3.4.13-0 k8s.gcr.io/etcd:3.4.13-0 <span class="o">&amp;&amp;</span>
+</span></span><span class="line"><span class="cl">docker tag registry.cn-hangzhou.aliyuncs.com/google_containers/coredns:v1.8.0 k8s.gcr.io/coredns:v1.8.0
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#可以移除老镜像，也可以不移除</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="font-stylecolorrgb35-38-59部署kubernetes-masterfont"><font style="color:rgb(35, 38, 59);">部署Kubernetes Master</font>
+</h2><h3 id="font-stylecolorrgb35-38-59初始化主节点主节点操作font"><font style="color:rgb(35, 38, 59);">初始化主节点（主节点操作）</font>
+</h3><p>注意：</p>
+<ul>
+<li>apiserver-advertise-address 一定要是master主机的 IP 地址。当然，你可以在任意一台机器上执行下面的命令，它就是主节点</li>
+<li>apiserver-advertise-address 、service-cidr 和 pod-network-cidr 不能在同一个网络范围内。</li>
+<li>不要使用 172.17.0.1/16 网段范围，因为这是 Docker 默认使用的。</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1">#第一个参数为master节点的地址，由于默认拉取镜像地址k8s.gcr.io国内无法访问，这里需要指定阿里云镜像仓库地址</span>
+</span></span><span class="line"><span class="cl">kubeadm init <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  --apiserver-advertise-address<span class="o">=</span>192.168.79.100 <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  --image-repository<span class="o">=</span>registry.cn-hangzhou.aliyuncs.com/google_containers <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  --kubernetes-version<span class="o">=</span>v1.21.10 <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  --service-cidr<span class="o">=</span>10.96.0.0/16 <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  --pod-network-cidr<span class="o">=</span>10.244.0.0/16
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#安装成功后可以看到</span>
+</span></span><span class="line"><span class="cl">Your Kubernetes control-plane has initialized successfully!
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">To start using your cluster, you need to run the following as a regular user:
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  mkdir -p <span class="nv">$HOME</span>/.kube
+</span></span><span class="line"><span class="cl">  sudo cp -i /etc/kubernetes/admin.conf <span class="nv">$HOME</span>/.kube/config
+</span></span><span class="line"><span class="cl">  sudo chown <span class="k">$(</span>id -u<span class="k">)</span>:<span class="k">$(</span>id -g<span class="k">)</span> <span class="nv">$HOME</span>/.kube/config
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Alternatively, <span class="k">if</span> you are the root user, you can run:
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="nb">export</span> <span class="nv">KUBECONFIG</span><span class="o">=</span>/etc/kubernetes/admin.conf
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">You should now deploy a pod network to the cluster.
+</span></span><span class="line"><span class="cl">Run <span class="s2">&#34;kubectl apply -f [podnetwork].yaml&#34;</span> with one of the options listed at:
+</span></span><span class="line"><span class="cl">  https://kubernetes.io/docs/concepts/cluster-administration/addons/
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Then you can join any number of worker nodes by running the following on each as root:
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">kubeadm join 192.168.79.100:6443 --token kpoksa.a5dhuqu4ccbap85o <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>        --discovery-token-ca-cert-hash sha256:e070c812307c6aaaccb328790001ce5bad043a994106b0949c4930b81e93eadc
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#然后按照指示执行如下操作</span>
+</span></span><span class="line"><span class="cl">  mkdir -p <span class="nv">$HOME</span>/.kube
+</span></span><span class="line"><span class="cl">  sudo cp -i /etc/kubernetes/admin.conf <span class="nv">$HOME</span>/.kube/config
+</span></span><span class="line"><span class="cl">  sudo chown <span class="k">$(</span>id -u<span class="k">)</span>:<span class="k">$(</span>id -g<span class="k">)</span> <span class="nv">$HOME</span>/.kube/config
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 如果是 root 用户，还可以执行如下命令</span>
+</span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">KUBECONFIG</span><span class="o">=</span>/etc/kubernetes/admin.conf
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#此时如果执行kubectl get nodes，可以看到没有任何工作节点</span>
+</span></span><span class="line"><span class="cl">kubectl get nodes
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong><font style="color:#DF2A3F;">默认的 token 有效期为 24 小时，当过期之后，该 token 就不能用了，这时可以使用如下的命令创建 token ：</font></strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">kubeadm token create --print-join-command
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>生成一个永不过期的token</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">kubeadm token create --ttl <span class="m">0</span> --print-join-command
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="font-stylecolorrgb35-38-59其余工作节点加入主节点font"><font style="color:rgb(35, 38, 59);">其余工作节点加入主节点</font>
+</h3><p>按照上一步的指示，将其余的工作节点加入到主节点</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">kubeadm join 192.168.79.100:6443 --token kpoksa.a5dhuqu4ccbap85o <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>        --discovery-token-ca-cert-hash sha256:e070c812307c6aaaccb328790001ce5bad043a994106b0949c4930b81e93eadc
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>然后再在master节点运行kubectl get nodes可以看到相应的工作节点了</p>
+<p><img src="/archives/kubernetes2%E9%9B%86%E7%BE%A4%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BAk8skubeadm%E6%96%B9%E5%BC%8F/img/image-2.png"
+	width="765"
+	height="208"
+	
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="367"
+		data-flex-basis="882px"
+	
+></p>
+<h3 id="font-stylecolorrgb35-38-59部署网络font"><font style="color:rgb(35, 38, 59);">部署网络</font>
+</h3><ul>
+<li><a class="link" href="https://projectcalico.docs.tigera.io/getting-started/kubernetes/self-managed-onprem/onpremises"  target="_blank" rel="noopener"
+    ><font style="color:#117CEE;">官网</font></a></li>
+<li><font style="color:rgb(35, 38, 59);">Kubernetes 支持多种网络插件，比如 flannel、calico、canal 等，任选一种即可，本次选择 calico（在 192.168.65.100 节点上执行，网络不行，请点这里 </font><a class="link" href="https://xxl-study.yuque.com/attachments/yuque/0/2024/yaml/42408833/1706539550656-43942426-e35d-4a3a-925c-fce564ec2183.yaml"  target="_blank" rel="noopener"
+    >calico.yaml</a><font style="color:rgb(35, 38, 59);">）。</font></li>
+<li><a class="link" href="https://projectcalico.docs.tigera.io/getting-started/kubernetes/requirements"  target="_blank" rel="noopener"
+    ><font style="color:#117CEE;">calico 和 k8s 的版本对应</font></a><font style="color:#117CEE;"> </font></li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">kubectl apply -f https://projectcalico.docs.tigera.io/v3.19/manifests/calico.yaml
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#网络不好将calico.yaml文件上传到root目录下然后执行</span>
+</span></span><span class="line"><span class="cl">kubectl apply -f /root/calico.yaml
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#网络这一步的等待时间可能比较久，中间可能会出现部分节点就绪，部分未就绪的情况</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>然后查看节点状态</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">kubectl get nodes
+</span></span><span class="line"><span class="cl"><span class="c1">#结果如下</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">[</span>root@master /<span class="o">]</span><span class="c1"># kubectl get nodes</span>
+</span></span><span class="line"><span class="cl">NAME     STATUS   ROLES                  AGE   VERSION
+</span></span><span class="line"><span class="cl">master   Ready    control-plane,master   27m   v1.21.10
+</span></span><span class="line"><span class="cl">node1    Ready    &lt;none&gt;                 21m   v1.21.10
+</span></span><span class="line"><span class="cl">node2    Ready    &lt;none&gt;                 21m   v1.21.10
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="至此kubernetes安装完成">至此，Kubernetes安装完成
+</h3><h3 id="让工作节点也能使用kubectl">让工作节点也能使用kubectl
+</h3><p>kubectl的运行是需要进行配置的,它的配置文件是$HOME/.kube,如果想要在node节点运行此命令,需要将</p>
+<p>master上的.kube文件复制到node节点上,即在master节点上执行下面操作:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">scp -r <span class="nv">$HOME</span>/.kube node1:<span class="nv">$HOME</span>/ <span class="o">&amp;&amp;</span> scp -r <span class="nv">$HOME</span>/.kube node2:<span class="nv">$HOME</span>/
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="font-stylecolorrgb35-38-59测试kubernetes-集群font"><font style="color:rgb(35, 38, 59);">测试kubernetes 集群</font>
+</h2><h3 id="font-stylecolorrgb35-38-59部署nginx-测试font"><font style="color:rgb(35, 38, 59);">部署nginx 测试</font>
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1">#在控制节点执行安装nginx</span>
+</span></span><span class="line"><span class="cl">kubectl create deployment nginx --image<span class="o">=</span>nginx:1.14-alpine
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#暴露80端口</span>
+</span></span><span class="line"><span class="cl">kubectl expose deployment nginx --port<span class="o">=</span><span class="m">80</span> --type<span class="o">=</span>NodePort
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#查看pod和service</span>
+</span></span><span class="line"><span class="cl">kubectl get pod,svc
+</span></span><span class="line"><span class="cl"><span class="c1">#结果如下</span>
+</span></span><span class="line"><span class="cl">NAME                         READY   STATUS    RESTARTS   AGE
+</span></span><span class="line"><span class="cl">pod/nginx-65c4bffcb6-knqpr   1/1     Running   <span class="m">0</span>          2m20s
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">NAME                 TYPE        CLUSTER-IP      EXTERNAL-IP   PORT<span class="o">(</span>S<span class="o">)</span>        AGE
+</span></span><span class="line"><span class="cl">service/kubernetes   ClusterIP   10.96.0.1       &lt;none&gt;        443/TCP        37m
+</span></span><span class="line"><span class="cl">service/nginx        NodePort    10.96.129.185   &lt;none&gt;        80:32100/TCP   100s
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><font style="color:#ED740C;">此时可以使用master节点的ip加nginx的端口访问，例如   192.168.79.100:32100</font></p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/kubernetes/">Kubernetes</a>
+        
+            <a href="/tags/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">环境搭建</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">相关文章</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="has-image">
+    <a href="/archives/kubernetes1kubernetes%E4%BB%8B%E7%BB%8D/">
+        
+        
+            <div class="article-image">
+                <img src="/archives/kubernetes1kubernetes%E4%BB%8B%E7%BB%8D/img/image.37352077f9455725c58b602276ce326f.png" 
+                        width="1000" 
+                        height="250" 
+                        loading="lazy"
+                        alt="Featured image of post 【kubernetes】1、kubernetes介绍"
+                        
+                        data-hash="md5-NzUgd/lFVyXFi2Aids4ybw==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">【kubernetes】1、kubernetes介绍</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    <script
+    src="https://giscus.app/client.js"
+    data-repo="XXL999227/XXL999227.github.io"
+    data-repo-id="R_kgDOINqX4g"
+    data-category="General"
+    data-category-id="DIC_kwDOINqX4s4CiTUd"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="top"
+    data-theme="light"
+    data-lang="zh-CN"
+    crossorigin="anonymous"
+    async
+></script>
+<script>
+    function setGiscusTheme(theme) {
+        let giscus = document.querySelector("iframe.giscus-frame");
+        if (giscus) {
+            giscus.contentWindow.postMessage(
+                {
+                    giscus: {
+                        setConfig: {
+                            theme: theme,
+                        },
+                    },
+                },
+                "https://giscus.app"
+            );
+        }
+    }
+
+    (function () {
+        addEventListener("message", (e) => {
+            if (event.origin !== "https://giscus.app") return;
+            handler();
+        });
+        window.addEventListener("onColorSchemeChange", handler);
+
+        function handler() {
+            if (document.documentElement.dataset.scheme === "light") {
+                setGiscusTheme('light');
+            } else {
+                setGiscusTheme('dark_dimmed');
+            }
+        }
+    })();
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2023 - 
+        
+        2024 Powered by 潇潇
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.27.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+<script>
+    
+    const cssPath = "https://xxl999227.github.io/waifu/waifu.css";
+    const tipsJsonPath = "https://xxl999227.github.io/waifu/waifu-tips.json";
+    const myTipsJsonPath = "https://xxl999227.github.io/waifu/my-waifu-tips.js";
+    const gamePath = "https://xxl999227.github.io/waifu/asteroids.js";
+    
+    const live2d_path = "https://fastly.jsdelivr.net/gh/stevenjoezhang/live2d-widget@latest/";
+    const live2dMinJsPath = "https://xxl999227.github.io/waifu/live2d.min.js";
+
+    
+    function loadExternalResource(url, type) {
+        return new Promise((resolve, reject) => {
+            let tag;
+            if (type === "css") {
+                tag = document.createElement("link");
+                tag.rel = "stylesheet";
+                tag.href = url;
+            }
+            else if (type === "js") {
+                tag = document.createElement("script");
+                tag.src = url;
+            }
+            if (tag) {
+                tag.onload = () => resolve(url);
+                tag.onerror = () => reject(url);
+                document.head.appendChild(tag);
+            }
+        });
+    }
+
+    
+    if (screen.width >= 768) {
+        Promise.all([
+            loadExternalResource(cssPath, "css"),
+            loadExternalResource(live2dMinJsPath, "js"),
+            loadExternalResource(myTipsJsonPath, "js")
+        ]).then(() => {
+            
+            initWidget({
+                waifuPath: tipsJsonPath,
+                gamePath: gamePath,
+                cdnPath: "https://cdn.jsdelivr.net/gh/XXL999227/static-resource@v1.0.0",
+                tools: ["hitokoto", "asteroids", "switch-model", "switch-texture", "photo", "quit"]
+             
+            });
+            
+            initWaifuMouseEvent();
+        });
+    }
+
+    function initWaifuMouseEvent() {
+        const waifu = document.getElementById("waifu");
+        let isDown = false;
+        let waifuLeft;
+        let mouseLeft;
+        let waifuTop;
+        let mouseTop;
+        
+        waifu.onmousedown = function (e) {
+            isDown = true;
+            
+            waifuLeft = waifu.offsetLeft;
+            mouseLeft = e.clientX;
+            
+            waifuTop = waifu.offsetTop;
+            mouseTop = e.clientY;
+        }
+        
+        window.onmousemove = function (e) {
+            if (!isDown) {
+                return;
+            }
+            
+            let currentLeft = waifuLeft + (e.clientX - mouseLeft);
+            if (currentLeft < 0) {
+                currentLeft = 0;
+            } else if (currentLeft > window.innerWidth - 300) {
+                currentLeft = window.innerWidth - 300;
+            }
+            waifu.style.left = currentLeft  + "px";
+            
+            let currentTop = waifuTop + (e.clientY - mouseTop);
+            if (currentTop < 30) {
+                currentTop = 30
+            } else if (currentTop > window.innerHeight - 290) {
+                currentTop = window.innerHeight - 290
+            }
+            waifu.style.top = currentTop + "px";
+        }
+        
+        window.onmouseup = function (e) {
+            isDown = false;
+        }
+    }
+</script>
+
+<script src= https://xxl999227.github.io/background/particles/particles.js></script>
+
+<link rel="stylesheet" href= https://xxl999227.github.io/background/particles/style.css>
+
+
+<div id="particles-js"></div>
+
+<script>
+    
+
+    particlesJS.load('particles-js', "https://xxl999227.github.io/background/particles/particlesjs-config.json", function() {
+        console.log('particles.js loaded - callback');
+    });
+</script>
+    </body>
+</html>
