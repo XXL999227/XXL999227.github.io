@@ -261,6 +261,307 @@
 </description>
         </item>
         <item>
+        <title>【微服务】3、Eureka注册中心</title>
+        <link>https://xxl999227.github.io/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A13eureka%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83/</link>
+        <pubDate>Tue, 16 Apr 2024 16:23:35 +0800</pubDate>
+        
+        <guid>https://xxl999227.github.io/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A13eureka%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83/</guid>
+        <description>&lt;h2 id=&#34;1font-stylecolor262626服务调用出现的问题font&#34;&gt;1、&lt;strong&gt;&lt;font style=&#34;color:#262626;&#34;&gt;服务调用出现的问题&lt;/font&gt;&lt;/strong&gt;
+&lt;/h2&gt;&lt;p&gt;:::color3&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;font style=&#34;color:#262626;&#34;&gt;服务消费者该如何获取服务提供者的地址信息？&lt;/font&gt;&lt;/li&gt;
+&lt;li&gt;&lt;font style=&#34;color:#262626;&#34;&gt;果有多个服务提供者，消费者该如何选择？&lt;/font&gt;&lt;/li&gt;
+&lt;li&gt;&lt;font style=&#34;color:#262626;&#34;&gt;消费者如何得知服务提供者的健康状态？&lt;/font&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;:::&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://xxl999227.github.io/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A13eureka%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83/img/image.png&#34;
+	width=&#34;1132&#34;
+	height=&#34;328&#34;
+	
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;345&#34;
+		data-flex-basis=&#34;828px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;2eureka的作用&#34;&gt;2、Eureka的作用
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;https://xxl999227.github.io/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A13eureka%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83/img/image-1.png&#34;
+	width=&#34;1345&#34;
+	height=&#34;730&#34;
+	
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;184&#34;
+		data-flex-basis=&#34;442px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;font style=&#34;color:#262626;&#34;&gt;消费者该如何获取服务提供者具体信息？&lt;/font&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;font style=&#34;color:black;&#34;&gt;服务提供者启动时向eureka注册自己的信息&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;&lt;font style=&#34;color:black;&#34;&gt;eureka保存这些信息&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;&lt;font style=&#34;color:black;&#34;&gt;消费者根据&lt;/font&gt;&lt;font style=&#34;color:#DF2A3F;&#34;&gt;服务名称&lt;/font&gt;&lt;font style=&#34;color:black;&#34;&gt;向eureka拉取提供者信息&lt;/font&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;font style=&#34;color:#262626;&#34;&gt;如果有多个服务提供者，消费者该如何选择？&lt;/font&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;font style=&#34;color:black;&#34;&gt;服务消费者利用&lt;/font&gt;&lt;font style=&#34;color:#DF2A3F;&#34;&gt;负载均衡&lt;/font&gt;&lt;font style=&#34;color:black;&#34;&gt;算法，从服务列表中挑选一个&lt;/font&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;font style=&#34;color:#262626;&#34;&gt;消费者如何感知服务提供者健康状态？&lt;/font&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;font style=&#34;color:black;&#34;&gt;服务提供者会每隔30秒向EurekaServer发送心跳请求，报告健康状态&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;&lt;font style=&#34;color:black;&#34;&gt;eureka会更新记录服务列表信息，心跳不正常会被剔除&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;&lt;font style=&#34;color:black;&#34;&gt;消费者就可以拉取到最新的信息&lt;/font&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;3总结&#34;&gt;3、总结
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;https://xxl999227.github.io/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A13eureka%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83/img/image-2.png&#34;
+	width=&#34;1283&#34;
+	height=&#34;543&#34;
+	
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;236&#34;
+		data-flex-basis=&#34;567px&#34;
+	
+&gt;&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>【微服务】2、服务拆分及远程调用</title>
+        <link>https://xxl999227.github.io/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A12%E6%9C%8D%E5%8A%A1%E6%8B%86%E5%88%86%E5%8F%8A%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8/</link>
+        <pubDate>Tue, 16 Apr 2024 15:33:50 +0800</pubDate>
+        
+        <guid>https://xxl999227.github.io/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A12%E6%9C%8D%E5%8A%A1%E6%8B%86%E5%88%86%E5%8F%8A%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8/</guid>
+        <description>&lt;h2 id=&#34;1微服务拆分&#34;&gt;1、微服务拆分
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;https://xxl999227.github.io/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A12%E6%9C%8D%E5%8A%A1%E6%8B%86%E5%88%86%E5%8F%8A%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8/img/image.png&#34;
+	width=&#34;937&#34;
+	height=&#34;480&#34;
+	
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;195&#34;
+		data-flex-basis=&#34;468px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://xxl999227.github.io/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A12%E6%9C%8D%E5%8A%A1%E6%8B%86%E5%88%86%E5%8F%8A%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8/img/image-1.png&#34;
+	width=&#34;1735&#34;
+	height=&#34;894&#34;
+	
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;194&#34;
+		data-flex-basis=&#34;465px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://xxl-study.yuque.com/attachments/yuque/0/2024/sql/42408833/1713200471379-47d4fefc-7c39-4f00-b17b-baffde97a6e0.sql&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;cloud-order.sql&lt;/a&gt;&lt;a class=&#34;link&#34; href=&#34;https://xxl-study.yuque.com/attachments/yuque/0/2024/sql/42408833/1713200471573-831e6e95-625c-486f-8450-ed7c29e61584.sql&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;cloud-user.sql&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://xxl999227.github.io/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A12%E6%9C%8D%E5%8A%A1%E6%8B%86%E5%88%86%E5%8F%8A%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8/img/image-2.png&#34;
+	width=&#34;1847&#34;
+	height=&#34;890&#34;
+	
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;207&#34;
+		data-flex-basis=&#34;498px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://xxl999227.github.io/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A12%E6%9C%8D%E5%8A%A1%E6%8B%86%E5%88%86%E5%8F%8A%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8/img/image-3.png&#34;
+	width=&#34;937&#34;
+	height=&#34;466&#34;
+	
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;201&#34;
+		data-flex-basis=&#34;482px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;2提供者与消费者&#34;&gt;2、提供者与消费者
+&lt;/h2&gt;&lt;p&gt;:::warning&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;font style=&#34;color:#262626;&#34;&gt;服务提供者：一次业务中，被其它微服务调用的服务。（提供接口给其它微服务）&lt;/font&gt;&lt;/li&gt;
+&lt;li&gt;&lt;font style=&#34;color:#262626;&#34;&gt;服务消费者：一次业务中，调用其它微服务的服务。（调用其它微服务提供的接口）&lt;/font&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;:::&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://xxl999227.github.io/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A12%E6%9C%8D%E5%8A%A1%E6%8B%86%E5%88%86%E5%8F%8A%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8/img/image-4.png&#34;
+	width=&#34;1059&#34;
+	height=&#34;187&#34;
+	
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;566&#34;
+		data-flex-basis=&#34;1359px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;font style=&#34;color:#DF2A3F;&#34;&gt;服务调用关系&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;:::color2&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;font style=&#34;color:black;&#34;&gt;服务提供者：暴露接口给其它微服务调用&lt;/font&gt;&lt;/li&gt;
+&lt;li&gt;&lt;font style=&#34;color:black;&#34;&gt;服务消费者&lt;/font&gt;&lt;font style=&#34;color:black;&#34;&gt;：&lt;/font&gt;&lt;font style=&#34;color:black;&#34;&gt;调用其它微服务提供的接口&lt;/font&gt;&lt;/li&gt;
+&lt;li&gt;&lt;font style=&#34;color:black;&#34;&gt;提供者与消费者角色其实是&lt;/font&gt;&lt;strong&gt;&lt;font style=&#34;color:black;&#34;&gt;相对&lt;/font&gt;&lt;/strong&gt;&lt;font style=&#34;color:black;&#34;&gt;的&lt;/font&gt;&lt;/li&gt;
+&lt;li&gt;&lt;font style=&#34;color:black;&#34;&gt;一个服务可以同时是服务提供者和服务消费者&lt;/font&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;:::&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>【微服务】1、认识微服务</title>
+        <link>https://xxl999227.github.io/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A11%E8%AE%A4%E8%AF%86%E5%BE%AE%E6%9C%8D%E5%8A%A1/</link>
+        <pubDate>Tue, 16 Apr 2024 15:24:26 +0800</pubDate>
+        
+        <guid>https://xxl999227.github.io/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A11%E8%AE%A4%E8%AF%86%E5%BE%AE%E6%9C%8D%E5%8A%A1/</guid>
+        <description>&lt;h2 id=&#34;1服务架构演变&#34;&gt;1、服务架构演变
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;https://xxl999227.github.io/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A11%E8%AE%A4%E8%AF%86%E5%BE%AE%E6%9C%8D%E5%8A%A1/img/image.png&#34;
+	width=&#34;1406&#34;
+	height=&#34;651&#34;
+	
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;215&#34;
+		data-flex-basis=&#34;518px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://xxl999227.github.io/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A11%E8%AE%A4%E8%AF%86%E5%BE%AE%E6%9C%8D%E5%8A%A1/img/image-1.png&#34;
+	width=&#34;1343&#34;
+	height=&#34;673&#34;
+	
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;199&#34;
+		data-flex-basis=&#34;478px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://xxl999227.github.io/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A11%E8%AE%A4%E8%AF%86%E5%BE%AE%E6%9C%8D%E5%8A%A1/img/image-2.png&#34;
+	width=&#34;937&#34;
+	height=&#34;485&#34;
+	
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;193&#34;
+		data-flex-basis=&#34;463px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;font style=&#34;color:#262626;&#34;&gt;微服务是一种经过良好架构设计的&lt;/font&gt;&lt;strong&gt;&lt;font style=&#34;color:#262626;&#34;&gt;分布式&lt;/font&gt;&lt;/strong&gt;&lt;font style=&#34;color:#262626;&#34;&gt;架构方案，微服务架构特征：&lt;/font&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;font style=&#34;color:#262626;&#34;&gt;单一职责：微服务拆分粒度更小，每一个服务都对应唯一的业务能力，做到单一职责，避免重复业务开发&lt;/font&gt;&lt;/li&gt;
+&lt;li&gt;&lt;font style=&#34;color:#262626;&#34;&gt;面向服务：微服务对外暴露业务接口&lt;/font&gt;&lt;/li&gt;
+&lt;li&gt;&lt;font style=&#34;color:#262626;&#34;&gt;自治：团队独立、技术独立、数据独立、部署独立&lt;/font&gt;&lt;/li&gt;
+&lt;li&gt;&lt;font style=&#34;color:#262626;&#34;&gt;隔离性强：服务调用做好隔离、容错、降级，避免出现级联问题&lt;/font&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://xxl999227.github.io/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A11%E8%AE%A4%E8%AF%86%E5%BE%AE%E6%9C%8D%E5%8A%A1/img/image-3.png&#34;
+	width=&#34;1059&#34;
+	height=&#34;286&#34;
+	
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;370&#34;
+		data-flex-basis=&#34;888px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://xxl999227.github.io/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A11%E8%AE%A4%E8%AF%86%E5%BE%AE%E6%9C%8D%E5%8A%A1/img/image-4.png&#34;
+	width=&#34;1260&#34;
+	height=&#34;592&#34;
+	
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;212&#34;
+		data-flex-basis=&#34;510px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;2微服务技术对比&#34;&gt;2、微服务技术对比
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;https://xxl999227.github.io/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A11%E8%AE%A4%E8%AF%86%E5%BE%AE%E6%9C%8D%E5%8A%A1/img/image-5.png&#34;
+	width=&#34;1364&#34;
+	height=&#34;704&#34;
+	
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;193&#34;
+		data-flex-basis=&#34;465px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://xxl999227.github.io/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A11%E8%AE%A4%E8%AF%86%E5%BE%AE%E6%9C%8D%E5%8A%A1/img/image-6.png&#34;
+	width=&#34;1755&#34;
+	height=&#34;742&#34;
+	
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;236&#34;
+		data-flex-basis=&#34;567px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://xxl999227.github.io/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A11%E8%AE%A4%E8%AF%86%E5%BE%AE%E6%9C%8D%E5%8A%A1/img/image-7.png&#34;
+	width=&#34;1823&#34;
+	height=&#34;807&#34;
+	
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;225&#34;
+		data-flex-basis=&#34;542px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;3springcloud&#34;&gt;3、SpringCloud
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;font style=&#34;color:#262626;&#34;&gt;SpringCloud是目前国内使用最广泛的微服务框架。官网地址：&lt;/font&gt;&lt;a class=&#34;link&#34; href=&#34;https://spring.io/projects/spring-cloud&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://spring.io/projects/spring-cloud&lt;/a&gt;&lt;font style=&#34;color:#262626;&#34;&gt;。&lt;/font&gt;&lt;/li&gt;
+&lt;li&gt;&lt;font style=&#34;color:#262626;&#34;&gt;SpringCloud集成了各种微服务功能组件，并基于SpringBoot实现了这些组件的自动装配，从而&lt;/font&gt;&lt;font style=&#34;color:#333333;&#34;&gt;提供了良好的开箱即用体验：&lt;/font&gt;&lt;img src=&#34;https://xxl999227.github.io/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A11%E8%AE%A4%E8%AF%86%E5%BE%AE%E6%9C%8D%E5%8A%A1/img/image-8.png&#34;
+	width=&#34;1147&#34;
+	height=&#34;499&#34;
+	
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;229&#34;
+		data-flex-basis=&#34;551px&#34;
+	
+&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;font style=&#34;color:#404040;&#34;&gt;l&lt;/font&gt;&lt;font style=&#34;color:#333333;&#34;&gt;SpringCloud与SpringBoot的版本兼容关系可以在官网找到 ：&lt;/font&gt;&lt;img src=&#34;https://xxl999227.github.io/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A11%E8%AE%A4%E8%AF%86%E5%BE%AE%E6%9C%8D%E5%8A%A1/img/image-9.png&#34;
+	width=&#34;1112&#34;
+	height=&#34;614&#34;
+	
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;181&#34;
+		data-flex-basis=&#34;434px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;font style=&#34;color:#404040;&#34;&gt;&lt;/font&gt;&lt;font style=&#34;color:#262626;&#34;&gt;我们用的版本是 &lt;/font&gt;&lt;font style=&#34;color:#333333;&#34;&gt;Hoxton.SR10，因此对应的SpringBoot版本是2.3.x版本。&lt;/font&gt;&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>【kubernetes】3、Kubernetes（v1.21）概念</title>
         <link>https://xxl999227.github.io/archives/kubernetes3kubernetesv1.21%E6%A6%82%E5%BF%B5/</link>
         <pubDate>Tue, 12 Mar 2024 14:30:05 +0800</pubDate>
