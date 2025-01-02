@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="zh-cn" dir="ltr">
     <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="微服务拆分 cloud-order.sqlcloud-user.sql\n提供者与消费者 :::warning\n服务提供者：一次业务中，被其它微服务调用的服务。（提供接口给其它微服务） 服务消费者：一次业务中，调用其它微服务的服务。（调用其它微服务提供的接口） :::\n服务调用关系\n:::color2\n服务提供者：暴露接口给其它微服务调用 服务消费者：调用其它微服务提供的接口 提供者与消费者角色其实是相对的 一个服务可以同时是服务提供者和服务消费者 :::\n">
-<title>【微服务】2、服务拆分及远程调用</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="负载均衡流程 负载均衡策略 内置负载均衡规则类 规则描述 RoundRobinRule 简单轮询服务列表来选择服务器。它是Ribbon默认的负载均衡规则。 AvailabilityFilteringRule 对以下两种服务器进行忽略：（1）在默认情况下，这台服务器如果3次连接失败，这台服务器就会被设置为“短路”状态。短路状态将持续30秒，如果再次连接失败，短路的持续时间就会几何级地增加。（2）并发数过高的服务器。如果一个服务器的并发连接数过高，配置了AvailabilityFilteringRule规则的客户端也会将其忽略。并发连接数的上限，可以由客户端的&laquo;/font&gt;clientName&gt;.&laquo;/font&gt;clientConfigNameSpace&gt;.ActiveConnectionsLimit属性进行配置。 WeightedResponseTimeRule 为每一个服务器赋予一个权重值。服务器响应时间越长，这个服务器的权重就越小。这个规则会随机选择服务器，这个权重值会影响服务器的选择。 ZoneAvoidanceRule 以区域可用的服务器为基础进行服务器的选择。使用Zone对服务器进行分类，这个Zone可以理解为一个机房、一个机架等。而后再对Zone内的多个服务做轮询。 BestAvailableRule 忽略那些短路的服务器，并选择并发数较低的服务器。 RandomRule 随机选择一个可用的服务器。 RetryRule 重试机制的选择逻辑 注意：第一种方式为全局设置（order服务访问任何微服务都为随机策略），第二种方法可以针对单个微服务设置负载均衡\n饥饿加载 Ribbon默认是采用懒加载，即第一次访问时才会去创建LoadBalanceClient，请求时间会很长。\n而饥饿加载则会在项目启动时创建，降低第一次访问的耗时，通过下面配置开启饥饿加载：\n1 2 3 4 ribbon: eager-load: enabled: true # 开启饥饿加载 clients: userservice # 指定对userservice这个服务饥饿加载 总结 ">
+<title>【微服务】3、Ribbon负载均衡</title>
 
-<link rel='canonical' href='https://xxl999227.github.io/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A12%E6%9C%8D%E5%8A%A1%E6%8B%86%E5%88%86%E5%8F%8A%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8/'>
+<link rel='canonical' href='https://xxl999227.github.io/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A13ribbon%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/'>
 
-<link rel="stylesheet" href="/scss/style.min.d91c2070e085e35f1fd5131bcadf95da720496f3d8c0dd302289c6e1955ee051.css"><meta property='og:title' content="【微服务】2、服务拆分及远程调用">
-<meta property='og:description' content="微服务拆分 cloud-order.sqlcloud-user.sql\n提供者与消费者 :::warning\n服务提供者：一次业务中，被其它微服务调用的服务。（提供接口给其它微服务） 服务消费者：一次业务中，调用其它微服务的服务。（调用其它微服务提供的接口） :::\n服务调用关系\n:::color2\n服务提供者：暴露接口给其它微服务调用 服务消费者：调用其它微服务提供的接口 提供者与消费者角色其实是相对的 一个服务可以同时是服务提供者和服务消费者 :::\n">
-<meta property='og:url' content='https://xxl999227.github.io/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A12%E6%9C%8D%E5%8A%A1%E6%8B%86%E5%88%86%E5%8F%8A%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8/'>
+<link rel="stylesheet" href="/scss/style.min.d91c2070e085e35f1fd5131bcadf95da720496f3d8c0dd302289c6e1955ee051.css"><meta property='og:title' content="【微服务】3、Ribbon负载均衡">
+<meta property='og:description' content="负载均衡流程 负载均衡策略 内置负载均衡规则类 规则描述 RoundRobinRule 简单轮询服务列表来选择服务器。它是Ribbon默认的负载均衡规则。 AvailabilityFilteringRule 对以下两种服务器进行忽略：（1）在默认情况下，这台服务器如果3次连接失败，这台服务器就会被设置为“短路”状态。短路状态将持续30秒，如果再次连接失败，短路的持续时间就会几何级地增加。（2）并发数过高的服务器。如果一个服务器的并发连接数过高，配置了AvailabilityFilteringRule规则的客户端也会将其忽略。并发连接数的上限，可以由客户端的&laquo;/font&gt;clientName&gt;.&laquo;/font&gt;clientConfigNameSpace&gt;.ActiveConnectionsLimit属性进行配置。 WeightedResponseTimeRule 为每一个服务器赋予一个权重值。服务器响应时间越长，这个服务器的权重就越小。这个规则会随机选择服务器，这个权重值会影响服务器的选择。 ZoneAvoidanceRule 以区域可用的服务器为基础进行服务器的选择。使用Zone对服务器进行分类，这个Zone可以理解为一个机房、一个机架等。而后再对Zone内的多个服务做轮询。 BestAvailableRule 忽略那些短路的服务器，并选择并发数较低的服务器。 RandomRule 随机选择一个可用的服务器。 RetryRule 重试机制的选择逻辑 注意：第一种方式为全局设置（order服务访问任何微服务都为随机策略），第二种方法可以针对单个微服务设置负载均衡\n饥饿加载 Ribbon默认是采用懒加载，即第一次访问时才会去创建LoadBalanceClient，请求时间会很长。\n而饥饿加载则会在项目启动时创建，降低第一次访问的耗时，通过下面配置开启饥饿加载：\n1 2 3 4 ribbon: eager-load: enabled: true # 开启饥饿加载 clients: userservice # 指定对userservice这个服务饥饿加载 总结 ">
+<meta property='og:url' content='https://xxl999227.github.io/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A13ribbon%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/'>
 <meta property='og:site_name' content='潇潇’s blog'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='微服务' /><meta property='article:published_time' content='2024-04-16T15:33:50&#43;08:00'/><meta property='article:modified_time' content='2024-04-16T15:33:50&#43;08:00'/>
-<meta name="twitter:title" content="【微服务】2、服务拆分及远程调用">
-<meta name="twitter:description" content="微服务拆分 cloud-order.sqlcloud-user.sql\n提供者与消费者 :::warning\n服务提供者：一次业务中，被其它微服务调用的服务。（提供接口给其它微服务） 服务消费者：一次业务中，调用其它微服务的服务。（调用其它微服务提供的接口） :::\n服务调用关系\n:::color2\n服务提供者：暴露接口给其它微服务调用 服务消费者：调用其它微服务提供的接口 提供者与消费者角色其实是相对的 一个服务可以同时是服务提供者和服务消费者 :::\n">
+<meta name="twitter:title" content="【微服务】3、Ribbon负载均衡">
+<meta name="twitter:description" content="负载均衡流程 负载均衡策略 内置负载均衡规则类 规则描述 RoundRobinRule 简单轮询服务列表来选择服务器。它是Ribbon默认的负载均衡规则。 AvailabilityFilteringRule 对以下两种服务器进行忽略：（1）在默认情况下，这台服务器如果3次连接失败，这台服务器就会被设置为“短路”状态。短路状态将持续30秒，如果再次连接失败，短路的持续时间就会几何级地增加。（2）并发数过高的服务器。如果一个服务器的并发连接数过高，配置了AvailabilityFilteringRule规则的客户端也会将其忽略。并发连接数的上限，可以由客户端的&laquo;/font&gt;clientName&gt;.&laquo;/font&gt;clientConfigNameSpace&gt;.ActiveConnectionsLimit属性进行配置。 WeightedResponseTimeRule 为每一个服务器赋予一个权重值。服务器响应时间越长，这个服务器的权重就越小。这个规则会随机选择服务器，这个权重值会影响服务器的选择。 ZoneAvoidanceRule 以区域可用的服务器为基础进行服务器的选择。使用Zone对服务器进行分类，这个Zone可以理解为一个机房、一个机架等。而后再对Zone内的多个服务做轮询。 BestAvailableRule 忽略那些短路的服务器，并选择并发数较低的服务器。 RandomRule 随机选择一个可用的服务器。 RetryRule 重试机制的选择逻辑 注意：第一种方式为全局设置（order服务访问任何微服务都为随机策略），第二种方法可以针对单个微服务设置负载均衡\n饥饿加载 Ribbon默认是采用懒加载，即第一次访问时才会去创建LoadBalanceClient，请求时间会很长。\n而饥饿加载则会在项目启动时创建，降低第一次访问的耗时，通过下面配置开启饥饿加载：\n1 2 3 4 ribbon: eager-load: enabled: true # 开启饥饿加载 clients: userservice # 指定对userservice这个服务饥饿加载 总结 ">
     <link rel="shortcut icon" href="/favicon.ico" />
 
     </head>
@@ -280,8 +280,10 @@
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li><a href="#微服务拆分">微服务拆分</a></li>
-    <li><a href="#提供者与消费者">提供者与消费者</a></li>
+    <li><a href="#负载均衡流程">负载均衡流程</a></li>
+    <li><a href="#负载均衡策略">负载均衡策略</a></li>
+    <li><a href="#饥饿加载">饥饿加载</a></li>
+    <li><a href="#总结">总结</a></li>
   </ol>
 </nav>
         </div>
@@ -327,7 +329,7 @@
 
     <div class="article-title-wrapper">
         <h2 class="article-title">
-            <a href="/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A12%E6%9C%8D%E5%8A%A1%E6%8B%86%E5%88%86%E5%8F%8A%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8/">【微服务】2、服务拆分及远程调用</a>
+            <a href="/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A13ribbon%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/">【微服务】3、Ribbon负载均衡</a>
         </h2>
     
         
@@ -356,7 +358,7 @@
                     更新时间：2024-04-16</time>
                 <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-file-word"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2" /><path d="M9 12l1.333 5l1.667 -4l1.667 4l1.333 -5" /></svg>
                 <time class="article-time--word">
-                    字数总计：167</time>
+                    字数总计：726</time>
             </div>
         
 
@@ -372,86 +374,136 @@
     <section class="article-content">
     
     
-    <h2 id="微服务拆分">微服务拆分
-</h2><p><img src="/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A12%E6%9C%8D%E5%8A%A1%E6%8B%86%E5%88%86%E5%8F%8A%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8/img/image.png"
-	width="937"
-	height="480"
+    <h2 id="负载均衡流程">负载均衡流程
+</h2><p><img src="/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A13ribbon%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/img/image.png"
+	width="1335"
+	height="585"
 	
 	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="228"
+		data-flex-basis="547px"
+	
+>
+<img src="/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A13ribbon%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/img/image-1.png"
+	width="1376"
+	height="657"
+	
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="209"
+		data-flex-basis="502px"
+	
+>
+<img src="/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A13ribbon%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/img/image-2.png"
+	width="937"
+	height="479"
+	
+	loading="lazy"
+	
+		alt="alt text"
 	
 	
 		class="gallery-image" 
 		data-flex-grow="195"
-		data-flex-basis="468px"
+		data-flex-basis="469px"
 	
 ></p>
-<p><img src="/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A12%E6%9C%8D%E5%8A%A1%E6%8B%86%E5%88%86%E5%8F%8A%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8/img/image-1.png"
-	width="1735"
-	height="894"
+<h2 id="负载均衡策略">负载均衡策略
+</h2><div class="table-wrapper"><table>
+  <thead>
+      <tr>
+          <th style="text-align: center"><strong><font style="color:white;">内置负载均衡规则类</font></strong></th>
+          <th><strong><font style="color:white;">规则描述</font></strong></th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: center"><font style="color:black;">RoundRobinRule</font></td>
+          <td><font style="color:black;">简单轮询服务列表来选择服务器。它是</font><font style="color:black;">Ribbon</font><font style="color:black;">默认的负载均衡规则。</font></td>
+      </tr>
+      <tr>
+          <td style="text-align: center"><font style="color:black;">AvailabilityFilteringRule</font></td>
+          <td><font style="color:black;">对以下两种服务器进行忽略：</font><br/><font style="color:#a7a7a7;"></font><font style="color:black;">（</font><font style="color:black;">1</font><font style="color:black;">）在默认情况下，这台服务器如果</font><font style="color:black;">3</font><font style="color:black;">次连接失败，这台服务器就会被设置为“短路”状态。短路状态将持续</font><font style="color:black;">30</font><font style="color:black;">秒，如果再次连接失败，短路的持续时间就会几何级地增加。</font><br/><font style="color:black;">（</font><font style="color:black;">2</font><font style="color:black;">）并发数过高的服务器。如果一个服务器的并发连接数过高，配置了</font><font style="color:black;">AvailabilityFilteringRule</font><font style="color:black;">规则的客户端也会将其忽略。并发连接数的上限，可以由客户端的</font><font style="color:#a7a7a7;">&laquo;/font&gt;<font style="color:#a7a7a7;">clientName</font><font style="color:#a7a7a7;">&gt;</font><font style="color:black;">.</font><font style="color:#a7a7a7;">&laquo;/font&gt;<font style="color:#a7a7a7;">clientConfigNameSpace</font><font style="color:#a7a7a7;">&gt;</font><font style="color:black;">.</font><font style="color:black;">ActiveConnectionsLimit</font><font style="color:black;">属性进行配置。</font></td>
+      </tr>
+      <tr>
+          <td style="text-align: center"><font style="color:black;">WeightedResponseTimeRule</font></td>
+          <td><font style="color:black;">为每一个服务器赋予一个权重值。服务器响应时间越长，这个服务器的权重就越小。这个规则会随机选择服务器，这个权重值会影响服务器的选择。</font></td>
+      </tr>
+      <tr>
+          <td style="text-align: center"><font style="color:#ad2b26;">ZoneAvoidanceRule</font></td>
+          <td><font style="color:black;">以区域可用的服务器为基础进行服务器的选择。使用</font><font style="color:black;">Zone</font><font style="color:black;">对服务器进行分类，这个</font><font style="color:black;">Zone</font><font style="color:black;">可以理解为一个机房、一个机架等。而后再对</font><font style="color:black;">Zone</font><font style="color:black;">内的多个服务做轮询。</font></td>
+      </tr>
+      <tr>
+          <td style="text-align: center"><font style="color:black;">BestAvailableRule</font></td>
+          <td><font style="color:black;">忽略那些短路的服务器，并选择并发数较低的服务器。</font></td>
+      </tr>
+      <tr>
+          <td style="text-align: center"><font style="color:black;">RandomRule</font></td>
+          <td><font style="color:black;">随机选择一个可用的服务器。</font></td>
+      </tr>
+      <tr>
+          <td style="text-align: center"><font style="color:black;">RetryRule</font></td>
+          <td><font style="color:black;">重试机制的选择逻辑</font></td>
+      </tr>
+  </tbody>
+</table></div>
+<p><img src="/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A13ribbon%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/img/image-3.png"
+	width="1146"
+	height="652"
 	
 	loading="lazy"
 	
+		alt="alt text"
+	
 	
 		class="gallery-image" 
-		data-flex-grow="194"
-		data-flex-basis="465px"
+		data-flex-grow="175"
+		data-flex-basis="421px"
 	
 ></p>
-<p><a class="link" href="https://xxl-study.yuque.com/attachments/yuque/0/2024/sql/42408833/1713200471379-47d4fefc-7c39-4f00-b17b-baffde97a6e0.sql"  target="_blank" rel="noopener"
-    >cloud-order.sql</a><a class="link" href="https://xxl-study.yuque.com/attachments/yuque/0/2024/sql/42408833/1713200471573-831e6e95-625c-486f-8450-ed7c29e61584.sql"  target="_blank" rel="noopener"
-    >cloud-user.sql</a></p>
-<p><img src="/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A12%E6%9C%8D%E5%8A%A1%E6%8B%86%E5%88%86%E5%8F%8A%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8/img/image-2.png"
-	width="1847"
-	height="890"
+<p><strong><font style="color:#DF2A3F;">注意：第一种方式为全局设置（order服务访问任何微服务都为随机策略），第二种方法可以针对单个微服务设置负载均衡</font></strong></p>
+<p><strong><font style="color:#DF2A3F;"></font></strong></p>
+<h2 id="饥饿加载">饥饿加载
+</h2><p><font style="color:#262626;">Ribbon默认是采用懒加载，即第一次访问时才会去创建LoadBalanceClient，请求时间会很长。</font></p>
+<p><font style="color:#262626;">而饥饿加载则会在项目启动时创建，降低第一次访问的耗时，通过下面配置开启饥饿加载：</font></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">ribbon</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">eager-load</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="c"># 开启饥饿加载</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">clients</span><span class="p">:</span><span class="w"> </span><span class="l">userservice</span><span class="w"> </span><span class="c"># 指定对userservice这个服务饥饿加载</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="总结">总结
+</h2><p><img src="/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A13ribbon%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/img/image-4.png"
+	width="1222"
+	height="603"
 	
 	loading="lazy"
 	
-	
-		class="gallery-image" 
-		data-flex-grow="207"
-		data-flex-basis="498px"
-	
-></p>
-<p><img src="/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A12%E6%9C%8D%E5%8A%A1%E6%8B%86%E5%88%86%E5%8F%8A%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8/img/image-3.png"
-	width="937"
-	height="466"
-	
-	loading="lazy"
+		alt="alt text"
 	
 	
 		class="gallery-image" 
-		data-flex-grow="201"
-		data-flex-basis="482px"
+		data-flex-grow="202"
+		data-flex-basis="486px"
 	
 ></p>
-<h2 id="提供者与消费者">提供者与消费者
-</h2><p>:::warning</p>
-<ul>
-<li><font style="color:#262626;">服务提供者：一次业务中，被其它微服务调用的服务。（提供接口给其它微服务）</font></li>
-<li><font style="color:#262626;">服务消费者：一次业务中，调用其它微服务的服务。（调用其它微服务提供的接口）</font></li>
-</ul>
-<p>:::</p>
-<p><img src="/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A12%E6%9C%8D%E5%8A%A1%E6%8B%86%E5%88%86%E5%8F%8A%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8/img/image-4.png"
-	width="1059"
-	height="187"
-	
-	loading="lazy"
-	
-	
-		class="gallery-image" 
-		data-flex-grow="566"
-		data-flex-basis="1359px"
-	
-></p>
-<p><font style="color:#DF2A3F;">服务调用关系</font></p>
-<p>:::color2</p>
-<ol>
-<li><font style="color:black;">服务提供者：暴露接口给其它微服务调用</font></li>
-<li><font style="color:black;">服务消费者</font><font style="color:black;">：</font><font style="color:black;">调用其它微服务提供的接口</font></li>
-<li><font style="color:black;">提供者与消费者角色其实是</font><strong><font style="color:black;">相对</font></strong><font style="color:black;">的</font></li>
-<li><font style="color:black;">一个服务可以同时是服务提供者和服务消费者</font></li>
-</ol>
-<p>:::</p>
 
 </section>
 
@@ -507,12 +559,12 @@
             
                 
 <article class="">
-    <a href="/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A13ribbon%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/">
+    <a href="/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A12%E6%9C%8D%E5%8A%A1%E6%8B%86%E5%88%86%E5%8F%8A%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8/">
         
         
 
         <div class="article-details">
-            <h2 class="article-title">【微服务】3、Ribbon负载均衡</h2>
+            <h2 class="article-title">【微服务】2、服务拆分及远程调用</h2>
         </div>
     </a>
 </article>
