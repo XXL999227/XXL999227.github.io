@@ -196,7 +196,7 @@
 &lt;p&gt;&lt;font style=&#34;color:black;&#34;&gt;elasticsearch&lt;/font&gt;&lt;font style=&#34;color:black;&#34;&gt;与数据库的关系：&lt;/font&gt;&lt;/p&gt;
 &lt;p&gt;&lt;font style=&#34;color:black;&#34;&gt;数据库负责事务类型操作&lt;/font&gt;&lt;/p&gt;
 &lt;p&gt;&lt;font style=&#34;color:black;&#34;&gt;elasticsearch负责海量数据的搜索、分析、计算&lt;/font&gt;&lt;/p&gt;
-&lt;h2 id=&#34;font-stylecolorblack3fontfont-stylecolor262626安装elasticsearchkibanaik分词器font&#34;&gt;&lt;font style=&#34;color:black;&#34;&gt;3、&lt;/font&gt;&lt;font style=&#34;color:#262626;&#34;&gt;安装elasticsearch、kibana、IK分词器&lt;/font&gt;
+&lt;h2 id=&#34;font-stylecolorblackfontfont-stylecolor262626安装elasticsearchkibanaik分词器font&#34;&gt;&lt;font style=&#34;color:black;&#34;&gt;&lt;/font&gt;&lt;font style=&#34;color:#262626;&#34;&gt;安装elasticsearch、kibana、IK分词器&lt;/font&gt;
 &lt;/h2&gt;&lt;p&gt;采用docker安装它们&lt;/p&gt;
 &lt;h3 id=&#34;font-stylecolorrgb51-51-51部署单点esfont&#34;&gt;&lt;font style=&#34;color:rgb(51, 51, 51);&#34;&gt;部署单点es&lt;/font&gt;
 &lt;/h3&gt;&lt;p&gt;&lt;font style=&#34;color:rgb(51, 51, 51);&#34;&gt;&lt;/font&gt;&lt;/p&gt;
