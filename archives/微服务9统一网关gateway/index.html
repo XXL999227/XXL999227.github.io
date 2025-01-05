@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="为什么需要网关 !](img/image.png)\n网关的技术实现：\n!](img/image-1.png)\n搭建网关服务 搭建网关服务的步骤：\n1.创建新的module，引入SpringCloudGateway的依赖和nacos的服务发现依赖：\n1 2 3 4 5 6 7 8 9 10 &lt;!--网关依赖--&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt; &lt;artifactId&gt;spring-cloud-starter-gateway&lt;/artifactId&gt; &lt;/dependency&gt; &lt;!--nacos服务发现依赖--&gt; &lt;dependency&gt; &lt;groupId&gt;com.alibaba.cloud&lt;/groupId&gt; &lt;artifactId&gt;spring-cloud-starter-alibaba-nacos-discovery&lt;/artifactId&gt; &lt;/dependency&gt; 2.编写路由配置及nacos地址\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 server: port: 10010 # 网关端口 spring: application: name: gateway # 服务名称 cloud: nacos: server-addr: localhost:8848 # nacos地址 gateway: routes: # 网关路由配置 - id: user-service # 路由id，自定义，只要唯一即可 # uri: http://127.0.0.1:8081 # 路由的目标地址 http就是固定地址，一般不用这种形式 uri: lb://user-service # 路由的目标地址 lb就是负载均衡，后面跟服务名称 predicates: # 路由断言，也就是判断请求是否符合路由规则的条件 - Path=/user/** # 这个是按照路径匹配，只要以/user/开头就符合要求 - id: order-service uri: lb://order-service predicates: - Path=/order/** !](img/image-2.png)\n">
+<title>【微服务】9、统一网关Gateway</title>
+
+<link rel='canonical' href='https://xxl999227.github.io/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A19%E7%BB%9F%E4%B8%80%E7%BD%91%E5%85%B3gateway/'>
+
+<link rel="stylesheet" href="/scss/style.min.d91c2070e085e35f1fd5131bcadf95da720496f3d8c0dd302289c6e1955ee051.css"><meta property='og:title' content="【微服务】9、统一网关Gateway">
+<meta property='og:description' content="为什么需要网关 !](img/image.png)\n网关的技术实现：\n!](img/image-1.png)\n搭建网关服务 搭建网关服务的步骤：\n1.创建新的module，引入SpringCloudGateway的依赖和nacos的服务发现依赖：\n1 2 3 4 5 6 7 8 9 10 &lt;!--网关依赖--&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt; &lt;artifactId&gt;spring-cloud-starter-gateway&lt;/artifactId&gt; &lt;/dependency&gt; &lt;!--nacos服务发现依赖--&gt; &lt;dependency&gt; &lt;groupId&gt;com.alibaba.cloud&lt;/groupId&gt; &lt;artifactId&gt;spring-cloud-starter-alibaba-nacos-discovery&lt;/artifactId&gt; &lt;/dependency&gt; 2.编写路由配置及nacos地址\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 server: port: 10010 # 网关端口 spring: application: name: gateway # 服务名称 cloud: nacos: server-addr: localhost:8848 # nacos地址 gateway: routes: # 网关路由配置 - id: user-service # 路由id，自定义，只要唯一即可 # uri: http://127.0.0.1:8081 # 路由的目标地址 http就是固定地址，一般不用这种形式 uri: lb://user-service # 路由的目标地址 lb就是负载均衡，后面跟服务名称 predicates: # 路由断言，也就是判断请求是否符合路由规则的条件 - Path=/user/** # 这个是按照路径匹配，只要以/user/开头就符合要求 - id: order-service uri: lb://order-service predicates: - Path=/order/** !](img/image-2.png)\n">
+<meta property='og:url' content='https://xxl999227.github.io/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A19%E7%BB%9F%E4%B8%80%E7%BD%91%E5%85%B3gateway/'>
+<meta property='og:site_name' content='潇潇’s blog'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='微服务' /><meta property='article:published_time' content='2024-04-28T21:38:29&#43;08:00'/><meta property='article:modified_time' content='2024-04-28T21:38:29&#43;08:00'/>
+<meta name="twitter:title" content="【微服务】9、统一网关Gateway">
+<meta name="twitter:description" content="为什么需要网关 !](img/image.png)\n网关的技术实现：\n!](img/image-1.png)\n搭建网关服务 搭建网关服务的步骤：\n1.创建新的module，引入SpringCloudGateway的依赖和nacos的服务发现依赖：\n1 2 3 4 5 6 7 8 9 10 &lt;!--网关依赖--&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt; &lt;artifactId&gt;spring-cloud-starter-gateway&lt;/artifactId&gt; &lt;/dependency&gt; &lt;!--nacos服务发现依赖--&gt; &lt;dependency&gt; &lt;groupId&gt;com.alibaba.cloud&lt;/groupId&gt; &lt;artifactId&gt;spring-cloud-starter-alibaba-nacos-discovery&lt;/artifactId&gt; &lt;/dependency&gt; 2.编写路由配置及nacos地址\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 server: port: 10010 # 网关端口 spring: application: name: gateway # 服务名称 cloud: nacos: server-addr: localhost:8848 # nacos地址 gateway: routes: # 网关路由配置 - id: user-service # 路由id，自定义，只要唯一即可 # uri: http://127.0.0.1:8081 # 路由的目标地址 http就是固定地址，一般不用这种形式 uri: lb://user-service # 路由的目标地址 lb就是负载均衡，后面跟服务名称 predicates: # 路由断言，也就是判断请求是否符合路由规则的条件 - Path=/user/** # 这个是按照路径匹配，只要以/user/开头就符合要求 - id: order-service uri: lb://order-service predicates: - Path=/order/** !](img/image-2.png)\n">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu6975665600438320786.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">❤️‍</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">潇潇’s blog</a></h1>
+            <h2 class="site-description">欢迎来到我的网站，此博客由【Hugo &#43; Stack】来进行搭建，主要分享个人生活和学习笔记</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://xxl999227.github.io/'
+                        target="_blank"
+                        title="Gitee"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-home-2"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l-2 0l9 -9l9 9l-2 0" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" /><path d="M10 12h4v4h-4z" /></svg>
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://github.com/XXL999227'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%85%B3%E4%BA%8E/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%8F%8B%E6%83%85%E9%93%BE%E6%8E%A5/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>友情链接</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span class="switch-model">暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+        <button class="back-to-top" id="scrollToTop" style="
+            position: fixed; 
+            bottom: 20px; 
+            width: 40px; 
+            height: 40px; 
+            border-radius: 50%; 
+            background-color: white; 
+            border: 1px solid #ccc; 
+            display: none; /* 初始隐藏 */
+            align-items: center; 
+            justify-content: center;
+            cursor: pointer;
+            font-size: 20px;
+            color: #888;
+        ">
+            ↑
+        </button>
+        
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#font-stylecolor262626为什么需要网关font"><font style="color:#262626;">为什么需要网关</font></a></li>
+    <li><a href="#font-stylecolor262626搭建网关服务font"><font style="color:#262626;">搭建网关服务</font></a></li>
+    <li><a href="#font-stylecolor262626路由断言工厂route-predicate-factoryfont"><font style="color:#262626;">路由断言工厂Route Predicate Factory</font></a></li>
+    <li><a href="#font-stylecolor262626路由过滤器-gatewayfilterfont"><font style="color:#262626;">路由过滤器 GatewayFilter</font></a></li>
+    <li><a href="#font-stylecolor262626全局过滤器-globalfilterfont"><font style="color:#262626;">全局过滤器 GlobalFilter</font></a></li>
+    <li><a href="#font-stylecolor262626过滤器执行顺序font"><font style="color:#262626;">过滤器执行顺序</font></a></li>
+    <li><a href="#font-stylecolorblackfontfont-stylecolor262626跨域问题处理font"><font style="color:black;"></font><font style="color:#262626;">跨域问题处理</font></a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+<script>
+    
+    const scrollToTopButton = document.getElementById('scrollToTop');
+
+    window.addEventListener('scroll', function() {
+        if (window.scrollY > 0) {
+            scrollToTopButton.style.display = 'flex';
+        } else {
+            scrollToTopButton.style.display = 'none';
+        }
+    });
+
+    scrollToTopButton.addEventListener('click', function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+</script>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="background-color: #221d01bf; color: #fff;">
+                微服务
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A19%E7%BB%9F%E4%B8%80%E7%BD%91%E5%85%B3gateway/">【微服务】9、统一网关Gateway</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">
+                    创建时间：2024-04-28</time>
+                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-clock-hour-4"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M12 12l3 2" /><path d="M12 7v5" /></svg>
+                <time class="article-time--lastUpdated">
+                    更新时间：2024-04-28</time>
+                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-file-word"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2" /><path d="M9 12l1.333 5l1.667 -4l1.667 4l1.333 -5" /></svg>
+                <time class="article-time--word">
+                    字数总计：2704</time>
+            </div>
+        
+
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h2 id="font-stylecolor262626为什么需要网关font"><font style="color:#262626;">为什么需要网关</font>
+</h2><p>!](img/image.png)</p>
+<p><strong><font style="color:#262626;">网关的技术实现：</font></strong></p>
+<p>!](img/image-1.png)</p>
+<h2 id="font-stylecolor262626搭建网关服务font"><font style="color:#262626;">搭建网关服务</font>
+</h2><p><font style="color:#262626;">搭建网关服务的步骤：</font></p>
+<p><font style="color:#404040;">1.</font><font style="color:#262626;">创建新的module，引入SpringCloudGateway的依赖和nacos的服务发现依赖：</font></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"><span class="c">&lt;!--网关依赖--&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;dependency&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&lt;groupId&gt;</span>org.springframework.cloud<span class="nt">&lt;/groupId&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&lt;artifactId&gt;</span>spring-cloud-starter-gateway<span class="nt">&lt;/artifactId&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/dependency&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="c">&lt;!--nacos服务发现依赖--&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;dependency&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&lt;groupId&gt;</span>com.alibaba.cloud<span class="nt">&lt;/groupId&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&lt;artifactId&gt;</span>spring-cloud-starter-alibaba-nacos-discovery<span class="nt">&lt;/artifactId&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/dependency&gt;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><font style="color:#404040;">2.</font><font style="color:#262626;">编写路由配置及nacos地址</font></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">server</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="m">10010</span><span class="w"> </span><span class="c"># 网关端口</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spring</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">application</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">gateway</span><span class="w"> </span><span class="c"># 服务名称</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">cloud</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">nacos</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">server-addr</span><span class="p">:</span><span class="w"> </span><span class="l">localhost:8848</span><span class="w"> </span><span class="c"># nacos地址</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">gateway</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">routes</span><span class="p">:</span><span class="w"> </span><span class="c"># 网关路由配置</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span>- <span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l">user-service</span><span class="w"> </span><span class="c"># 路由id，自定义，只要唯一即可</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="c"># uri: http://127.0.0.1:8081 # 路由的目标地址 http就是固定地址，一般不用这种形式</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">uri</span><span class="p">:</span><span class="w"> </span><span class="l">lb://user-service</span><span class="w"> </span><span class="c"># 路由的目标地址 lb就是负载均衡，后面跟服务名称</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">predicates</span><span class="p">:</span><span class="w"> </span><span class="c"># 路由断言，也就是判断请求是否符合路由规则的条件</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span>- <span class="l">Path=/user/**</span><span class="w"> </span><span class="c"># 这个是按照路径匹配，只要以/user/开头就符合要求</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span>- <span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l">order-service</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">uri</span><span class="p">:</span><span class="w"> </span><span class="l">lb://order-service</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">predicates</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span>- <span class="l">Path=/order/**</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>!](img/image-2.png)</p>
+<p>然后访问：</p>
+<p>!](img/image-3.png)</p>
+<p>!](img/image-4.png)</p>
+<p>流程图：</p>
+<p>!](img/image-5.png)</p>
+<h2 id="font-stylecolor262626路由断言工厂route-predicate-factoryfont"><font style="color:#262626;">路由断言工厂Route Predicate Factory</font>
+</h2><p><font style="color:#262626;">网关路由可以配置的内容包括：</font></p>
+<p>:::color2</p>
+<ul>
+<li><font style="color:#262626;">路由id：路由唯一标示</font></li>
+<li><font style="color:#404040;"></font><font style="color:#262626;">uri：路由目的地，支持lb和http两种</font></li>
+<li><font style="color:#404040;"></font><font style="color:#ad2b26;">predicates：路由断言，判断请求是否符合要求，符合则转发到路由目的地</font></li>
+<li><font style="color:#262626;">filters：路由过滤器，处理请求或响应</font></li>
+</ul>
+<p>:::</p>
+<p>:::color2</p>
+<ul>
+<li><font style="color:#262626;">我们在配置文件中写的断言规则只是字符串，这些字符串会被Predicate Factory读取并处理，转变为路由判断的条件</font></li>
+<li><font style="color:#404040;"></font><font style="color:#262626;">例如Path=/user/**是按照路径匹配，这个规则是由org.springframework.cloud.gateway.handler.predicate.PathRoutePredicateFactory类来处理的</font></li>
+<li><font style="color:#262626;">像这样的断言工厂在SpringCloudGateway还有十几个</font></li>
+</ul>
+<p>:::</p>
+<p><font style="color:#262626;">Spring提供了11种基本的Predicate工厂：</font></p>
+<div class="table-wrapper"><table>
+  <thead>
+      <tr>
+          <th style="text-align: center"><strong><font style="color:white;">名称</font></strong></th>
+          <th style="text-align: center"><strong><font style="color:white;">说明</font></strong></th>
+          <th><strong><font style="color:white;">示例</font></strong></th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: center"><font style="color:black;">After</font></td>
+          <td style="text-align: center"><font style="color:black;">是某个时间点后的请求</font></td>
+          <td><font style="color:black;">- After=2037-01-20T17:42:47.789-07:00[America/Denver]</font></td>
+      </tr>
+      <tr>
+          <td style="text-align: center"><font style="color:black;">Before</font></td>
+          <td style="text-align: center"><font style="color:black;">是某个时间点之前的请求</font></td>
+          <td><font style="color:black;">- Before=2031-04-13T15:14:47.433+08:00[Asia/Shanghai]</font></td>
+      </tr>
+      <tr>
+          <td style="text-align: center"><font style="color:black;">Between</font></td>
+          <td style="text-align: center"><font style="color:black;">是某两个时间点之前的请求</font></td>
+          <td><font style="color:black;">- Between=2037-01-20T17:42:47.789-07:00[America/Denver], 2037-01-21T17:42:47.789-07:00[America/Denver]</font></td>
+      </tr>
+      <tr>
+          <td style="text-align: center"><font style="color:black;">Cookie</font></td>
+          <td style="text-align: center"><font style="color:black;">请求必须包含某些</font><font style="color:black;">cookie</font></td>
+          <td><font style="color:black;">- Cookie=chocolate, </font><font style="color:black;">ch.p</font></td>
+      </tr>
+      <tr>
+          <td style="text-align: center"><font style="color:black;">Header</font></td>
+          <td style="text-align: center"><font style="color:black;">请求必须包含某些</font><font style="color:black;">header</font></td>
+          <td><font style="color:black;">- Header=X-Request-Id, \d+</font></td>
+      </tr>
+      <tr>
+          <td style="text-align: center"><font style="color:black;">Host</font></td>
+          <td style="text-align: center"><font style="color:black;">请求必须是访问某个</font><font style="color:black;">host</font><font style="color:black;">（域名）</font></td>
+          <td><font style="color:black;">- Host=<strong>.somehost.org,</strong>.anotherhost.org</font></td>
+      </tr>
+      <tr>
+          <td style="text-align: center"><font style="color:black;">Method</font></td>
+          <td style="text-align: center"><font style="color:black;">请求方式必须是指定方式</font></td>
+          <td><font style="color:black;">- Method=GET,POST</font></td>
+      </tr>
+      <tr>
+          <td style="text-align: center"><font style="color:black;">Path</font></td>
+          <td style="text-align: center"><font style="color:black;">请求路径必须符合指定规则</font></td>
+          <td><font style="color:black;">- Path=/red/{segment},/blue/</font><font style="color:black;">**</font></td>
+      </tr>
+      <tr>
+          <td style="text-align: center"><font style="color:black;">Query</font></td>
+          <td style="text-align: center"><font style="color:black;">请求参数必须包含指定参数</font></td>
+          <td><font style="color:black;">- Query=name, Jack</font><font style="color:black;">或者</font><font style="color:black;">- Query=name</font></td>
+      </tr>
+      <tr>
+          <td style="text-align: center"><font style="color:black;">RemoteAddr</font></td>
+          <td style="text-align: center"><font style="color:black;">请求者的</font><font style="color:black;">ip</font><font style="color:black;">必须是指定范围</font></td>
+          <td><font style="color:black;">- RemoteAddr=192.168.1.1/24</font></td>
+      </tr>
+      <tr>
+          <td style="text-align: center"><font style="color:black;">Weight</font></td>
+          <td style="text-align: center"><font style="color:black;">权重处理</font></td>
+          <td></td>
+      </tr>
+  </tbody>
+</table></div>
+<p>常用的是Path和Cookie。</p>
+<p>官网地址：[Route Predicate Factories :: Spring Cloud Gateway]!](img/image-6.png)</p>
+<h2 id="font-stylecolor262626路由过滤器-gatewayfilterfont"><font style="color:#262626;">路由过滤器 GatewayFilter</font>
+</h2><p>官网地址 ：[GatewayFilter Factories :: Spring Cloud Gateway]!](img/image-7.png)</p>
+<p><font style="color:black;">Spring提供了30+种不同的路由过滤器工厂。例如：</font></p>
+<div class="table-wrapper"><table>
+  <thead>
+      <tr>
+          <th style="text-align: center"><strong><font style="color:white;">名称</font></strong></th>
+          <th><strong><font style="color:white;">说明</font></strong></th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: center"><font style="color:black;">AddRequestHeader</font></td>
+          <td><font style="color:black;">给当前请求添加一个请求头</font></td>
+      </tr>
+      <tr>
+          <td style="text-align: center"><font style="color:black;">RemoveRequestHeader</font></td>
+          <td><font style="color:black;">移除请求中的一个请求头</font></td>
+      </tr>
+      <tr>
+          <td style="text-align: center"><font style="color:black;">AddResponseHeader</font></td>
+          <td><font style="color:black;">给响应结果中添加一个响应头</font></td>
+      </tr>
+      <tr>
+          <td style="text-align: center"><font style="color:black;">RemoveResponseHeader</font></td>
+          <td><font style="color:black;">从响应结果中移除有一个响应头</font></td>
+      </tr>
+      <tr>
+          <td style="text-align: center"><font style="color:black;">RequestRateLimiter</font></td>
+          <td><font style="color:black;">限制请求的流量</font></td>
+      </tr>
+      <tr>
+          <td style="text-align: center"><font style="color:black;">&hellip;</font></td>
+          <td></td>
+      </tr>
+  </tbody>
+</table></div>
+<p>!](img/image-8.png)</p>
+<p><font style="color:#262626;">如果要对所有的路由都生效，则可以将过滤器工厂写到default下。格式如下：</font></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">server</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="m">10010</span><span class="w"> </span><span class="c"># 网关端口</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spring</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">application</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">gateway</span><span class="w"> </span><span class="c"># 服务名称</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">cloud</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">nacos</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">server-addr</span><span class="p">:</span><span class="w"> </span><span class="l">localhost:8848</span><span class="w"> </span><span class="c"># nacos地址</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">gateway</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">routes</span><span class="p">:</span><span class="w"> </span><span class="c"># 网关路由配置</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span>- <span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l">user-service</span><span class="w"> </span><span class="c"># 路由id，自定义，只要唯一即可</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="c"># uri: http://127.0.0.1:8081 # 路由的目标地址 http就是固定地址，一般不用这种形式</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">uri</span><span class="p">:</span><span class="w"> </span><span class="l">lb://user-service</span><span class="w"> </span><span class="c"># 路由的目标地址 lb就是负载均衡，后面跟服务名称</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">predicates</span><span class="p">:</span><span class="w"> </span><span class="c"># 路由断言，也就是判断请求是否符合路由规则的条件</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span>- <span class="l">Path=/user/**</span><span class="w"> </span><span class="c"># 这个是按照路径匹配，只要以/user/开头就符合要求</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">filters</span><span class="p">:</span><span class="w"> </span><span class="c"># 过滤器，可以对请求进行一些处理</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span>- <span class="l">AddRequestHeader=X-Request-Red, blue</span><span class="w"> </span><span class="c"># 添加请求头，key是X-Request-Red，value是blue</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span>- <span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l">order-service</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">uri</span><span class="p">:</span><span class="w"> </span><span class="l">lb://order-service</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">predicates</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span>- <span class="l">Path=/order/**</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">default-filters</span><span class="p">:</span><span class="w"> </span><span class="c"># 默认过滤器，会对所有的路由请求都生效</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span>- <span class="l">AddRequestHeader=X-Request-Default, default</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="font-stylecolor262626全局过滤器-globalfilterfont"><font style="color:#262626;">全局过滤器 GlobalFilter</font>
+</h2><p><font style="color:#262626;">全局过滤器的作用也是处理一切进入网关的请求和微服务响应，与</font><font style="color:#262626;">GatewayFilter</font><font style="color:#262626;">的作用一样。</font></p>
+<p><font style="color:#DF2A3F;">区别在于GatewayFilter通过配置定义，处理逻辑是固定的。而GlobalFilter的逻辑需要自己写代码实现。</font></p>
+<p>!](img/image-9.png)</p>
+<p><font style="color:#262626;">定义方式是实现GlobalFilter接口。</font></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="c1">// @Order(-1) // 优先级, 数字越小, 优先级越高，这里用实现Ordered接口的方式代替</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nd">@Component</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">AuthorizeFilter</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">GlobalFilter</span><span class="p">,</span><span class="w"> </span><span class="n">Ordered</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm">     *  处理当前请求，有必要的话通过{@link GatewayFilterChain}将请求交给下一个过滤器处理
+</span></span></span><span class="line"><span class="cl"><span class="cm">     *
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * @param exchange 请求上下文，里面可以获取Request、Response等信息    
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * @param chain 过滤器链，用来把请求委托给下一个过滤器     
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * @return {@code Mono&lt;Void&gt;} 返回标示当前过滤器业务结束    
+</span></span></span><span class="line"><span class="cl"><span class="cm">     */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">Mono</span><span class="o">&lt;</span><span class="n">Void</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">filter</span><span class="p">(</span><span class="n">ServerWebExchange</span><span class="w"> </span><span class="n">exchange</span><span class="p">,</span><span class="w"> </span><span class="n">GatewayFilterChain</span><span class="w"> </span><span class="n">chain</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// 1.获取请求</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">ServerHttpRequest</span><span class="w"> </span><span class="n">request</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">exchange</span><span class="p">.</span><span class="na">getRequest</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// 2.获取请求参数</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">authorization</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">request</span><span class="p">.</span><span class="na">getQueryParams</span><span class="p">().</span><span class="na">getFirst</span><span class="p">(</span><span class="s">&#34;authorization&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// 3.判断是否有authorization参数</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="s">&#34;admin&#34;</span><span class="p">.</span><span class="na">equals</span><span class="p">(</span><span class="n">authorization</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="c1">// 4.有, 放行</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">chain</span><span class="p">.</span><span class="na">filter</span><span class="p">(</span><span class="n">exchange</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// 5.没有, 设置状态码返回401</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">exchange</span><span class="p">.</span><span class="na">getResponse</span><span class="p">().</span><span class="na">setStatusCode</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">.</span><span class="na">UNAUTHORIZED</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">exchange</span><span class="p">.</span><span class="na">getResponse</span><span class="p">().</span><span class="na">setComplete</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">getOrder</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="o">-</span><span class="n">1</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="font-stylecolor262626过滤器执行顺序font"><font style="color:#262626;">过滤器执行顺序</font>
+</h2><p><font style="color:#262626;">请求进入网关会碰到三类过滤器：当前路由的过滤器、</font><font style="color:#262626;">DefaultFilter</font><font style="color:#262626;">、</font><font style="color:#262626;">GlobalFilter</font></p>
+<p><font style="color:#DF2A3F;">请求路由后</font><font style="color:#262626;">，会将当前路由过滤器和DefaultFilter、GlobalFilter，合并到</font><font style="color:#DF2A3F;">一个过滤器链（集合）</font><font style="color:#262626;">中，排序后依次执行每个过滤器</font></p>
+<p>!](img/image-10.png)</p>
+<p>:::color4</p>
+<ul>
+<li><font style="color:#404040;"></font><font style="color:#262626;">每一个过滤器都必须指定一个int类型的order值，</font><strong><font style="color:#262626;">order值越小，优先级越高，执行顺序越靠前。</font></strong></li>
+<li><font style="color:#404040;"></font><font style="color:#262626;">GlobalFilter通过实现Ordered接口，或者添加@Order注解来指定order值，由我们自己指定</font></li>
+<li><font style="color:#262626;">路由过滤器和defaultFilter的order由Spring指定，</font><font style="color:#2F8EF4;">默认是按照声明顺序从1递增。</font></li>
+<li><font style="color:#404040;"></font><font style="color:#262626;">当过滤器的order值一样时，会按照 defaultFilter &gt; 路由过滤器 &gt; GlobalFilter的顺序执行。</font></li>
+</ul>
+<p>:::</p>
+<p><font style="color:#262626;">可以参考下面几个类的源码来查看：</font></p>
+<p><strong><font style="color:#ad2b26;">org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator#getFilters()</font></strong><font style="color:black;">方法是先加载</font><font style="color:black;">defaultFilters</font><font style="color:black;">，然后再加载某个</font><font style="color:black;">route</font><font style="color:black;">的</font><font style="color:black;">filters</font><font style="color:black;">，然后合并。</font></p>
+<p><strong><font style="color:#ad2b26;">org.springframework.cloud.gateway.handler.FilteringWebHandler#handle</font></strong><font style="color:black;">()方法会加载全局过滤器，与前面的过滤器合并后根据order排序，组织过滤器链</font></p>
+<h2 id="font-stylecolorblackfontfont-stylecolor262626跨域问题处理font"><font style="color:black;"></font><font style="color:#262626;">跨域问题处理</font>
+</h2><p><font style="color:#262626;">跨域：域名不一致就是跨域，主要包括：</font></p>
+<ul>
+<li><font style="color:#404040;"></font><font style="color:#262626;">域名不同： <a class="link" href="https://www.taobao.com"  target="_blank" rel="noopener"
+    >www.taobao.com</a> 和 <a class="link" href="https://www.taobao.org"  target="_blank" rel="noopener"
+    >www.taobao.org</a> 和 <a class="link" href="https://www.jd.com"  target="_blank" rel="noopener"
+    >www.jd.com</a> 和 miaosha.jd.com</font></li>
+<li><font style="color:#404040;"></font><font style="color:#262626;">域名相同，端口不同：localhost:8080和localhost8081</font></li>
+</ul>
+<p><font style="color:#262626;">跨域问题：浏览器禁止请求的发起者与服务端发生跨域</font><font style="color:#262626;">ajax</font><font style="color:#262626;">请求，请求被浏览器拦截的问题</font></p>
+<p><font style="color:#262626;">解决方案：CORS  </font><a class="link" href="https://baike.baidu.com/item/CORS/16411212?fr=ge_ala"  target="_blank" rel="noopener"
+    >CORS</a></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">server</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="m">10010</span><span class="w"> </span><span class="c"># 网关端口</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spring</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">application</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">gateway</span><span class="w"> </span><span class="c"># 服务名称</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">cloud</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">nacos</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">server-addr</span><span class="p">:</span><span class="w"> </span><span class="l">localhost:8848</span><span class="w"> </span><span class="c"># nacos地址</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">gateway</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="l">...</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">globalcors</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">add-to-simple-url-handler-mapping</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="c"># 解决options请求被拦截问题</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">corsConfigurations</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">&#39;[/**]&#39;</span><span class="p">:</span><span class="w"> </span><span class="c"># 所有的请求都生效</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="nt">allowedOrigins</span><span class="p">:</span><span class="w"> </span><span class="c"># 允许哪些网站跨域请求</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">              </span>- <span class="s2">&#34;http://localhost:8080&#34;</span><span class="w"> </span><span class="c"># 允许的请求来源</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">              </span>- <span class="s2">&#34;http://www.baidu.com&#34;</span><span class="w"> </span><span class="c"># 允许的请求来源</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="nt">allowedMethods</span><span class="p">:</span><span class="w"> </span><span class="c"># 允许哪些请求方法</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">              </span>- <span class="l">GET</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">              </span>- <span class="l">POST</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">              </span>- <span class="l">PUT</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">              </span>- <span class="l">DELETE</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">              </span>- <span class="l">OPTIONS</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="nt">allowedHeaders</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;*&#34;</span><span class="w"> </span><span class="c"># 允许在请求头中携带的信息</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="nt">allowCredentials</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="c"># 是否允许携带cookie</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="nt">maxAge</span><span class="p">:</span><span class="w"> </span><span class="m">360000</span><span class="w"> </span><span class="c"># 这次跨域检测的有效期，为了减少检测次数，提高性能</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div>
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/">微服务</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">相关文章</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A18http%E5%AE%A2%E6%88%B7%E7%AB%AFfeign/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">【微服务】8、http客户端Feign</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A17nacos%E9%85%8D%E7%BD%AE%E7%AE%A1%E7%90%86/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">【微服务】7、Nacos配置管理</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A16nacos%E6%9C%8D%E5%8A%A1%E5%88%86%E7%BA%A7%E5%AD%98%E5%82%A8%E5%92%8C%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">【微服务】6、Nacos服务分级存储和负载均衡</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A15nacos%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">【微服务】5、Nacos注册中心</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A14ribbon%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">【微服务】4、Ribbon负载均衡</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    <script
+    src="https://giscus.app/client.js"
+    data-repo="XXL999227/XXL999227.github.io"
+    data-repo-id="R_kgDOINqX4g"
+    data-category="General"
+    data-category-id="DIC_kwDOINqX4s4CiTUd"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="top"
+    data-theme="light"
+    data-lang="zh-CN"
+    crossorigin="anonymous"
+    async
+></script>
+<script>
+    function setGiscusTheme(theme) {
+        let giscus = document.querySelector("iframe.giscus-frame");
+        if (giscus) {
+            giscus.contentWindow.postMessage(
+                {
+                    giscus: {
+                        setConfig: {
+                            theme: theme,
+                        },
+                    },
+                },
+                "https://giscus.app"
+            );
+        }
+    }
+
+    (function () {
+        addEventListener("message", (e) => {
+            if (event.origin !== "https://giscus.app") return;
+            handler();
+        });
+        window.addEventListener("onColorSchemeChange", handler);
+
+        function handler() {
+            if (document.documentElement.dataset.scheme === "light") {
+                setGiscusTheme('light');
+            } else {
+                setGiscusTheme('dark_dimmed');
+            }
+        }
+    })();
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2023 - 
+        
+        2025 Powered by 潇潇
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.27.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+<script>
+    
+    const cssPath = "https://xxl999227.github.io/waifu/waifu.css";
+    const tipsJsonPath = "https://xxl999227.github.io/waifu/waifu-tips.json";
+    const myTipsJsonPath = "https://xxl999227.github.io/waifu/my-waifu-tips.js";
+    const gamePath = "https://xxl999227.github.io/waifu/asteroids.js";
+    
+    const live2d_path = "https://fastly.jsdelivr.net/gh/stevenjoezhang/live2d-widget@latest/";
+    const live2dMinJsPath = "https://xxl999227.github.io/waifu/live2d.min.js";
+
+    
+    function loadExternalResource(url, type) {
+        return new Promise((resolve, reject) => {
+            let tag;
+            if (type === "css") {
+                tag = document.createElement("link");
+                tag.rel = "stylesheet";
+                tag.href = url;
+            }
+            else if (type === "js") {
+                tag = document.createElement("script");
+                tag.src = url;
+            }
+            if (tag) {
+                tag.onload = () => resolve(url);
+                tag.onerror = () => reject(url);
+                document.head.appendChild(tag);
+            }
+        });
+    }
+
+    
+    if (screen.width >= 768) {
+        Promise.all([
+            loadExternalResource(cssPath, "css"),
+            loadExternalResource(live2dMinJsPath, "js"),
+            loadExternalResource(myTipsJsonPath, "js")
+        ]).then(() => {
+            
+            initWidget({
+                waifuPath: tipsJsonPath,
+                gamePath: gamePath,
+                cdnPath: "https://cdn.jsdelivr.net/gh/XXL999227/static-resource@v1.0.0",
+                tools: ["hitokoto", "asteroids", "switch-model", "switch-texture", "photo", "quit"]
+             
+            });
+            
+            initWaifuMouseEvent();
+        });
+    }
+
+    function initWaifuMouseEvent() {
+        const waifu = document.getElementById("waifu");
+        let isDown = false;
+        let waifuLeft;
+        let mouseLeft;
+        let waifuTop;
+        let mouseTop;
+        
+        waifu.onmousedown = function (e) {
+            isDown = true;
+            
+            waifuLeft = waifu.offsetLeft;
+            mouseLeft = e.clientX;
+            
+            waifuTop = waifu.offsetTop;
+            mouseTop = e.clientY;
+        }
+        
+        window.onmousemove = function (e) {
+            if (!isDown) {
+                return;
+            }
+            
+            let currentLeft = waifuLeft + (e.clientX - mouseLeft);
+            if (currentLeft < 0) {
+                currentLeft = 0;
+            } else if (currentLeft > window.innerWidth - 300) {
+                currentLeft = window.innerWidth - 300;
+            }
+            waifu.style.left = currentLeft  + "px";
+            
+            let currentTop = waifuTop + (e.clientY - mouseTop);
+            if (currentTop < 30) {
+                currentTop = 30
+            } else if (currentTop > window.innerHeight - 290) {
+                currentTop = window.innerHeight - 290
+            }
+            waifu.style.top = currentTop + "px";
+        }
+        
+        window.onmouseup = function (e) {
+            isDown = false;
+        }
+    }
+</script>
+
+<script src= https://xxl999227.github.io/background/particles/particles.js></script>
+
+<link rel="stylesheet" href= https://xxl999227.github.io/background/particles/style.css>
+
+
+<div id="particles-js"></div>
+
+<script>
+    
+
+    particlesJS.load('particles-js', "https://xxl999227.github.io/background/particles/particlesjs-config.json", function() {
+        console.log('particles.js loaded - callback');
+    });
+</script>
+    </body>
+</html>

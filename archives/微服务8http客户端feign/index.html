@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="定义和使用Feign客户端 Feign的介绍\nFeign是一个声明式的http客户端，官方地址：https://github.com/OpenFeign/feign\n其作用就是帮助我们优雅的实现http请求的发送，解决上面提到的问题。\n使用Feign客户端\n引入依赖 1 2 3 4 5 &lt;!-- OpenFeign --&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt; &lt;artifactId&gt;spring-cloud-starter-openfeign&lt;/artifactId&gt; &lt;/dependency&gt; 在order-service的启动类添加注解开启Feign的功能 编写Feign客户端 1 2 3 4 5 @FeignClient(&#34;userservice&#34;) public interface UserClient { @GetMapping(&#34;/user/{id}&#34;) User findById(@PathVariable(&#34;id&#34;) Long id); } 主要是基于SpringMVC的注解来声明远程调用的信息，比如：\n服务名称：userservice 请求方式：GET 请求路径：/user/{id} 请求参数：Long id 返回值类型：User 用Feign客户端代替RestTemplate 自定义Feign的配置 Feign运行自定义配置来覆盖默认配置，可以修改的配置如下：\n类型 作用 说明 feign.Logger.Level 修改日志级别 包含四种不同的级别：NONE、BASIC、HEADERS、FULL feign.codec.Decoder 响应结果的解析器 http远程调用的结果做解析，例如解析json字符串为java对象 feign.codec.Encoder 请求参数编码 将请求参数编码，便于通过http请求发送 feign. Contract 支持的注解格式 默认是SpringMVC的注解 feign. Retryer 失败重试机制 请求失败的重试机制，默认是没有，不过会使用Ribbon的重试 一般我们需要配置的就是日志级别。\n">
+<title>【微服务】8、http客户端Feign</title>
+
+<link rel='canonical' href='https://xxl999227.github.io/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A18http%E5%AE%A2%E6%88%B7%E7%AB%AFfeign/'>
+
+<link rel="stylesheet" href="/scss/style.min.d91c2070e085e35f1fd5131bcadf95da720496f3d8c0dd302289c6e1955ee051.css"><meta property='og:title' content="【微服务】8、http客户端Feign">
+<meta property='og:description' content="定义和使用Feign客户端 Feign的介绍\nFeign是一个声明式的http客户端，官方地址：https://github.com/OpenFeign/feign\n其作用就是帮助我们优雅的实现http请求的发送，解决上面提到的问题。\n使用Feign客户端\n引入依赖 1 2 3 4 5 &lt;!-- OpenFeign --&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt; &lt;artifactId&gt;spring-cloud-starter-openfeign&lt;/artifactId&gt; &lt;/dependency&gt; 在order-service的启动类添加注解开启Feign的功能 编写Feign客户端 1 2 3 4 5 @FeignClient(&#34;userservice&#34;) public interface UserClient { @GetMapping(&#34;/user/{id}&#34;) User findById(@PathVariable(&#34;id&#34;) Long id); } 主要是基于SpringMVC的注解来声明远程调用的信息，比如：\n服务名称：userservice 请求方式：GET 请求路径：/user/{id} 请求参数：Long id 返回值类型：User 用Feign客户端代替RestTemplate 自定义Feign的配置 Feign运行自定义配置来覆盖默认配置，可以修改的配置如下：\n类型 作用 说明 feign.Logger.Level 修改日志级别 包含四种不同的级别：NONE、BASIC、HEADERS、FULL feign.codec.Decoder 响应结果的解析器 http远程调用的结果做解析，例如解析json字符串为java对象 feign.codec.Encoder 请求参数编码 将请求参数编码，便于通过http请求发送 feign. Contract 支持的注解格式 默认是SpringMVC的注解 feign. Retryer 失败重试机制 请求失败的重试机制，默认是没有，不过会使用Ribbon的重试 一般我们需要配置的就是日志级别。\n">
+<meta property='og:url' content='https://xxl999227.github.io/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A18http%E5%AE%A2%E6%88%B7%E7%AB%AFfeign/'>
+<meta property='og:site_name' content='潇潇’s blog'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='微服务' /><meta property='article:published_time' content='2024-04-27T21:34:29&#43;08:00'/><meta property='article:modified_time' content='2024-04-27T21:34:29&#43;08:00'/>
+<meta name="twitter:title" content="【微服务】8、http客户端Feign">
+<meta name="twitter:description" content="定义和使用Feign客户端 Feign的介绍\nFeign是一个声明式的http客户端，官方地址：https://github.com/OpenFeign/feign\n其作用就是帮助我们优雅的实现http请求的发送，解决上面提到的问题。\n使用Feign客户端\n引入依赖 1 2 3 4 5 &lt;!-- OpenFeign --&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt; &lt;artifactId&gt;spring-cloud-starter-openfeign&lt;/artifactId&gt; &lt;/dependency&gt; 在order-service的启动类添加注解开启Feign的功能 编写Feign客户端 1 2 3 4 5 @FeignClient(&#34;userservice&#34;) public interface UserClient { @GetMapping(&#34;/user/{id}&#34;) User findById(@PathVariable(&#34;id&#34;) Long id); } 主要是基于SpringMVC的注解来声明远程调用的信息，比如：\n服务名称：userservice 请求方式：GET 请求路径：/user/{id} 请求参数：Long id 返回值类型：User 用Feign客户端代替RestTemplate 自定义Feign的配置 Feign运行自定义配置来覆盖默认配置，可以修改的配置如下：\n类型 作用 说明 feign.Logger.Level 修改日志级别 包含四种不同的级别：NONE、BASIC、HEADERS、FULL feign.codec.Decoder 响应结果的解析器 http远程调用的结果做解析，例如解析json字符串为java对象 feign.codec.Encoder 请求参数编码 将请求参数编码，便于通过http请求发送 feign. Contract 支持的注解格式 默认是SpringMVC的注解 feign. Retryer 失败重试机制 请求失败的重试机制，默认是没有，不过会使用Ribbon的重试 一般我们需要配置的就是日志级别。\n">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu6975665600438320786.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">❤️‍</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">潇潇’s blog</a></h1>
+            <h2 class="site-description">欢迎来到我的网站，此博客由【Hugo &#43; Stack】来进行搭建，主要分享个人生活和学习笔记</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://xxl999227.github.io/'
+                        target="_blank"
+                        title="Gitee"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-home-2"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l-2 0l9 -9l9 9l-2 0" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" /><path d="M10 12h4v4h-4z" /></svg>
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://github.com/XXL999227'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%85%B3%E4%BA%8E/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%8F%8B%E6%83%85%E9%93%BE%E6%8E%A5/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>友情链接</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span class="switch-model">暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+        <button class="back-to-top" id="scrollToTop" style="
+            position: fixed; 
+            bottom: 20px; 
+            width: 40px; 
+            height: 40px; 
+            border-radius: 50%; 
+            background-color: white; 
+            border: 1px solid #ccc; 
+            display: none; /* 初始隐藏 */
+            align-items: center; 
+            justify-content: center;
+            cursor: pointer;
+            font-size: 20px;
+            color: #888;
+        ">
+            ↑
+        </button>
+        
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#font-stylecolor262626定义和使用feign客户端font"><font style="color:#262626;">定义和使用Feign客户端</font></a>
+      <ol>
+        <li><a href="#font-stylecolor262626fontfont-stylecolor262626引入依赖font"><font style="color:#262626;"></font><font style="color:#262626;">引入依赖</font></a></li>
+        <li><a href="#font-stylecolor262626在order-service的启动类添加注解开启feign的功能font"><font style="color:#262626;">在order-service的启动类添加注解开启Feign的功能</font></a></li>
+        <li><a href="#font-stylecolor262626编写feign客户端font"><font style="color:#262626;">编写Feign客户端</font></a></li>
+        <li><a href="#font-stylecolor262626fontfont-stylecolor262626用feign客户端代替resttemplatefont"><font style="color:#262626;"></font><font style="color:#262626;">用Feign客户端代替RestTemplate</font></a></li>
+      </ol>
+    </li>
+    <li><a href="#font-stylecolor262626自定义feign的配置font"><font style="color:#262626;">自定义Feign的配置</font></a>
+      <ol>
+        <li><a href="#font-stylecolor262626方式一配置文件方式font"><font style="color:#262626;">方式一：配置文件方式</font></a></li>
+        <li><a href="#font-stylecolor262626方式二java代码方式需要先声明一个beanfont"><font style="color:#262626;">方式二：java代码方式，需要先声明一个Bean：</font></a></li>
+      </ol>
+    </li>
+    <li><a href="#font-stylecolor262626feign的性能优化font"><font style="color:#262626;">Feign的性能优化</font></a></li>
+    <li><a href="#font-stylecolor262626feign的最佳实践font"><font style="color:#262626;">Feign的最佳实践</font></a>
+      <ol>
+        <li><a href="#font-stylecolor262626方式一继承font"><font style="color:#262626;">方式一（继承）</font></a></li>
+        <li><a href="#font-stylecolor262626方式二抽取font"><font style="color:#262626;">方式二（抽取）</font></a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+<script>
+    
+    const scrollToTopButton = document.getElementById('scrollToTop');
+
+    window.addEventListener('scroll', function() {
+        if (window.scrollY > 0) {
+            scrollToTopButton.style.display = 'flex';
+        } else {
+            scrollToTopButton.style.display = 'none';
+        }
+    });
+
+    scrollToTopButton.addEventListener('click', function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+</script>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="background-color: #221d01bf; color: #fff;">
+                微服务
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A18http%E5%AE%A2%E6%88%B7%E7%AB%AFfeign/">【微服务】8、http客户端Feign</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">
+                    创建时间：2024-04-27</time>
+                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-clock-hour-4"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M12 12l3 2" /><path d="M12 7v5" /></svg>
+                <time class="article-time--lastUpdated">
+                    更新时间：2024-04-27</time>
+                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-file-word"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2" /><path d="M9 12l1.333 5l1.667 -4l1.667 4l1.333 -5" /></svg>
+                <time class="article-time--word">
+                    字数总计：1654</time>
+            </div>
+        
+
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h2 id="font-stylecolor262626定义和使用feign客户端font"><font style="color:#262626;">定义和使用Feign客户端</font>
+</h2><p><img src="/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A18http%E5%AE%A2%E6%88%B7%E7%AB%AFfeign/img/image.png"
+	width="708"
+	height="436"
+	
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="162"
+		data-flex-basis="389px"
+	
+></p>
+<p><strong><font style="color:#262626;">Feign的介绍</font></strong></p>
+<p><font style="color:#262626;">Feign</font><font style="color:#262626;">是一个声明式的</font><font style="color:#262626;">http</font><font style="color:#262626;">客户端，官方地址：</font><a class="link" href="https://github.com/OpenFeign/feign"  target="_blank" rel="noopener"
+    >https://github.com/OpenFeign/feign</a></p>
+<p><font style="color:#262626;">其作用就是帮助我们优雅的实现http请求的发送，解决上面提到的问题。</font></p>
+<p><img src="/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A18http%E5%AE%A2%E6%88%B7%E7%AB%AFfeign/img/image-1.png"
+	width="1218"
+	height="286"
+	
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="425"
+		data-flex-basis="1022px"
+	
+></p>
+<p><strong><font style="color:#262626;">使用Feign客户端</font></strong></p>
+<h3 id="font-stylecolor262626fontfont-stylecolor262626引入依赖font"><font style="color:#262626;"></font><font style="color:#262626;">引入依赖</font>
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"><span class="c">&lt;!-- OpenFeign --&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;dependency&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&lt;groupId&gt;</span>org.springframework.cloud<span class="nt">&lt;/groupId&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&lt;artifactId&gt;</span>spring-cloud-starter-openfeign<span class="nt">&lt;/artifactId&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/dependency&gt;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="font-stylecolor262626在order-service的启动类添加注解开启feign的功能font"><font style="color:#262626;">在order-service的启动类添加注解开启Feign的功能</font>
+</h3><p><img src="/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A18http%E5%AE%A2%E6%88%B7%E7%AB%AFfeign/img/image-2.png"
+	width="779"
+	height="269"
+	
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="289"
+		data-flex-basis="695px"
+	
+></p>
+<h3 id="font-stylecolor262626编写feign客户端font"><font style="color:#262626;">编写Feign客户端</font>
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@FeignClient</span><span class="p">(</span><span class="s">&#34;userservice&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">UserClient</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@GetMapping</span><span class="p">(</span><span class="s">&#34;/user/{id}&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">User</span><span class="w"> </span><span class="nf">findById</span><span class="p">(</span><span class="nd">@PathVariable</span><span class="p">(</span><span class="s">&#34;id&#34;</span><span class="p">)</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><font style="color:#262626;">主要是基于</font><font style="color:#262626;">SpringMVC</font><font style="color:#262626;">的注解来声明远程调用的信息，比如：</font></p>
+<ul>
+<li><font style="color:#262626;">服务名称：userservice</font></li>
+<li><font style="color:#262626;">请求方式：GET</font></li>
+<li><font style="color:#262626;">请求路径：/user/{id}</font></li>
+<li><font style="color:#262626;">请求参数：Long id</font></li>
+<li><font style="color:#262626;">返回值类型：User</font></li>
+</ul>
+<h3 id="font-stylecolor262626fontfont-stylecolor262626用feign客户端代替resttemplatefont"><font style="color:#262626;"></font><font style="color:#262626;">用Feign客户端代替RestTemplate</font>
+</h3><p><img src="/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A18http%E5%AE%A2%E6%88%B7%E7%AB%AFfeign/img/image-3.png"
+	width="790"
+	height="454"
+	
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="174"
+		data-flex-basis="417px"
+	
+></p>
+<h2 id="font-stylecolor262626自定义feign的配置font"><font style="color:#262626;">自定义Feign的配置</font>
+</h2><p><font style="color:#262626;">Feign运行自定义配置来覆盖默认配置，可以修改的配置如下：</font></p>
+<div class="table-wrapper"><table>
+  <thead>
+      <tr>
+          <th style="text-align: center"><font style="color:white;">类型</font></th>
+          <th style="text-align: center"><font style="color:white;">作用</font></th>
+          <th><font style="color:white;">说明</font></th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: center"><strong><font style="color:#ad2b26;">feign.Logger.Level</font></strong></td>
+          <td style="text-align: center"><font style="color:#262626;">修改日志级别</font></td>
+          <td><font style="color:#262626;">包含四种不同的级别：</font><font style="color:#262626;">NONE</font><font style="color:#262626;">、</font><font style="color:#262626;">BASIC</font><font style="color:#262626;">、</font><font style="color:#262626;">HEADERS</font><font style="color:#262626;">、</font><font style="color:#262626;">FULL</font></td>
+      </tr>
+      <tr>
+          <td style="text-align: center"><font style="color:#262626;">feign.codec.Decoder</font></td>
+          <td style="text-align: center"><font style="color:#262626;">响应结果的解析器</font></td>
+          <td><font style="color:#262626;">http</font><font style="color:#262626;">远程调用的结果做解析，例如解析</font><font style="color:#262626;">json</font><font style="color:#262626;">字符串为</font><font style="color:#262626;">java</font><font style="color:#262626;">对象</font></td>
+      </tr>
+      <tr>
+          <td style="text-align: center"><font style="color:#262626;">feign.codec.Encoder</font></td>
+          <td style="text-align: center"><font style="color:#262626;">请求参数编码</font></td>
+          <td><font style="color:#262626;">将请求参数编码，便于通过</font><font style="color:#262626;">http</font><font style="color:#262626;">请求发送</font></td>
+      </tr>
+      <tr>
+          <td style="text-align: center"><font style="color:#262626;">feign. Contract</font></td>
+          <td style="text-align: center"><font style="color:#262626;">支持的注解格式</font></td>
+          <td><font style="color:#262626;">默认是</font><font style="color:#262626;">SpringMVC</font><font style="color:#262626;">的注解</font></td>
+      </tr>
+      <tr>
+          <td style="text-align: center"><font style="color:#262626;">feign. Retryer</font></td>
+          <td style="text-align: center"><font style="color:#262626;">失败重试机制</font></td>
+          <td><font style="color:#262626;">请求失败的重试机制，默认是没有，不过会使用</font><font style="color:#262626;">Ribbon</font><font style="color:#262626;">的重试</font></td>
+      </tr>
+  </tbody>
+</table></div>
+<p><font style="color:#262626;">一般我们需要配置的就是日志级别。</font></p>
+<p><font style="color:#262626;"></font></p>
+<p><font style="color:#262626;">配置</font><font style="color:#262626;">Feign</font><font style="color:#262626;">日志有两种方式：</font></p>
+<h3 id="font-stylecolor262626方式一配置文件方式font"><font style="color:#262626;">方式一：配置文件方式</font>
+</h3><p><font style="color:#262626;">全局生效：</font></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">feign</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">client</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">config</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="c"># 这里用default就是全局配置，如果是写服务名称，则是针对某个微服务的配置</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">loggerLevel</span><span class="p">:</span><span class="w"> </span><span class="l">FULL</span><span class="w"> </span><span class="c">#  日志级别</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><font style="color:#262626;">局部生效：</font></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">feign</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">client</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">config</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">userservice</span><span class="p">:</span><span class="w"> </span><span class="c"># 这里用default就是全局配置，如果是写服务名称，则是针对某个微服务的配置</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">loggerLevel</span><span class="p">:</span><span class="w"> </span><span class="l">FULL</span><span class="w"> </span><span class="c">#  日志级别</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="font-stylecolor262626方式二java代码方式需要先声明一个beanfont"><font style="color:#262626;">方式二：java代码方式，需要先声明一个Bean：</font>
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">FeignClientConfiguration</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Bean</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">Logger</span><span class="p">.</span><span class="na">Level</span><span class="w"> </span><span class="nf">feignLogLevel</span><span class="p">(){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">Logger</span><span class="p">.</span><span class="na">Level</span><span class="p">.</span><span class="na">BASIC</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><font style="color:#262626;">而后如果是全局配置，则把它放到@EnableFeignClients这个注解中：</font></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@EnableFeignClients</span><span class="p">(</span><span class="n">defaultConfiguration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">FeignClientConfiguration</span><span class="p">.</span><span class="na">class</span><span class="p">)</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><font style="color:#262626;">如果是局部配置，则把它放到@FeignClient这个注解中</font></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@FeignClient</span><span class="p">(</span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#34;userservice&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">configuration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">FeignClientConfiguration</span><span class="p">.</span><span class="na">class</span><span class="p">)</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="font-stylecolor262626feign的性能优化font"><font style="color:#262626;">Feign的性能优化</font>
+</h2><p><font style="color:#262626;">Feign</font><font style="color:#262626;">底层的客户端实现：</font></p>
+<ul>
+<li><font style="color:#262626;">URLConnection：默认实现，不支持连接池</font></li>
+<li><font style="color:#262626;">Apache HttpClient：支持连接池</font></li>
+<li><font style="color:#262626;">OKHttp：支持连接池</font></li>
+</ul>
+<p><font style="color:#262626;">因此优化</font><font style="color:#262626;">Feign</font><font style="color:#262626;">的性能主要包括：</font></p>
+<p>①<font style="color:#262626;">使用连接池代替默认的</font><font style="color:#262626;">URLConnection</font></p>
+<p>②<font style="color:#DF2A3F;">日志级别，最好用basic或none</font></p>
+<p><font style="color:#262626;"></font></p>
+<p><font style="color:#DF2A3F;">Feign添加HttpClient的支持：</font></p>
+<p><font style="color:#262626;">引入依赖：</font></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"><span class="c">&lt;!--httpClient的依赖--&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;dependency&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&lt;groupId&gt;</span>io.github.openfeign<span class="nt">&lt;/groupId&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&lt;artifactId&gt;</span>feign-httpclient<span class="nt">&lt;/artifactId&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/dependency&gt;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><font style="color:#262626;">配置连接池：</font></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">feign</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">client</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">config</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="c"># default全局的配置</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">loggerLevel</span><span class="p">:</span><span class="w"> </span><span class="l">BASIC</span><span class="w"> </span><span class="c"># 日志级别，BASIC就是基本的请求和响应信息</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">httpclient</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="c"># 开启feign对HttpClient的支持</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">max-connections</span><span class="p">:</span><span class="w"> </span><span class="m">200</span><span class="w"> </span><span class="c"># 最大的连接数</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">max-connections-per-route</span><span class="p">:</span><span class="w"> </span><span class="m">50</span><span class="w"> </span><span class="c"># 每个路径的最大连接数</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="font-stylecolor262626feign的最佳实践font"><font style="color:#262626;">Feign的最佳实践</font>
+</h2><h3 id="font-stylecolor262626方式一继承font"><font style="color:#262626;">方式一（继承）</font>
+</h3><p><font style="color:#262626;">给消费者的FeignClient和提供者的controller定义统一的父接口作为标准。</font></p>
+<p><img src="/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A18http%E5%AE%A2%E6%88%B7%E7%AB%AFfeign/img/image-4.png"
+	width="937"
+	height="451"
+	
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="207"
+		data-flex-basis="498px"
+	
+></p>
+<p><font style="color:#DF2A3F;">不推荐：因为紧耦合和spring MVC的参数映射无法继承</font></p>
+<h3 id="font-stylecolor262626方式二抽取font"><font style="color:#262626;">方式二（抽取）</font>
+</h3><p><font style="color:#262626;">将FeignClient抽取为独立模块，并且把接口有关的POJO、默认的Feign配置都放到这个模块中，提供给所有消费者使用</font></p>
+<p><img src="/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A18http%E5%AE%A2%E6%88%B7%E7%AB%AFfeign/img/image-5.png"
+	width="1288"
+	height="477"
+	
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="270"
+		data-flex-basis="648px"
+	
+></p>
+<p><font style="color:#262626;">实现最佳实践方式二的步骤如下：</font></p>
+<ol>
+<li><font style="color:#262626;">首先创建一个module，命名为feign-api，然后引入feign的starter依赖</font></li>
+</ol>
+<p><img src="/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A18http%E5%AE%A2%E6%88%B7%E7%AB%AFfeign/img/image-6.png"
+	width="1060"
+	height="612"
+	
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="173"
+		data-flex-basis="415px"
+	
+></p>
+<ol start="2">
+<li><font style="color:#262626;">将order-service中编写的UserClient、User、DefaultFeignConfiguration都复制到feign-api项目中</font></li>
+<li><font style="color:#262626;">order-service中引入feign-api的依赖</font></li>
+<li><font style="color:#262626;">修改order-service中的所有与上述三个组件有关的import部分，改成导入feign-api中的包</font></li>
+<li><font style="color:#262626;">重启测试</font></li>
+</ol>
+<p>此时会启动失败：</p>
+<p><img src="/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A18http%E5%AE%A2%E6%88%B7%E7%AB%AFfeign/img/image-7.png"
+	width="1348"
+	height="548"
+	
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="245"
+		data-flex-basis="590px"
+	
+></p>
+<p>这是因为springboot的启动扫描默认不会扫描到这个bean，解决办法：</p>
+<p><font style="color:#262626;">当定义的</font><font style="color:#262626;">FeignClient</font><font style="color:#262626;">不在</font><font style="color:#262626;">SpringBootApplication</font><font style="color:#262626;">的扫描包范围时，这些</font><font style="color:#262626;">FeignClient</font><font style="color:#262626;">无法使用。有两种方式解决：</font></p>
+<p><font style="color:#262626;">方式一：指定</font><font style="color:#262626;">FeignClient</font><font style="color:#262626;">所在包</font></p>
+<p><img src="/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A18http%E5%AE%A2%E6%88%B7%E7%AB%AFfeign/img/image-8.png"
+	width="939"
+	height="191"
+	
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="491"
+		data-flex-basis="1179px"
+	
+></p>
+<p><font style="color:#262626;">方式二：指定FeignClient字节码</font></p>
+<p><img src="/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A18http%E5%AE%A2%E6%88%B7%E7%AB%AFfeign/img/image-9.png"
+	width="834"
+	height="247"
+	
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="337"
+		data-flex-basis="810px"
+	
+></p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/">微服务</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">相关文章</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A19%E7%BB%9F%E4%B8%80%E7%BD%91%E5%85%B3gateway/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">【微服务】9、统一网关Gateway</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A17nacos%E9%85%8D%E7%BD%AE%E7%AE%A1%E7%90%86/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">【微服务】7、Nacos配置管理</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A16nacos%E6%9C%8D%E5%8A%A1%E5%88%86%E7%BA%A7%E5%AD%98%E5%82%A8%E5%92%8C%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">【微服务】6、Nacos服务分级存储和负载均衡</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A15nacos%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">【微服务】5、Nacos注册中心</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A14ribbon%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">【微服务】4、Ribbon负载均衡</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    <script
+    src="https://giscus.app/client.js"
+    data-repo="XXL999227/XXL999227.github.io"
+    data-repo-id="R_kgDOINqX4g"
+    data-category="General"
+    data-category-id="DIC_kwDOINqX4s4CiTUd"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="top"
+    data-theme="light"
+    data-lang="zh-CN"
+    crossorigin="anonymous"
+    async
+></script>
+<script>
+    function setGiscusTheme(theme) {
+        let giscus = document.querySelector("iframe.giscus-frame");
+        if (giscus) {
+            giscus.contentWindow.postMessage(
+                {
+                    giscus: {
+                        setConfig: {
+                            theme: theme,
+                        },
+                    },
+                },
+                "https://giscus.app"
+            );
+        }
+    }
+
+    (function () {
+        addEventListener("message", (e) => {
+            if (event.origin !== "https://giscus.app") return;
+            handler();
+        });
+        window.addEventListener("onColorSchemeChange", handler);
+
+        function handler() {
+            if (document.documentElement.dataset.scheme === "light") {
+                setGiscusTheme('light');
+            } else {
+                setGiscusTheme('dark_dimmed');
+            }
+        }
+    })();
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2023 - 
+        
+        2025 Powered by 潇潇
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.27.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+<script>
+    
+    const cssPath = "https://xxl999227.github.io/waifu/waifu.css";
+    const tipsJsonPath = "https://xxl999227.github.io/waifu/waifu-tips.json";
+    const myTipsJsonPath = "https://xxl999227.github.io/waifu/my-waifu-tips.js";
+    const gamePath = "https://xxl999227.github.io/waifu/asteroids.js";
+    
+    const live2d_path = "https://fastly.jsdelivr.net/gh/stevenjoezhang/live2d-widget@latest/";
+    const live2dMinJsPath = "https://xxl999227.github.io/waifu/live2d.min.js";
+
+    
+    function loadExternalResource(url, type) {
+        return new Promise((resolve, reject) => {
+            let tag;
+            if (type === "css") {
+                tag = document.createElement("link");
+                tag.rel = "stylesheet";
+                tag.href = url;
+            }
+            else if (type === "js") {
+                tag = document.createElement("script");
+                tag.src = url;
+            }
+            if (tag) {
+                tag.onload = () => resolve(url);
+                tag.onerror = () => reject(url);
+                document.head.appendChild(tag);
+            }
+        });
+    }
+
+    
+    if (screen.width >= 768) {
+        Promise.all([
+            loadExternalResource(cssPath, "css"),
+            loadExternalResource(live2dMinJsPath, "js"),
+            loadExternalResource(myTipsJsonPath, "js")
+        ]).then(() => {
+            
+            initWidget({
+                waifuPath: tipsJsonPath,
+                gamePath: gamePath,
+                cdnPath: "https://cdn.jsdelivr.net/gh/XXL999227/static-resource@v1.0.0",
+                tools: ["hitokoto", "asteroids", "switch-model", "switch-texture", "photo", "quit"]
+             
+            });
+            
+            initWaifuMouseEvent();
+        });
+    }
+
+    function initWaifuMouseEvent() {
+        const waifu = document.getElementById("waifu");
+        let isDown = false;
+        let waifuLeft;
+        let mouseLeft;
+        let waifuTop;
+        let mouseTop;
+        
+        waifu.onmousedown = function (e) {
+            isDown = true;
+            
+            waifuLeft = waifu.offsetLeft;
+            mouseLeft = e.clientX;
+            
+            waifuTop = waifu.offsetTop;
+            mouseTop = e.clientY;
+        }
+        
+        window.onmousemove = function (e) {
+            if (!isDown) {
+                return;
+            }
+            
+            let currentLeft = waifuLeft + (e.clientX - mouseLeft);
+            if (currentLeft < 0) {
+                currentLeft = 0;
+            } else if (currentLeft > window.innerWidth - 300) {
+                currentLeft = window.innerWidth - 300;
+            }
+            waifu.style.left = currentLeft  + "px";
+            
+            let currentTop = waifuTop + (e.clientY - mouseTop);
+            if (currentTop < 30) {
+                currentTop = 30
+            } else if (currentTop > window.innerHeight - 290) {
+                currentTop = window.innerHeight - 290
+            }
+            waifu.style.top = currentTop + "px";
+        }
+        
+        window.onmouseup = function (e) {
+            isDown = false;
+        }
+    }
+</script>
+
+<script src= https://xxl999227.github.io/background/particles/particles.js></script>
+
+<link rel="stylesheet" href= https://xxl999227.github.io/background/particles/style.css>
+
+
+<div id="particles-js"></div>
+
+<script>
+    
+
+    particlesJS.load('particles-js', "https://xxl999227.github.io/background/particles/particlesjs-config.json", function() {
+        console.log('particles.js loaded - callback');
+    });
+</script>
+    </body>
+</html>

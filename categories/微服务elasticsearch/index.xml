@@ -1,0 +1,600 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>微服务，ElasticSearch on 潇潇’s blog</title>
+        <link>https://xxl999227.github.io/categories/%E5%BE%AE%E6%9C%8D%E5%8A%A1elasticsearch/</link>
+        <description>Recent content in 微服务，ElasticSearch on 潇潇’s blog</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>zh-cn</language>
+        <copyright>Powered by 潇潇</copyright>
+        <lastBuildDate>Thu, 09 May 2024 21:58:16 +0800</lastBuildDate><atom:link href="https://xxl999227.github.io/categories/%E5%BE%AE%E6%9C%8D%E5%8A%A1elasticsearch/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>【微服务】11、ElasticSearch</title>
+        <link>https://xxl999227.github.io/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A111elasticsearch/</link>
+        <pubDate>Thu, 09 May 2024 21:58:16 +0800</pubDate>
+        
+        <guid>https://xxl999227.github.io/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A111elasticsearch/</guid>
+        <description>&lt;h2 id=&#34;font-stylecolor262626初识elasticsearchfont&#34;&gt;&lt;font style=&#34;color:#262626;&#34;&gt;初识elasticsearch&lt;/font&gt;
+&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;&lt;font style=&#34;color:#262626;&#34;&gt;什么是elasticsearch&lt;/font&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;font style=&#34;color:#262626;&#34;&gt;elasticsearch是一款非常强大的开源搜索引擎，可以帮助我们从海量数据中快速找到需要的内容。&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;&lt;font style=&#34;color:#262626;&#34;&gt;&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;&lt;font style=&#34;color:#262626;&#34;&gt;elasticsearch结合kibana、Logstash、Beats，也就是elastic stack（ELK）（&lt;/font&gt;&lt;font style=&#34;color:black;&#34;&gt;是以elasticsearch为核心的技术栈，包括beats、Logstash、kibana、elasticsearch&lt;/font&gt;&lt;font style=&#34;color:#262626;&#34;&gt;）。被广泛应用在日志数据分析、实时监控等领域。&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://xxl999227.github.io/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A111elasticsearch/img/image.png&#34;
+	width=&#34;937&#34;
+	height=&#34;483&#34;
+	
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;193&#34;
+		data-flex-basis=&#34;465px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;font style=&#34;color:#262626;&#34;&gt;elasticsearch是elastic stack的核心，负责存储、搜索、分析数据。&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://xxl999227.github.io/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A111elasticsearch/img/image-1.png&#34;
+	width=&#34;823&#34;
+	height=&#34;501&#34;
+	
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;164&#34;
+		data-flex-basis=&#34;394px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;font style=&#34;color:#262626;&#34;&gt;elasticsearch的发展&lt;/font&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;font style=&#34;color:#262626;&#34;&gt;Lucene&lt;/font&gt;&lt;font style=&#34;color:#262626;&#34;&gt;是一个&lt;/font&gt;&lt;font style=&#34;color:#262626;&#34;&gt;Java&lt;/font&gt;&lt;font style=&#34;color:#262626;&#34;&gt;语言的搜索引擎类库，是&lt;/font&gt;&lt;font style=&#34;color:#262626;&#34;&gt;Apache&lt;/font&gt;&lt;font style=&#34;color:#262626;&#34;&gt;公司的顶级项目，由&lt;/font&gt;&lt;font style=&#34;color:#262626;&#34;&gt;DougCutting&lt;/font&gt;&lt;font style=&#34;color:#262626;&#34;&gt;于&lt;/font&gt;&lt;font style=&#34;color:#262626;&#34;&gt;1999&lt;/font&gt;&lt;font style=&#34;color:#262626;&#34;&gt;年研发。官网地址：&lt;/font&gt;&lt;a class=&#34;link&#34; href=&#34;https://lucene.apache.org/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://lucene.apache.org/&lt;/a&gt;&lt;font style=&#34;color:#262626;&#34;&gt;。&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;&lt;font style=&#34;color:#262626;&#34;&gt;Lucene&lt;/font&gt;&lt;font style=&#34;color:#262626;&#34;&gt;的优势：&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;:::danger
+&lt;font style=&#34;color:#262626;&#34;&gt;易扩展&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;&lt;font style=&#34;color:#262626;&#34;&gt;高性能（基于倒排索引）&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;:::&lt;/p&gt;
+&lt;p&gt;&lt;font style=&#34;color:#262626;&#34;&gt;Lucene&lt;/font&gt;&lt;font style=&#34;color:#262626;&#34;&gt;的缺点：&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;:::color4
+&lt;font style=&#34;color:#262626;&#34;&gt;只限于Java语言开发&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;&lt;font style=&#34;color:#262626;&#34;&gt;学习曲线陡峭&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;&lt;font style=&#34;color:#262626;&#34;&gt;不支持水平扩展&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;:::&lt;/p&gt;
+&lt;p&gt;&lt;font style=&#34;color:#262626;&#34;&gt;2004&lt;/font&gt;&lt;font style=&#34;color:#262626;&#34;&gt;年&lt;/font&gt;&lt;font style=&#34;color:#262626;&#34;&gt;Shay &lt;/font&gt;&lt;font style=&#34;color:#262626;&#34;&gt;Banon&lt;/font&gt;&lt;font style=&#34;color:#262626;&#34;&gt;基于&lt;/font&gt;&lt;font style=&#34;color:#262626;&#34;&gt;Lucene&lt;/font&gt;&lt;font style=&#34;color:#262626;&#34;&gt;开发了&lt;/font&gt;&lt;font style=&#34;color:#262626;&#34;&gt;Compass&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;&lt;font style=&#34;color:#262626;&#34;&gt;2010&lt;/font&gt;&lt;font style=&#34;color:#262626;&#34;&gt;年&lt;/font&gt;&lt;font style=&#34;color:#262626;&#34;&gt;Shay &lt;/font&gt;&lt;font style=&#34;color:#262626;&#34;&gt;Banon&lt;/font&gt;&lt;font style=&#34;color:#262626;&#34;&gt;重写了&lt;/font&gt;&lt;font style=&#34;color:#262626;&#34;&gt;Compass&lt;/font&gt;&lt;font style=&#34;color:#262626;&#34;&gt;，取名为&lt;/font&gt;&lt;font style=&#34;color:#262626;&#34;&gt;Elasticsearch&lt;/font&gt;&lt;font style=&#34;color:#262626;&#34;&gt;。&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;&lt;font style=&#34;color:#262626;&#34;&gt;官网地址: &lt;/font&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.elastic.co/cn/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://www.elastic.co/cn/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;font style=&#34;color:#262626;&#34;&gt;相比与&lt;/font&gt;&lt;font style=&#34;color:#262626;&#34;&gt;lucene&lt;/font&gt;&lt;font style=&#34;color:#262626;&#34;&gt;，&lt;/font&gt;&lt;font style=&#34;color:#262626;&#34;&gt;elasticsearch&lt;/font&gt;&lt;font style=&#34;color:#262626;&#34;&gt;具备下列优势：&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;:::success
+&lt;font style=&#34;color:#262626;&#34;&gt;支持分布式，可水平扩展&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;&lt;font style=&#34;color:#262626;&#34;&gt;提供Restful接口，可被任何语言调用&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;:::&lt;/p&gt;
+&lt;h2 id=&#34;font-stylecolor262626正向索引和倒排索引font&#34;&gt;&lt;font style=&#34;color:#262626;&#34;&gt;正向索引和倒排索引&lt;/font&gt;
+&lt;/h2&gt;&lt;p&gt;&lt;font style=&#34;color:#262626;&#34;&gt;传统数据库（如MySQL）采用正向索引，例如给下表（tb_goods）中的id创建索引：&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://xxl999227.github.io/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A111elasticsearch/img/image-2.png&#34;
+	width=&#34;1581&#34;
+	height=&#34;714&#34;
+	
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;221&#34;
+		data-flex-basis=&#34;531px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;font style=&#34;color:#262626;&#34;&gt;elasticsearch&lt;/font&gt;&lt;font style=&#34;color:#262626;&#34;&gt;采用倒排索引：&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;:::success
+&lt;font style=&#34;color:#262626;&#34;&gt;文档（document）：每条数据就是一个文档&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;&lt;font style=&#34;color:#262626;&#34;&gt;词条（term）：文档按照语义分成的词语&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;:::&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://xxl999227.github.io/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A111elasticsearch/img/image-3.png&#34;
+	width=&#34;1564&#34;
+	height=&#34;767&#34;
+	
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;203&#34;
+		data-flex-basis=&#34;489px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;font style=&#34;color:#DF2A3F;&#34;&gt;总结：&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;&lt;font style=&#34;color:black;&#34;&gt;什么是文档和词条？&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;:::success
+&lt;font style=&#34;color:black;&#34;&gt;每一条数据就是一个文档&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;&lt;font style=&#34;color:black;&#34;&gt;对文档中的内容分词，得到的词语就是词条&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;:::&lt;/p&gt;
+&lt;p&gt;&lt;font style=&#34;color:black;&#34;&gt;什么是正向索引？&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;:::warning
+&lt;font style=&#34;color:black;&#34;&gt;基于文档id创建索引。查询词条时必须先找到文档，而后判断是否包含词条&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;:::&lt;/p&gt;
+&lt;p&gt;&lt;font style=&#34;color:black;&#34;&gt;什么是倒排索引？&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;:::color1
+&lt;font style=&#34;color:black;&#34;&gt;对文档内容分词，对词条创建索引，并记录词条所在文档的信息。查询时先根据词条查询到文档id，而后获取到文档&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;:::&lt;/p&gt;
+&lt;p&gt;&lt;font style=&#34;color:#262626;&#34;&gt;elasticsearch&lt;/font&gt;&lt;font style=&#34;color:#262626;&#34;&gt;是面向文档存储的，可以是数据库中的一条商品数据，一个订单信息。&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;&lt;font style=&#34;color:#262626;&#34;&gt;文档数据会被序列化为json格式后存储在elasticsearch中。&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://xxl999227.github.io/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A111elasticsearch/img/image-4.png&#34;
+	width=&#34;1479&#34;
+	height=&#34;626&#34;
+	
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;236&#34;
+		data-flex-basis=&#34;567px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://xxl999227.github.io/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A111elasticsearch/img/image-5.png&#34;
+	width=&#34;1644&#34;
+	height=&#34;780&#34;
+	
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;210&#34;
+		data-flex-basis=&#34;505px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;mysql和font-stylecolor595959elasticsearch概念对比font&#34;&gt;mysql和&lt;font style=&#34;color:#595959;&#34;&gt;elasticsearch概念对比&lt;/font&gt;
+&lt;/h3&gt;&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th style=&#34;text-align: center&#34;&gt;&lt;strong&gt;&lt;font style=&#34;color:white;&#34;&gt;MySQL&lt;/font&gt;&lt;/strong&gt;&lt;/th&gt;
+          &lt;th style=&#34;text-align: center&#34;&gt;&lt;strong&gt;&lt;font style=&#34;color:white;&#34;&gt;Elasticsearch&lt;/font&gt;&lt;/strong&gt;&lt;/th&gt;
+          &lt;th style=&#34;text-align: center&#34;&gt;&lt;strong&gt;&lt;font style=&#34;color:white;&#34;&gt;说明&lt;/font&gt;&lt;/strong&gt;&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;&lt;font style=&#34;color:black;&#34;&gt;Table&lt;/font&gt;&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;&lt;font style=&#34;color:black;&#34;&gt;Index&lt;/font&gt;&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;&lt;font style=&#34;color:black;&#34;&gt;索引&lt;/font&gt;&lt;font style=&#34;color:black;&#34;&gt;(index)&lt;/font&gt;&lt;font style=&#34;color:black;&#34;&gt;，就是文档的集合，类似数据库的表&lt;/font&gt;&lt;font style=&#34;color:black;&#34;&gt;(table)&lt;/font&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;&lt;font style=&#34;color:black;&#34;&gt;Row&lt;/font&gt;&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;&lt;font style=&#34;color:black;&#34;&gt;Document&lt;/font&gt;&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;&lt;font style=&#34;color:black;&#34;&gt;文档（&lt;/font&gt;&lt;font style=&#34;color:black;&#34;&gt;Document&lt;/font&gt;&lt;font style=&#34;color:black;&#34;&gt;），就是一条条的数据，类似数据库中的行（&lt;/font&gt;&lt;font style=&#34;color:black;&#34;&gt;Row&lt;/font&gt;&lt;font style=&#34;color:black;&#34;&gt;），文档都是&lt;/font&gt;&lt;font style=&#34;color:black;&#34;&gt;JSON&lt;/font&gt;&lt;font style=&#34;color:black;&#34;&gt;格式&lt;/font&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;&lt;font style=&#34;color:black;&#34;&gt;Column&lt;/font&gt;&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;&lt;font style=&#34;color:black;&#34;&gt;Field&lt;/font&gt;&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;&lt;font style=&#34;color:black;&#34;&gt;字段（&lt;/font&gt;&lt;font style=&#34;color:black;&#34;&gt;Field&lt;/font&gt;&lt;font style=&#34;color:black;&#34;&gt;），就是&lt;/font&gt;&lt;font style=&#34;color:black;&#34;&gt;JSON&lt;/font&gt;&lt;font style=&#34;color:black;&#34;&gt;文档中的字段，类似数据库中的列（&lt;/font&gt;&lt;font style=&#34;color:black;&#34;&gt;Column&lt;/font&gt;&lt;font style=&#34;color:black;&#34;&gt;）&lt;/font&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;&lt;font style=&#34;color:black;&#34;&gt;Schema&lt;/font&gt;&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;&lt;font style=&#34;color:black;&#34;&gt;Mapping&lt;/font&gt;&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;&lt;font style=&#34;color:black;&#34;&gt;Mapping&lt;/font&gt;&lt;font style=&#34;color:black;&#34;&gt;（映射）是索引中文档的约束，例如字段类型约束。类似数据库的表结构（&lt;/font&gt;&lt;font style=&#34;color:black;&#34;&gt;Schema&lt;/font&gt;&lt;font style=&#34;color:black;&#34;&gt;）&lt;/font&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;&lt;font style=&#34;color:black;&#34;&gt;SQL&lt;/font&gt;&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;&lt;font style=&#34;color:black;&#34;&gt;DSL&lt;/font&gt;&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;&lt;font style=&#34;color:black;&#34;&gt;DSL&lt;/font&gt;&lt;font style=&#34;color:black;&#34;&gt;是&lt;/font&gt;&lt;font style=&#34;color:black;&#34;&gt;elasticsearch&lt;/font&gt;&lt;font style=&#34;color:black;&#34;&gt;提供的&lt;/font&gt;&lt;font style=&#34;color:black;&#34;&gt;JSON&lt;/font&gt;&lt;font style=&#34;color:black;&#34;&gt;风格的请求语句，用来操作&lt;/font&gt;&lt;font style=&#34;color:black;&#34;&gt;elasticsearch&lt;/font&gt;&lt;font style=&#34;color:black;&#34;&gt;，实现&lt;/font&gt;&lt;font style=&#34;color:black;&#34;&gt;CRUD&lt;/font&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;font style=&#34;color:#262626;&#34;&gt;Mysql&lt;/font&gt;&lt;font style=&#34;color:#262626;&#34;&gt;：擅长事务类型操作，可以确保数据的安全和一致性&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;&lt;font style=&#34;color:#262626;&#34;&gt;Elasticsearch：擅长海量数据的搜索、分析、计算&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://xxl999227.github.io/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A111elasticsearch/img/image-6.png&#34;
+	width=&#34;1009&#34;
+	height=&#34;385&#34;
+	
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;262&#34;
+		data-flex-basis=&#34;628px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;总结：&lt;/p&gt;
+&lt;p&gt;&lt;font style=&#34;color:black;&#34;&gt;文档：一条数据就是一个文档，&lt;/font&gt;&lt;font style=&#34;color:black;&#34;&gt;es&lt;/font&gt;&lt;font style=&#34;color:black;&#34;&gt;中是&lt;/font&gt;&lt;font style=&#34;color:black;&#34;&gt;Json&lt;/font&gt;&lt;font style=&#34;color:black;&#34;&gt;格式&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;&lt;font style=&#34;color:black;&#34;&gt;字段：&lt;/font&gt;&lt;font style=&#34;color:black;&#34;&gt;Json&lt;/font&gt;&lt;font style=&#34;color:black;&#34;&gt;文档中的字段&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;&lt;font style=&#34;color:black;&#34;&gt;索引：同类型文档的集合&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;&lt;font style=&#34;color:black;&#34;&gt;映射：索引中文档的约束，比如字段名称、类型&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;&lt;font style=&#34;color:black;&#34;&gt;elasticsearch&lt;/font&gt;&lt;font style=&#34;color:black;&#34;&gt;与数据库的关系：&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;&lt;font style=&#34;color:black;&#34;&gt;数据库负责事务类型操作&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;&lt;font style=&#34;color:black;&#34;&gt;elasticsearch负责海量数据的搜索、分析、计算&lt;/font&gt;&lt;/p&gt;
+&lt;h2 id=&#34;font-stylecolorblack3fontfont-stylecolor262626安装elasticsearchkibanaik分词器font&#34;&gt;&lt;font style=&#34;color:black;&#34;&gt;3、&lt;/font&gt;&lt;font style=&#34;color:#262626;&#34;&gt;安装elasticsearch、kibana、IK分词器&lt;/font&gt;
+&lt;/h2&gt;&lt;p&gt;采用docker安装它们&lt;/p&gt;
+&lt;h3 id=&#34;font-stylecolorrgb51-51-51部署单点esfont&#34;&gt;&lt;font style=&#34;color:rgb(51, 51, 51);&#34;&gt;部署单点es&lt;/font&gt;
+&lt;/h3&gt;&lt;p&gt;&lt;font style=&#34;color:rgb(51, 51, 51);&#34;&gt;&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;&lt;font style=&#34;color:rgb(51, 51, 51);&#34;&gt;创建网络&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;&lt;font style=&#34;color:rgb(51, 51, 51);&#34;&gt;因为我们还需要部署kibana容器，因此需要让es和kibana容器互联。这里先创建一个网络：&lt;/font&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;docker network create es-net
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;运行docker命令，部署单点es：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;docker run -d &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;	--name es &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;    -e &lt;span class=&#34;s2&#34;&gt;&amp;#34;ES_JAVA_OPTS=-Xms512m -Xmx512m&amp;#34;&lt;/span&gt; &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;    -e &lt;span class=&#34;s2&#34;&gt;&amp;#34;discovery.type=single-node&amp;#34;&lt;/span&gt; &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;    -v es-data:/usr/share/elasticsearch/data &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;    -v es-plugins:/usr/share/elasticsearch/plugins &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;    --privileged &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;    --network es-net &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;    -p 9200:9200 &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;    -p 9300:9300 &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;elasticsearch:7.12.1
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;命令解释：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;-e &amp;quot;cluster.name=es-docker-cluster&amp;quot;&lt;/code&gt;：设置集群名称&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-e &amp;quot;http.host=0.0.0.0&amp;quot;&lt;/code&gt;：监听的地址，可以外网访问&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-e &amp;quot;ES_JAVA_OPTS=-Xms512m -Xmx512m&amp;quot;&lt;/code&gt;：内存大小&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-e &amp;quot;discovery.type=single-node&amp;quot;&lt;/code&gt;：非集群模式&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-v es-data:/usr/share/elasticsearch/data&lt;/code&gt;：挂载逻辑卷，绑定es的数据目录&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-v es-logs:/usr/share/elasticsearch/logs&lt;/code&gt;：挂载逻辑卷，绑定es的日志目录&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-v es-plugins:/usr/share/elasticsearch/plugins&lt;/code&gt;：挂载逻辑卷，绑定es的插件目录&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;--privileged&lt;/code&gt;：授予逻辑卷访问权&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;--network es-net&lt;/code&gt; ：加入一个名为es-net的网络中&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-p 9200:9200&lt;/code&gt;：端口映射配置&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;在浏览器中输入：&lt;a class=&#34;link&#34; href=&#34;http://192.168.150.101:9200&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;http://虚拟机ip:9200&lt;/a&gt; 即可看到elasticsearch的响应结果：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://xxl999227.github.io/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A111elasticsearch/img/image-7.png&#34;
+	width=&#34;655&#34;
+	height=&#34;423&#34;
+	
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;154&#34;
+		data-flex-basis=&#34;371px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;部署kibana&#34;&gt;部署kibana
+&lt;/h3&gt;&lt;p&gt;kibana可以给我们提供一个elasticsearch的可视化界面，便于我们学习。&lt;/p&gt;
+&lt;p&gt;运行docker命令，部署kibana：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;docker run -d &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;--name kibana &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;-e &lt;span class=&#34;nv&#34;&gt;ELASTICSEARCH_HOSTS&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;http://es:9200 &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;--network&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;es-net &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;-p 5601:5601  &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;kibana:7.12.1
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;kibana启动一般比较慢，需要多等待一会，可以通过命令：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;docker logs -f kibana &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt;grep &lt;span class=&#34;m&#34;&gt;5601&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;查看运行日志，当查看到下面的日志，说明成功：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://xxl999227.github.io/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A111elasticsearch/img/image-8.png&#34;
+	width=&#34;1438&#34;
+	height=&#34;100&#34;
+	
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;1438&#34;
+		data-flex-basis=&#34;3451px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;此时，在浏览器输入地址访问：&lt;a class=&#34;link&#34; href=&#34;http://192.168.150.101:5601&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;http://虚拟机ip:5601&lt;/a&gt;，即可看到结果&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://xxl999227.github.io/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A111elasticsearch/img/image-9.png&#34;
+	width=&#34;937&#34;
+	height=&#34;512&#34;
+	
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;183&#34;
+		data-flex-basis=&#34;439px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;安装ik分词器&#34;&gt;安装IK分词器
+&lt;/h3&gt;&lt;p&gt;在线安装：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# 进入容器内部&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;docker &lt;span class=&#34;nb&#34;&gt;exec&lt;/span&gt; -it es /bin/bash
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# 在线下载并安装&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;./bin/elasticsearch-plugin  install https://github.com/medcl/elasticsearch-analysis-ik/releases/download/v7.12.1/elasticsearch-analysis-ik-7.12.1.zip
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;#退出&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;exit&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;#重启容器&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;docker restart es
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;IK分词器包含两种模式：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;ik_smart&lt;/code&gt;：最少切分，粒度较粗&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;ik_max_word&lt;/code&gt;：最细切分，粒度细&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;进入es的Dev Tools&lt;br&gt;
+&lt;img src=&#34;https://xxl999227.github.io/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A111elasticsearch/img/image-10.png&#34;
+	width=&#34;1883&#34;
+	height=&#34;1018&#34;
+	
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;184&#34;
+		data-flex-basis=&#34;443px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;扩展词典和停用词典&#34;&gt;扩展词典和停用词典
+&lt;/h3&gt;&lt;p&gt;随着互联网的发展，“造词运动”也越发的频繁。出现了很多新的词语，在原有的词汇列表中并不存在。比如：“奥力给”，“传智播客” 等。&lt;/p&gt;
+&lt;p&gt;所以我们的词汇也需要不断的更新，IK分词器提供了扩展词汇的功能。&lt;/p&gt;
+&lt;p&gt;1）打开IK分词器config目录：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://xxl999227.github.io/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A111elasticsearch/img/image-11.png&#34;
+	width=&#34;902&#34;
+	height=&#34;409&#34;
+	
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;220&#34;
+		data-flex-basis=&#34;529px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;2）在IKAnalyzer.cfg.xml配置文件内容添加：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-xml&#34; data-lang=&#34;xml&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cp&#34;&gt;&amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;UTF-8&amp;#34;?&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cp&#34;&gt;&amp;lt;!DOCTYPE properties SYSTEM &amp;#34;http://java.sun.com/dtd/properties.dtd&amp;#34;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nt&#34;&gt;&amp;lt;properties&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;nt&#34;&gt;&amp;lt;comment&amp;gt;&lt;/span&gt;IK Analyzer 扩展配置&lt;span class=&#34;nt&#34;&gt;&amp;lt;/comment&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;c&#34;&gt;&amp;lt;!--用户可以在这里配置自己的扩展字典 *** 添加扩展词典--&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;nt&#34;&gt;&amp;lt;entry&lt;/span&gt; &lt;span class=&#34;na&#34;&gt;key=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;ext_dict&amp;#34;&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;&amp;gt;&lt;/span&gt;ext.dic&lt;span class=&#34;nt&#34;&gt;&amp;lt;/entry&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nt&#34;&gt;&amp;lt;/properties&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;3）新建一个 ext.dic，可以参考config目录下复制一个配置文件进行修改&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-xml&#34; data-lang=&#34;xml&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;传智播客
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;奥力给
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;4）重启elasticsearch&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;docker restart es
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# 查看 日志&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;docker logs -f elasticsearch
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://xxl999227.github.io/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A111elasticsearch/img/image-12.png&#34;
+	width=&#34;937&#34;
+	height=&#34;194&#34;
+	
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;482&#34;
+		data-flex-basis=&#34;1159px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;日志中已经成功加载ext.dic配置文件&lt;/p&gt;
+&lt;p&gt;&lt;font style=&#34;color:#DF2A3F;&#34;&gt;停用词典：&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;在互联网项目中，在网络间传输的速度很快，所以很多语言是不允许在网络上传递的，如：关于宗教、政治等敏感词语，那么我们在搜索时也应该忽略当前词汇。&lt;/p&gt;
+&lt;p&gt;IK分词器也提供了强大的停用词功能，让我们在索引时就直接忽略当前的停用词汇表中的内容。&lt;/p&gt;
+&lt;p&gt;1）IKAnalyzer.cfg.xml配置文件内容添加：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;9
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-xml&#34; data-lang=&#34;xml&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cp&#34;&gt;&amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;UTF-8&amp;#34;?&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cp&#34;&gt;&amp;lt;!DOCTYPE properties SYSTEM &amp;#34;http://java.sun.com/dtd/properties.dtd&amp;#34;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nt&#34;&gt;&amp;lt;properties&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;nt&#34;&gt;&amp;lt;comment&amp;gt;&lt;/span&gt;IK Analyzer 扩展配置&lt;span class=&#34;nt&#34;&gt;&amp;lt;/comment&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;c&#34;&gt;&amp;lt;!--用户可以在这里配置自己的扩展字典--&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;nt&#34;&gt;&amp;lt;entry&lt;/span&gt; &lt;span class=&#34;na&#34;&gt;key=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;ext_dict&amp;#34;&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;&amp;gt;&lt;/span&gt;ext.dic&lt;span class=&#34;nt&#34;&gt;&amp;lt;/entry&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;c&#34;&gt;&amp;lt;!--用户可以在这里配置自己的扩展停止词字典  *** 添加停用词词典--&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;nt&#34;&gt;&amp;lt;entry&lt;/span&gt; &lt;span class=&#34;na&#34;&gt;key=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;ext_stopwords&amp;#34;&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;&amp;gt;&lt;/span&gt;stopword.dic&lt;span class=&#34;nt&#34;&gt;&amp;lt;/entry&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nt&#34;&gt;&amp;lt;/properties&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;3）在 stopword.dic 添加停用词&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-xml&#34; data-lang=&#34;xml&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;习大大
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;4）重启elasticsearch&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# 重启服务&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;docker restart es
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;docker restart kibana
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# 查看 日志&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;docker logs -f es
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;日志中已经成功加载stopword.dic配置文件&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;注意当前文件的编码必须是 UTF-8 格式，严禁使用Windows记事本编辑&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;font style=&#34;color:#DF2A3F;&#34;&gt;总结：&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;&lt;font style=&#34;color:black;&#34;&gt;分词器的作用是什么？&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;:::warning
+&lt;font style=&#34;color:black;&#34;&gt;创建倒排索引时对文档分词&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;&lt;font style=&#34;color:black;&#34;&gt;用户搜索时，对输入的内容分词&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;:::&lt;/p&gt;
+&lt;p&gt;&lt;font style=&#34;color:black;&#34;&gt;IK&lt;/font&gt;&lt;font style=&#34;color:black;&#34;&gt;分词器有几种模式？&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;:::color1
+&lt;font style=&#34;color:black;&#34;&gt;ik_smart：智能切分，粗粒度&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;&lt;font style=&#34;color:black;&#34;&gt;ik_max_word：最细切分，细粒度&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;:::&lt;/p&gt;
+&lt;p&gt;&lt;font style=&#34;color:black;&#34;&gt;IK&lt;/font&gt;&lt;font style=&#34;color:black;&#34;&gt;分词器如何拓展词条？如何停用词条？&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;:::danger
+&lt;font style=&#34;color:black;&#34;&gt;利用config目录的IkAnalyzer.cfg.xml文件添加拓展词典和停用词典&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;&lt;font style=&#34;color:black;&#34;&gt;在词典中添加拓展词条或者停用词条&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;:::&lt;/p&gt;
+&lt;h2 id=&#34;font-stylecolor262626数据同步font&#34;&gt;&lt;font style=&#34;color:#262626;&#34;&gt;数据同步&lt;/font&gt;
+&lt;/h2&gt;&lt;p&gt;&lt;font style=&#34;color:#262626;&#34;&gt;elasticsearch中的酒店数据来自于mysql数据库，因此mysql数据发生改变时，elasticsearch也必须跟着改变，这个就是elasticsearch与mysql之间的&lt;/font&gt;&lt;strong&gt;&lt;font style=&#34;color:#c00000;&#34;&gt;数据同步&lt;/font&gt;&lt;/strong&gt;&lt;font style=&#34;color:#262626;&#34;&gt;。&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://xxl999227.github.io/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A111elasticsearch/img/image-13.png&#34;
+	width=&#34;1291&#34;
+	height=&#34;440&#34;
+	
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;293&#34;
+		data-flex-basis=&#34;704px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://xxl999227.github.io/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A111elasticsearch/img/image-14.png&#34;
+	width=&#34;1298&#34;
+	height=&#34;533&#34;
+	
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;243&#34;
+		data-flex-basis=&#34;584px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://xxl999227.github.io/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A111elasticsearch/img/image-15.png&#34;
+	width=&#34;1324&#34;
+	height=&#34;607&#34;
+	
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;218&#34;
+		data-flex-basis=&#34;523px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://xxl999227.github.io/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A111elasticsearch/img/image-16.png&#34;
+	width=&#34;1314&#34;
+	height=&#34;570&#34;
+	
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;230&#34;
+		data-flex-basis=&#34;553px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;font style=&#34;color:#DF2A3F;&#34;&gt;总结：&lt;/font&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;font style=&#34;color:black;&#34;&gt;方式一：同步调用&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;:::info
+&lt;font style=&#34;color:black;&#34;&gt;优点：实现简单，粗暴&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;&lt;font style=&#34;color:black;&#34;&gt;缺点：业务耦合度高&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;:::&lt;/p&gt;
+&lt;p&gt;&lt;font style=&#34;color:black;&#34;&gt;方式二：异步通知&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;:::color2
+&lt;font style=&#34;color:black;&#34;&gt;优点：低耦合，实现难度一般&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;&lt;font style=&#34;color:black;&#34;&gt;缺点：依赖mq的可靠性&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;:::&lt;/p&gt;
+&lt;p&gt;&lt;font style=&#34;color:black;&#34;&gt;方式三：监听&lt;/font&gt;&lt;font style=&#34;color:black;&#34;&gt;binlog&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;:::color3
+&lt;font style=&#34;color:black;&#34;&gt;优点：完全解除服务间耦合&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;&lt;font style=&#34;color:black;&#34;&gt;缺点：开启binlog增加数据库负担、实现复杂度高&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;:::&lt;/p&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>

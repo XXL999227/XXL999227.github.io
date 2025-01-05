@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="nacos服务分级 nacos引入了服务-&gt;集群-&gt;实例的分级概念\n服务集群属性\n1.修改application.yml，添加如下内容：\n1 2 3 4 5 6 spring: cloud: nacos: server-addr: localhost:8848 # nacos 服务端地址 discovery: cluster-name: HZ # 配置集群名称，也就是机房位置，例如：HZ，杭州 然后启动项目\n2.在Nacos控制台可以看到集群变化：\n">
+<title>【微服务】6、Nacos服务分级存储和负载均衡</title>
+
+<link rel='canonical' href='https://xxl999227.github.io/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A16nacos%E6%9C%8D%E5%8A%A1%E5%88%86%E7%BA%A7%E5%AD%98%E5%82%A8%E5%92%8C%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/'>
+
+<link rel="stylesheet" href="/scss/style.min.d91c2070e085e35f1fd5131bcadf95da720496f3d8c0dd302289c6e1955ee051.css"><meta property='og:title' content="【微服务】6、Nacos服务分级存储和负载均衡">
+<meta property='og:description' content="nacos服务分级 nacos引入了服务-&gt;集群-&gt;实例的分级概念\n服务集群属性\n1.修改application.yml，添加如下内容：\n1 2 3 4 5 6 spring: cloud: nacos: server-addr: localhost:8848 # nacos 服务端地址 discovery: cluster-name: HZ # 配置集群名称，也就是机房位置，例如：HZ，杭州 然后启动项目\n2.在Nacos控制台可以看到集群变化：\n">
+<meta property='og:url' content='https://xxl999227.github.io/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A16nacos%E6%9C%8D%E5%8A%A1%E5%88%86%E7%BA%A7%E5%AD%98%E5%82%A8%E5%92%8C%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/'>
+<meta property='og:site_name' content='潇潇’s blog'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='微服务' /><meta property='article:published_time' content='2024-04-23T21:19:29&#43;08:00'/><meta property='article:modified_time' content='2024-04-23T21:19:29&#43;08:00'/>
+<meta name="twitter:title" content="【微服务】6、Nacos服务分级存储和负载均衡">
+<meta name="twitter:description" content="nacos服务分级 nacos引入了服务-&gt;集群-&gt;实例的分级概念\n服务集群属性\n1.修改application.yml，添加如下内容：\n1 2 3 4 5 6 spring: cloud: nacos: server-addr: localhost:8848 # nacos 服务端地址 discovery: cluster-name: HZ # 配置集群名称，也就是机房位置，例如：HZ，杭州 然后启动项目\n2.在Nacos控制台可以看到集群变化：\n">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu6975665600438320786.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">❤️‍</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">潇潇’s blog</a></h1>
+            <h2 class="site-description">欢迎来到我的网站，此博客由【Hugo &#43; Stack】来进行搭建，主要分享个人生活和学习笔记</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://xxl999227.github.io/'
+                        target="_blank"
+                        title="Gitee"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-home-2"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l-2 0l9 -9l9 9l-2 0" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" /><path d="M10 12h4v4h-4z" /></svg>
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://github.com/XXL999227'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%85%B3%E4%BA%8E/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%8F%8B%E6%83%85%E9%93%BE%E6%8E%A5/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>友情链接</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span class="switch-model">暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+        <button class="back-to-top" id="scrollToTop" style="
+            position: fixed; 
+            bottom: 20px; 
+            width: 40px; 
+            height: 40px; 
+            border-radius: 50%; 
+            background-color: white; 
+            border: 1px solid #ccc; 
+            display: none; /* 初始隐藏 */
+            align-items: center; 
+            justify-content: center;
+            cursor: pointer;
+            font-size: 20px;
+            color: #888;
+        ">
+            ↑
+        </button>
+        
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#nacos服务分级">nacos服务分级</a></li>
+    <li><a href="#nacos负载均衡">nacos负载均衡</a>
+      <ol>
+        <li><a href="#font-stylecolorblack修改order-service中的applicationyml设置集群为hzfont"><font style="color:black;">修改order-service中的application.yml，设置集群为HZ：</font></a></li>
+        <li><a href="#font-stylecolorblack然后在order-service中设置负载均衡的irule为nacosrulefontfont-stylecolordf2a3f这个规则优先会寻找与自己同集群的服务font"><font style="color:black;">然后在order-service中设置负载均衡的IRule为NacosRule，</font><font style="color:#DF2A3F;">这个规则优先会寻找与自己同集群的服务：</font></a></li>
+        <li><a href="#font-stylecolorblacknacosrule负载均衡策略font"><font style="color:black;">NacosRule负载均衡策略</font></a></li>
+      </ol>
+    </li>
+    <li><a href="#font-stylecolor262626根据权重负载均衡font"><font style="color:#262626;">根据权重负载均衡</font></a>
+      <ol>
+        <li><a href="#font-stylecolorblack在nacos控制台可以设置实例的权重值首先选中实例后面的编辑按钮font"><font style="color:black;">在Nacos控制台可以设置实例的权重值，首先选中实例后面的编辑按钮</font></a></li>
+        <li><a href="#font-stylecolorblack将权重设置为01测试可以发现8081被访问到的频率大大降低font"><font style="color:black;">将权重设置为0.1，测试可以发现8081被访问到的频率大大降低</font></a></li>
+        <li><a href="#总结">总结</a></li>
+      </ol>
+    </li>
+    <li><a href="#font-stylecolor262626环境隔离---namespacefont"><strong><font style="color:#262626;">环境隔离 - namespace</font></strong></a>
+      <ol>
+        <li><a href="#font-stylecolorblack在nacos控制台可以创建namespace用来隔离不同环境font"><font style="color:black;">在Nacos控制台可以创建namespace，用来隔离不同环境</font></a></li>
+        <li><a href="#font-stylecolorblack然后填写一个新的命名空间信息font"><font style="color:black;">然后填写一个新的命名空间信息：</font></a></li>
+        <li><a href="#font-stylecolorblack保存后会在控制台看到这个命名空间的idfont"><font style="color:black;">保存后会在控制台看到这个命名空间的id</font></a></li>
+        <li><a href="#font-stylecolorblack修改order-service的applicationyml添加namespacefont"><font style="color:black;">修改order-service的application.yml，添加namespace</font></a></li>
+        <li><a href="#font-stylecolorblack重启order-service后再来查看控制台font"><font style="color:black;">重启order-service后，再来查看控制台</font></a></li>
+        <li><a href="#font-stylecolorblack此时访问order-service因为namespace不同会导致找不到userservice控制台会报错font"><font style="color:black;">此时访问order-service，因为namespace不同，会导致找不到userservice，控制台会报错</font></a></li>
+        <li><a href="#总结-1">总结</a></li>
+      </ol>
+    </li>
+    <li><a href="#font-stylecolor262626nacos注册中心细节分析font"><font style="color:#262626;">nacos注册中心细节分析</font></a>
+      <ol>
+        <li><a href="#总结nacos与eureka的异同">总结nacos与eureka的异同</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+<script>
+    
+    const scrollToTopButton = document.getElementById('scrollToTop');
+
+    window.addEventListener('scroll', function() {
+        if (window.scrollY > 0) {
+            scrollToTopButton.style.display = 'flex';
+        } else {
+            scrollToTopButton.style.display = 'none';
+        }
+    });
+
+    scrollToTopButton.addEventListener('click', function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+</script>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="background-color: #221d01bf; color: #fff;">
+                微服务
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A16nacos%E6%9C%8D%E5%8A%A1%E5%88%86%E7%BA%A7%E5%AD%98%E5%82%A8%E5%92%8C%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/">【微服务】6、Nacos服务分级存储和负载均衡</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">
+                    创建时间：2024-04-23</time>
+                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-clock-hour-4"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M12 12l3 2" /><path d="M12 7v5" /></svg>
+                <time class="article-time--lastUpdated">
+                    更新时间：2024-04-23</time>
+                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-file-word"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2" /><path d="M9 12l1.333 5l1.667 -4l1.667 4l1.333 -5" /></svg>
+                <time class="article-time--word">
+                    字数总计：1494</time>
+            </div>
+        
+
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h2 id="nacos服务分级">nacos服务分级
+</h2><p><font style="color:#DF2A3F;">nacos引入了服务-&gt;集群-&gt;实例的分级概念</font></p>
+<p><img src="/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A16nacos%E6%9C%8D%E5%8A%A1%E5%88%86%E7%BA%A7%E5%AD%98%E5%82%A8%E5%92%8C%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/img/image.png"
+	width="937"
+	height="494"
+	
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="189"
+		data-flex-basis="455px"
+	
+></p>
+<p><img src="/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A16nacos%E6%9C%8D%E5%8A%A1%E5%88%86%E7%BA%A7%E5%AD%98%E5%82%A8%E5%92%8C%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/img/image-1.png"
+	width="1206"
+	height="622"
+	
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="193"
+		data-flex-basis="465px"
+	
+></p>
+<p><strong><font style="color:#262626;">服务集群属性</font></strong></p>
+<p>1.<font style="color:black;">修改application.yml，添加如下内容：</font></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">spring</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">cloud</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">nacos</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">server-addr</span><span class="p">:</span><span class="w"> </span><span class="l">localhost:8848</span><span class="w"> </span><span class="c"># nacos 服务端地址</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">discovery</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">cluster-name</span><span class="p">:</span><span class="w"> </span><span class="l">HZ</span><span class="w"> </span><span class="c"># 配置集群名称，也就是机房位置，例如：HZ，杭州</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>然后启动项目</p>
+<p>2.<font style="color:black;">在Nacos控制台可以看到集群变化：</font></p>
+<p><img src="/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A16nacos%E6%9C%8D%E5%8A%A1%E5%88%86%E7%BA%A7%E5%AD%98%E5%82%A8%E5%92%8C%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/img/image-2.png"
+	width="1199"
+	height="292"
+	
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="410"
+		data-flex-basis="985px"
+	
+></p>
+<p><img src="/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A16nacos%E6%9C%8D%E5%8A%A1%E5%88%86%E7%BA%A7%E5%AD%98%E5%82%A8%E5%92%8C%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/img/image-3.png"
+	width="1276"
+	height="610"
+	
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="209"
+		data-flex-basis="502px"
+	
+></p>
+<h2 id="nacos负载均衡">nacos负载均衡
+</h2><h3 id="font-stylecolorblack修改order-service中的applicationyml设置集群为hzfont"><font style="color:black;">修改order-service中的application.yml，设置集群为HZ：</font>
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">spring</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">cloud</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">nacos</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">server-addr</span><span class="p">:</span><span class="w"> </span><span class="l">localhost:8848</span><span class="w"> </span><span class="c"># nacos 服务端地址</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">discovery</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">cluster-name</span><span class="p">:</span><span class="w"> </span><span class="l">HZ</span><span class="w"> </span><span class="c"># 配置集群名称，也就是机房位置</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="font-stylecolorblack然后在order-service中设置负载均衡的irule为nacosrulefontfont-stylecolordf2a3f这个规则优先会寻找与自己同集群的服务font"><font style="color:black;">然后在order-service中设置负载均衡的IRule为NacosRule，</font><font style="color:#DF2A3F;">这个规则优先会寻找与自己同集群的服务：</font>
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">userservice</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">ribbon</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">NFLoadBalancerRuleClassName</span><span class="p">:</span><span class="w"> </span><span class="l">com.alibaba.cloud.nacos.ribbon.NacosRule# 负载均衡规则</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="font-stylecolorblacknacosrule负载均衡策略font"><font style="color:black;">NacosRule负载均衡策略</font>
+</h3><p>:::color2
+①<font style="color:black;">优先选择同集群服务实例列表</font></p>
+<p>②<font style="color:black;">本地集群找不到提供者，才去其它集群寻找，并且会报警告</font></p>
+<p>③<font style="color:black;">确定了可用实例列表后，再采用</font><font style="color:#DF2A3F;">随机</font><font style="color:black;">负载均衡挑选实例</font></p>
+<p>:::</p>
+<h2 id="font-stylecolor262626根据权重负载均衡font"><font style="color:#262626;">根据权重负载均衡</font>
+</h2><p><font style="color:black;">实际部署中会出现这样的场景：</font></p>
+<p><font style="color:black;">服务器设备性能有差异，部分实例所在机器性能较好，另一些较差，我们希望性能好的机器承担更多的用户请求</font></p>
+<p><font style="color:#DF2A3F;">Nacos提供了权重配置来控制访问频率，权重越大则访问频率越高</font></p>
+<h3 id="font-stylecolorblack在nacos控制台可以设置实例的权重值首先选中实例后面的编辑按钮font"><font style="color:black;">在Nacos控制台可以设置实例的权重值，首先选中实例后面的编辑按钮</font>
+</h3><p><img src="/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A16nacos%E6%9C%8D%E5%8A%A1%E5%88%86%E7%BA%A7%E5%AD%98%E5%82%A8%E5%92%8C%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/img/image-4.png"
+	width="1019"
+	height="218"
+	
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="467"
+		data-flex-basis="1121px"
+	
+></p>
+<h3 id="font-stylecolorblack将权重设置为01测试可以发现8081被访问到的频率大大降低font"><font style="color:black;">将权重设置为0.1，测试可以发现8081被访问到的频率大大降低</font>
+</h3><p><img src="/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A16nacos%E6%9C%8D%E5%8A%A1%E5%88%86%E7%BA%A7%E5%AD%98%E5%82%A8%E5%92%8C%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/img/image-5.png"
+	width="566"
+	height="215"
+	
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="263"
+		data-flex-basis="631px"
+	
+></p>
+<h3 id="总结">总结
+</h3><p><font style="color:black;">实例的权重控制</font></p>
+<p>:::color2
+①<font style="color:black;">Nacos控制台可以设置实例的权重值，0~1之间</font></p>
+<p>②<font style="color:black;">同集群内的多个实例，权重越高被访问的频率越高</font></p>
+<p>③<font style="color:black;">权重设置为0则完全不会被访问，可以以此来做灰度发布</font></p>
+<p>:::</p>
+<h2 id="font-stylecolor262626环境隔离---namespacefont"><strong><font style="color:#262626;">环境隔离 - namespace</font></strong>
+</h2><p><img src="/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A16nacos%E6%9C%8D%E5%8A%A1%E5%88%86%E7%BA%A7%E5%AD%98%E5%82%A8%E5%92%8C%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/img/image-6.png"
+	width="937"
+	height="503"
+	
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="186"
+		data-flex-basis="447px"
+	
+></p>
+<h3 id="font-stylecolorblack在nacos控制台可以创建namespace用来隔离不同环境font"><font style="color:black;">在Nacos控制台可以创建namespace，用来隔离不同环境</font>
+</h3><p><img src="/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A16nacos%E6%9C%8D%E5%8A%A1%E5%88%86%E7%BA%A7%E5%AD%98%E5%82%A8%E5%92%8C%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/img/image-7.png"
+	width="799"
+	height="463"
+	
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="172"
+		data-flex-basis="414px"
+	
+></p>
+<h3 id="font-stylecolorblack然后填写一个新的命名空间信息font"><font style="color:black;">然后填写一个新的命名空间信息：</font>
+</h3><p><img src="/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A16nacos%E6%9C%8D%E5%8A%A1%E5%88%86%E7%BA%A7%E5%AD%98%E5%82%A8%E5%92%8C%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/img/image-8.png"
+	width="789"
+	height="444"
+	
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="177"
+		data-flex-basis="426px"
+	
+></p>
+<h3 id="font-stylecolorblack保存后会在控制台看到这个命名空间的idfont"><font style="color:black;">保存后会在控制台看到这个命名空间的id</font>
+</h3><p><img src="/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A16nacos%E6%9C%8D%E5%8A%A1%E5%88%86%E7%BA%A7%E5%AD%98%E5%82%A8%E5%92%8C%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/img/image-9.png"
+	width="946"
+	height="291"
+	
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="325"
+		data-flex-basis="780px"
+	
+></p>
+<h3 id="font-stylecolorblack修改order-service的applicationyml添加namespacefont"><font style="color:black;">修改order-service的application.yml，添加namespace</font>
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">spring</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">cloud</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">nacos</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">server-addr</span><span class="p">:</span><span class="w"> </span><span class="l">localhost:8848</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">discovery</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">cluster-name</span><span class="p">:</span><span class="w"> </span><span class="l">SH</span><span class="w"> </span><span class="c"># 上海</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">492a7d5d-237b-46a1-a99a-fa8e98e4b0f9</span><span class="w"> </span><span class="c"># 命名空间，填ID</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="font-stylecolorblack重启order-service后再来查看控制台font"><font style="color:black;">重启order-service后，再来查看控制台</font>
+</h3><p><img src="/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A16nacos%E6%9C%8D%E5%8A%A1%E5%88%86%E7%BA%A7%E5%AD%98%E5%82%A8%E5%92%8C%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/img/image-10.png"
+	width="1248"
+	height="236"
+	
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="528"
+		data-flex-basis="1269px"
+	
+></p>
+<h3 id="font-stylecolorblack此时访问order-service因为namespace不同会导致找不到userservice控制台会报错font"><font style="color:black;">此时访问order-service，因为namespace不同，会导致找不到userservice，控制台会报错</font>
+</h3><p><img src="/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A16nacos%E6%9C%8D%E5%8A%A1%E5%88%86%E7%BA%A7%E5%AD%98%E5%82%A8%E5%92%8C%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/img/image-11.png"
+	width="937"
+	height="141"
+	
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="664"
+		data-flex-basis="1594px"
+	
+></p>
+<h3 id="总结-1">总结
+</h3><p>:::warning
+①<font style="color:black;">每个namespace都有唯一id</font></p>
+<p>②<font style="color:black;">服务设置</font><font style="color:black;">namespace</font><font style="color:black;">时要写</font><font style="color:black;">id</font><font style="color:black;">而不是名称</font></p>
+<p>③<font style="color:black;">不同namespace下的服务互相不可见</font></p>
+<p>:::</p>
+<h2 id="font-stylecolor262626nacos注册中心细节分析font"><font style="color:#262626;">nacos注册中心细节分析</font>
+</h2><p><img src="/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A16nacos%E6%9C%8D%E5%8A%A1%E5%88%86%E7%BA%A7%E5%AD%98%E5%82%A8%E5%92%8C%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/img/image-12.png"
+	width="1191"
+	height="601"
+	
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="198"
+		data-flex-basis="475px"
+	
+></p>
+<p><font style="color:black;">服务注册到Nacos时，可以选择注册为临时或非临时实例，通过下面的配置来设置：</font></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">spring</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">cloud</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">nacos</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">discovery</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">ephemeral</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w"> </span><span class="c"># 设置为非临时实例</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><font style="color:#DF2A3F;">临时实例宕机时，会从nacos的服务列表中剔除，而非临时实例则不会</font></p>
+<p><font style="color:#DF2A3F;"></font></p>
+<h3 id="总结nacos与eureka的异同">总结nacos与eureka的异同
+</h3><p>:::warning
+<font style="color:black;">Nacos与eureka的共同点</font></p>
+<p>①<font style="color:black;">都支持服务注册和服务拉取</font></p>
+<p>②<font style="color:black;">都支持服务提供者心跳方式做健康检测</font></p>
+<p>:::</p>
+<p>:::color1
+<font style="color:black;">Nacos与Eureka的区别</font></p>
+<p>①<font style="color:black;">Nacos</font><font style="color:black;">支持服务端主动检测提供者状态：临时实例采用心跳模式，非临时实例采用主动检测模式</font></p>
+<p>②<font style="color:black;">临时实例心跳不正常会被剔除，非临时实例则不会被剔除</font></p>
+<p>③<font style="color:black;">Nacos</font><font style="color:black;">支持服务列表变更的消息推送模式，服务列表更新更及时</font></p>
+<p>④<font style="color:black;">Nacos集群默认采用AP方式，当集群中存在非临时实例时，采用CP模式；Eureka采用AP方式</font></p>
+<p>:::</p>
+<p>AP（可用性和分区容忍性）：</p>
+<p>在AP模式下，Nacos追求高可用性。即使在网络分区的情况下，Nacos仍然会继续提供服务，即使在数据之间可能存在一定的不一致。这种模式适用于对可用性要求较高、可以容忍一定数据不一致的场景，例如大多数互联网应用。</p>
+<p>CP（一致性和分区容忍性）：</p>
+<p>在CP模式下，Nacos追求强一致性。这意味着在面临网络分区时，Nacos会牺牲一定的可用性，以保持数据的一致性。这种模式适用于对一致性要求较高的场景，例如金融、电商等对数据准确性要求高的领域。</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/">微服务</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">相关文章</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A19%E7%BB%9F%E4%B8%80%E7%BD%91%E5%85%B3gateway/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">【微服务】9、统一网关Gateway</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A18http%E5%AE%A2%E6%88%B7%E7%AB%AFfeign/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">【微服务】8、http客户端Feign</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A17nacos%E9%85%8D%E7%BD%AE%E7%AE%A1%E7%90%86/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">【微服务】7、Nacos配置管理</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A15nacos%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">【微服务】5、Nacos注册中心</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A14ribbon%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">【微服务】4、Ribbon负载均衡</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    <script
+    src="https://giscus.app/client.js"
+    data-repo="XXL999227/XXL999227.github.io"
+    data-repo-id="R_kgDOINqX4g"
+    data-category="General"
+    data-category-id="DIC_kwDOINqX4s4CiTUd"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="top"
+    data-theme="light"
+    data-lang="zh-CN"
+    crossorigin="anonymous"
+    async
+></script>
+<script>
+    function setGiscusTheme(theme) {
+        let giscus = document.querySelector("iframe.giscus-frame");
+        if (giscus) {
+            giscus.contentWindow.postMessage(
+                {
+                    giscus: {
+                        setConfig: {
+                            theme: theme,
+                        },
+                    },
+                },
+                "https://giscus.app"
+            );
+        }
+    }
+
+    (function () {
+        addEventListener("message", (e) => {
+            if (event.origin !== "https://giscus.app") return;
+            handler();
+        });
+        window.addEventListener("onColorSchemeChange", handler);
+
+        function handler() {
+            if (document.documentElement.dataset.scheme === "light") {
+                setGiscusTheme('light');
+            } else {
+                setGiscusTheme('dark_dimmed');
+            }
+        }
+    })();
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2023 - 
+        
+        2025 Powered by 潇潇
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.27.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+<script>
+    
+    const cssPath = "https://xxl999227.github.io/waifu/waifu.css";
+    const tipsJsonPath = "https://xxl999227.github.io/waifu/waifu-tips.json";
+    const myTipsJsonPath = "https://xxl999227.github.io/waifu/my-waifu-tips.js";
+    const gamePath = "https://xxl999227.github.io/waifu/asteroids.js";
+    
+    const live2d_path = "https://fastly.jsdelivr.net/gh/stevenjoezhang/live2d-widget@latest/";
+    const live2dMinJsPath = "https://xxl999227.github.io/waifu/live2d.min.js";
+
+    
+    function loadExternalResource(url, type) {
+        return new Promise((resolve, reject) => {
+            let tag;
+            if (type === "css") {
+                tag = document.createElement("link");
+                tag.rel = "stylesheet";
+                tag.href = url;
+            }
+            else if (type === "js") {
+                tag = document.createElement("script");
+                tag.src = url;
+            }
+            if (tag) {
+                tag.onload = () => resolve(url);
+                tag.onerror = () => reject(url);
+                document.head.appendChild(tag);
+            }
+        });
+    }
+
+    
+    if (screen.width >= 768) {
+        Promise.all([
+            loadExternalResource(cssPath, "css"),
+            loadExternalResource(live2dMinJsPath, "js"),
+            loadExternalResource(myTipsJsonPath, "js")
+        ]).then(() => {
+            
+            initWidget({
+                waifuPath: tipsJsonPath,
+                gamePath: gamePath,
+                cdnPath: "https://cdn.jsdelivr.net/gh/XXL999227/static-resource@v1.0.0",
+                tools: ["hitokoto", "asteroids", "switch-model", "switch-texture", "photo", "quit"]
+             
+            });
+            
+            initWaifuMouseEvent();
+        });
+    }
+
+    function initWaifuMouseEvent() {
+        const waifu = document.getElementById("waifu");
+        let isDown = false;
+        let waifuLeft;
+        let mouseLeft;
+        let waifuTop;
+        let mouseTop;
+        
+        waifu.onmousedown = function (e) {
+            isDown = true;
+            
+            waifuLeft = waifu.offsetLeft;
+            mouseLeft = e.clientX;
+            
+            waifuTop = waifu.offsetTop;
+            mouseTop = e.clientY;
+        }
+        
+        window.onmousemove = function (e) {
+            if (!isDown) {
+                return;
+            }
+            
+            let currentLeft = waifuLeft + (e.clientX - mouseLeft);
+            if (currentLeft < 0) {
+                currentLeft = 0;
+            } else if (currentLeft > window.innerWidth - 300) {
+                currentLeft = window.innerWidth - 300;
+            }
+            waifu.style.left = currentLeft  + "px";
+            
+            let currentTop = waifuTop + (e.clientY - mouseTop);
+            if (currentTop < 30) {
+                currentTop = 30
+            } else if (currentTop > window.innerHeight - 290) {
+                currentTop = window.innerHeight - 290
+            }
+            waifu.style.top = currentTop + "px";
+        }
+        
+        window.onmouseup = function (e) {
+            isDown = false;
+        }
+    }
+</script>
+
+<script src= https://xxl999227.github.io/background/particles/particles.js></script>
+
+<link rel="stylesheet" href= https://xxl999227.github.io/background/particles/style.css>
+
+
+<div id="particles-js"></div>
+
+<script>
+    
+
+    particlesJS.load('particles-js', "https://xxl999227.github.io/background/particles/particlesjs-config.json", function() {
+        console.log('particles.js loaded - callback');
+    });
+</script>
+    </body>
+</html>
