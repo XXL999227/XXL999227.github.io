@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
-        <title>微服务，ElasticSearch on 潇潇’s blog</title>
-        <link>https://xxl999227.github.io/categories/%E5%BE%AE%E6%9C%8D%E5%8A%A1elasticsearch/</link>
-        <description>Recent content in 微服务，ElasticSearch on 潇潇’s blog</description>
+        <title>ElasticSearch on 潇潇’s blog</title>
+        <link>https://xxl999227.github.io/tags/elasticsearch/</link>
+        <description>Recent content in ElasticSearch on 潇潇’s blog</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Powered by 潇潇</copyright>
-        <lastBuildDate>Thu, 09 May 2024 21:58:16 +0800</lastBuildDate><atom:link href="https://xxl999227.github.io/categories/%E5%BE%AE%E6%9C%8D%E5%8A%A1elasticsearch/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Thu, 09 May 2024 21:58:16 +0800</lastBuildDate><atom:link href="https://xxl999227.github.io/tags/elasticsearch/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>【微服务】11、ElasticSearch</title>
         <link>https://xxl999227.github.io/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A111elasticsearch/</link>
         <pubDate>Thu, 09 May 2024 21:58:16 +0800</pubDate>
         
         <guid>https://xxl999227.github.io/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A111elasticsearch/</guid>
-        <description>&lt;h2 id=&#34;font-stylecolor262626初识elasticsearchfont&#34;&gt;&lt;font style=&#34;color:#262626;&#34;&gt;初识elasticsearch&lt;/font&gt;
+        <description>&lt;img src="https://xxl999227.github.io/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A111elasticsearch/img/image-17.png" alt="Featured image of post 【微服务】11、ElasticSearch" /&gt;&lt;h2 id=&#34;font-stylecolor262626初识elasticsearchfont&#34;&gt;&lt;font style=&#34;color:#262626;&#34;&gt;初识elasticsearch&lt;/font&gt;
 &lt;/h2&gt;&lt;p&gt;&lt;strong&gt;&lt;font style=&#34;color:#262626;&#34;&gt;什么是elasticsearch&lt;/font&gt;&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;&lt;font style=&#34;color:#262626;&#34;&gt;elasticsearch是一款非常强大的开源搜索引擎，可以帮助我们从海量数据中快速找到需要的内容。&lt;/font&gt;&lt;/p&gt;
 &lt;p&gt;&lt;font style=&#34;color:#262626;&#34;&gt;&lt;/font&gt;&lt;/p&gt;
