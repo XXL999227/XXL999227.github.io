@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>树 on 潇潇’s blog</title>
+        <link>https://xxl999227.github.io/categories/%E6%A0%91/</link>
+        <description>Recent content in 树 on 潇潇’s blog</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>zh-cn</language>
+        <copyright>Powered by 潇潇</copyright>
+        <lastBuildDate>Sun, 19 Jan 2025 22:55:51 +0800</lastBuildDate><atom:link href="https://xxl999227.github.io/categories/%E6%A0%91/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>【算法篇】树</title>
+        <link>https://xxl999227.github.io/archives/%E7%AE%97%E6%B3%95%E7%AF%87%E6%A0%91/</link>
+        <pubDate>Sun, 19 Jan 2025 22:55:51 +0800</pubDate>
+        
+        <guid>https://xxl999227.github.io/archives/%E7%AE%97%E6%B3%95%E7%AF%87%E6%A0%91/</guid>
+        <description>&lt;img src="https://xxl999227.github.io/archives/%E7%AE%97%E6%B3%95%E7%AF%87%E6%A0%91/img/image.png" alt="Featured image of post 【算法篇】树" /&gt;&lt;p&gt;&lt;img src=&#34;https://xxl999227.github.io/archives/%E7%AE%97%E6%B3%95%E7%AF%87%E6%A0%91/img/image.png&#34;
+	width=&#34;850&#34;
+	height=&#34;1100&#34;
+	
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;77&#34;
+		data-flex-basis=&#34;185px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;二叉搜索树&#34;&gt;二叉搜索树
+&lt;/h2&gt;&lt;p&gt;二叉搜索树（Binary Search Tree，简称 BST）是一种很常见的二叉树，它的定义是：&lt;/p&gt;
+&lt;p&gt;对于树中的每个节点，其&lt;strong&gt;左子树的每个节点&lt;/strong&gt;的值都要小于这个节点的值，&lt;strong&gt;右子树的每个节点&lt;/strong&gt;的值都要大于这个节点的值。你可以简单记为「左小右大」。&lt;/p&gt;
+&lt;p&gt;我把「子树的每个节点」加粗了，这是初学者常犯的错误，不要只看子节点，而要看整棵子树的所有节点。&lt;/p&gt;
+&lt;p&gt;比方说，下面这棵树就是一棵 BST：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    7
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;   / \
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  4   9
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; / \   \
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;1   5   10
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;节点 &lt;code&gt;7&lt;/code&gt; 的左子树所有节点的值都小于 &lt;code&gt;7&lt;/code&gt;，右子树所有节点的值都大于 &lt;code&gt;7&lt;/code&gt;；节点 &lt;code&gt;4&lt;/code&gt; 的左子树所有节点的值都小于 &lt;code&gt;4&lt;/code&gt;，右子树所有节点的值都大于 &lt;code&gt;4&lt;/code&gt;，以此类推。&lt;/p&gt;
+&lt;p&gt;相反的，下面这棵树就不是 BST：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    7
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;   / \
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  4   9
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; / \   \
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;1   8   10
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id=&#34;红黑树&#34;&gt;红黑树
+&lt;/h2&gt;&lt;p&gt;后面写&lt;/p&gt;
+&lt;h2 id=&#34;二叉树的遍历方式&#34;&gt;二叉树的遍历方式
+&lt;/h2&gt;</description>
+        </item>
+        
+    </channel>
+</rss>

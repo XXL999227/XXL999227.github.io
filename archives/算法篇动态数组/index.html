@@ -240,7 +240,75 @@
     </ol>
 </aside>
 
+    <aside class="sidebar right-sidebar sticky">
+        
+        <button class="back-to-top" id="scrollToTop" style="
+            position: fixed; 
+            bottom: 20px; 
+            width: 40px; 
+            height: 40px; 
+            border-radius: 50%; 
+            background-color: white; 
+            border: 1px solid #ccc; 
+            display: none; /* 初始隐藏 */
+            align-items: center; 
+            justify-content: center;
+            cursor: pointer;
+            font-size: 20px;
+            color: #888;
+        ">
+            ↑
+        </button>
+        
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#做好以下几个点就可以了">做好以下几个点就可以了</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+<script>
     
+    const scrollToTopButton = document.getElementById('scrollToTop');
+
+    window.addEventListener('scroll', function() {
+        if (window.scrollY > 0) {
+            scrollToTopButton.style.display = 'flex';
+        } else {
+            scrollToTopButton.style.display = 'none';
+        }
+    });
+
+    scrollToTopButton.addEventListener('click', function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+</script>
+
 
             <main class="main full-width">
     <article class="has-image main-article">
@@ -341,8 +409,8 @@
 <p>参考<a class="link" href="https://labuladong.online/algo/data-structure-basic/array-basic/"  target="_blank" rel="noopener"
     >labuladong 的算法笔记</a> 和 k神的<a class="link" href="https://www.hello-algo.com/chapter_array_and_linkedlist/"  target="_blank" rel="noopener"
     >Hello 算法</a></p>
-<p>做好以下几个点就可以了</p>
-<ol>
+<h2 id="做好以下几个点就可以了">做好以下几个点就可以了
+</h2><ol>
 <li>关键点一、自动扩缩容</li>
 <li>关键点二、索引越界的检查</li>
 <li>关键点三、删除元素谨防内存泄漏</li>
@@ -773,6 +841,89 @@
     
 
     
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">相关文章</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="has-image">
+    <a href="/archives/%E7%AE%97%E6%B3%95%E7%AF%87%E9%93%BE%E8%A1%A8/">
+        
+        
+            <div class="article-image">
+                <img src="/archives/%E7%AE%97%E6%B3%95%E7%AF%87%E9%93%BE%E8%A1%A8/img/image.445d329f64720207e7f3b8eeddc0b023.png" 
+                        width="850" 
+                        height="1100" 
+                        loading="lazy"
+                        alt="Featured image of post 【算法篇】链表"
+                        
+                        data-hash="md5-RF0yn2RyAgfn87ju3cCwIw==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">【算法篇】链表</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
+    <a href="/archives/%E7%AE%97%E6%B3%95%E7%AF%87%E6%A0%91/">
+        
+        
+            <div class="article-image">
+                <img src="/archives/%E7%AE%97%E6%B3%95%E7%AF%87%E6%A0%91/img/image.d7dcd3f574bec97f9ccedf59fdb30b96.png" 
+                        width="850" 
+                        height="1100" 
+                        loading="lazy"
+                        alt="Featured image of post 【算法篇】树"
+                        
+                        data-hash="md5-19zT9XS&#43;yX&#43;czt9Z/bMLlg==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">【算法篇】树</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/archives/%E7%AE%97%E6%B3%95%E7%AF%87%E5%93%88%E5%B8%8C%E8%A1%A8/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">【算法篇】哈希表</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/archives/%E7%AE%97%E6%B3%95%E7%AF%87%E6%A0%88%E5%92%8C%E9%98%9F%E5%88%97/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">【算法篇】栈和队列</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
 
      
     
