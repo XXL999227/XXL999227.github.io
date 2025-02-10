@@ -2090,8 +2090,7 @@
 &lt;p&gt;&lt;font style=&#34;color:rgb(51, 51, 51);&#34;&gt;删除：kubectl delete -f svc-nginx.yaml&lt;/font&gt;&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;&lt;font style=&#34;color:rgb(119, 119, 119);&#34;&gt;小结&lt;/font&gt;&lt;/strong&gt;&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;&lt;font style=&#34;color:rgb(119, 119, 119);&#34;&gt;至此，已经掌握了Namespace、Pod、Deployment、Service资源的基本操作，有了这些操作，就可以在kubernetes集群中实现一个服务的简单部署和访问了，但是如果想要更好的使用kubernetes，就需要深入学习这几种资源的细节和原理。&lt;/font&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;&lt;font style=&#34;color:rgb(119, 119, 119);&#34;&gt;至此，已经掌握了Namespace、Pod、Deployment、Service资源的基本操作，有了这些操作，就可以在kubernetes集群中实现一个服务的简单部署和访问了，但是如果想要更好的使用kubernetes，就需要深入学习这几种资源的细节和原理。&lt;/font&gt;&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;后续k8s详解可以看：&lt;/p&gt;
 &lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.yuque.com/fairy-era/yg511q/lmy7gc#9d0a1c8b&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;https://www.yuque.com/fairy-era/yg511q/lmy7gc#9d0a1c8b&lt;/a&gt;&lt;/p&gt;

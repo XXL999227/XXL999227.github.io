@@ -58,7 +58,7 @@
                     
                     
                         
-                        <img src="/img/avatar_hu6975665600438320786.png" width="300"
+                        <img src="/img/avatar_hu_eb7a3547fa1b0d6b.png" width="300"
                             height="300" class="site-logo" loading="lazy" alt="Avatar">
                     
                 
@@ -410,18 +410,15 @@
 <blockquote>
 <p><font style="color:black;">服务提供者启动时向eureka注册自己的信息</font></p>
 <p><font style="color:black;">eureka保存这些信息</font></p>
-<p><font style="color:black;">消费者根据</font><font style="color:#DF2A3F;">服务名称</font><font style="color:black;">向eureka拉取提供者信息</font></p>
-</blockquote>
+<p><font style="color:black;">消费者根据</font><font style="color:#DF2A3F;">服务名称</font><font style="color:black;">向eureka拉取提供者信息</font></p></blockquote>
 <p><font style="color:#262626;">如果有多个服务提供者，消费者该如何选择？</font></p>
 <blockquote>
-<p><font style="color:black;">服务消费者利用</font><font style="color:#DF2A3F;">负载均衡</font><font style="color:black;">算法，从服务列表中挑选一个</font></p>
-</blockquote>
+<p><font style="color:black;">服务消费者利用</font><font style="color:#DF2A3F;">负载均衡</font><font style="color:black;">算法，从服务列表中挑选一个</font></p></blockquote>
 <p><font style="color:#262626;">消费者如何感知服务提供者健康状态？</font></p>
 <blockquote>
 <p><font style="color:black;">服务提供者会每隔30秒向EurekaServer发送心跳请求，报告健康状态</font></p>
 <p><font style="color:black;">eureka会更新记录服务列表信息，心跳不正常会被剔除</font></p>
-<p><font style="color:black;">消费者就可以拉取到最新的信息</font></p>
-</blockquote>
+<p><font style="color:black;">消费者就可以拉取到最新的信息</font></p></blockquote>
 <h2 id="总结">总结
 </h2><p><img src="/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A13eureka%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83/img/image-2.png"
 	width="1283"

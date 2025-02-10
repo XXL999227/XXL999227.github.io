@@ -509,8 +509,7 @@
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;日志中已经成功加载stopword.dic配置文件&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;注意当前文件的编码必须是 UTF-8 格式，严禁使用Windows记事本编辑&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;注意当前文件的编码必须是 UTF-8 格式，严禁使用Windows记事本编辑&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;&lt;font style=&#34;color:#DF2A3F;&#34;&gt;总结：&lt;/font&gt;&lt;/p&gt;
 &lt;p&gt;&lt;font style=&#34;color:black;&#34;&gt;分词器的作用是什么？&lt;/font&gt;&lt;/p&gt;
 &lt;p&gt;:::warning

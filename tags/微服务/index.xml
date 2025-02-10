@@ -509,8 +509,7 @@
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;日志中已经成功加载stopword.dic配置文件&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;注意当前文件的编码必须是 UTF-8 格式，严禁使用Windows记事本编辑&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;注意当前文件的编码必须是 UTF-8 格式，严禁使用Windows记事本编辑&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;&lt;font style=&#34;color:#DF2A3F;&#34;&gt;总结：&lt;/font&gt;&lt;/p&gt;
 &lt;p&gt;&lt;font style=&#34;color:black;&#34;&gt;分词器的作用是什么？&lt;/font&gt;&lt;/p&gt;
 &lt;p&gt;:::warning
@@ -4048,18 +4047,15 @@
 &lt;blockquote&gt;
 &lt;p&gt;&lt;font style=&#34;color:black;&#34;&gt;服务提供者启动时向eureka注册自己的信息&lt;/font&gt;&lt;/p&gt;
 &lt;p&gt;&lt;font style=&#34;color:black;&#34;&gt;eureka保存这些信息&lt;/font&gt;&lt;/p&gt;
-&lt;p&gt;&lt;font style=&#34;color:black;&#34;&gt;消费者根据&lt;/font&gt;&lt;font style=&#34;color:#DF2A3F;&#34;&gt;服务名称&lt;/font&gt;&lt;font style=&#34;color:black;&#34;&gt;向eureka拉取提供者信息&lt;/font&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;&lt;font style=&#34;color:black;&#34;&gt;消费者根据&lt;/font&gt;&lt;font style=&#34;color:#DF2A3F;&#34;&gt;服务名称&lt;/font&gt;&lt;font style=&#34;color:black;&#34;&gt;向eureka拉取提供者信息&lt;/font&gt;&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;&lt;font style=&#34;color:#262626;&#34;&gt;如果有多个服务提供者，消费者该如何选择？&lt;/font&gt;&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;&lt;font style=&#34;color:black;&#34;&gt;服务消费者利用&lt;/font&gt;&lt;font style=&#34;color:#DF2A3F;&#34;&gt;负载均衡&lt;/font&gt;&lt;font style=&#34;color:black;&#34;&gt;算法，从服务列表中挑选一个&lt;/font&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;&lt;font style=&#34;color:black;&#34;&gt;服务消费者利用&lt;/font&gt;&lt;font style=&#34;color:#DF2A3F;&#34;&gt;负载均衡&lt;/font&gt;&lt;font style=&#34;color:black;&#34;&gt;算法，从服务列表中挑选一个&lt;/font&gt;&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;&lt;font style=&#34;color:#262626;&#34;&gt;消费者如何感知服务提供者健康状态？&lt;/font&gt;&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;&lt;font style=&#34;color:black;&#34;&gt;服务提供者会每隔30秒向EurekaServer发送心跳请求，报告健康状态&lt;/font&gt;&lt;/p&gt;
 &lt;p&gt;&lt;font style=&#34;color:black;&#34;&gt;eureka会更新记录服务列表信息，心跳不正常会被剔除&lt;/font&gt;&lt;/p&gt;
-&lt;p&gt;&lt;font style=&#34;color:black;&#34;&gt;消费者就可以拉取到最新的信息&lt;/font&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;&lt;font style=&#34;color:black;&#34;&gt;消费者就可以拉取到最新的信息&lt;/font&gt;&lt;/p&gt;&lt;/blockquote&gt;
 &lt;h2 id=&#34;总结&#34;&gt;总结
 &lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;https://xxl999227.github.io/archives/%E5%BE%AE%E6%9C%8D%E5%8A%A13eureka%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83/img/image-2.png&#34;
 	width=&#34;1283&#34;
