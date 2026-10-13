@@ -60,17 +60,11 @@
         }
 
         async prepareModelFiles(modelUrl) {
+            // 仅验证小型模型清单，不再提前下载大体积模型和贴图。
+            // 避免在渲染器开始之前重复加载资源，降低首次显示等待时间。
             const data = await this.fetchWithRetry(modelUrl);
             if (!data || typeof data.model !== "string" || !Array.isArray(data.textures)) {
                 throw new Error(`模型描述文件格式错误: ${modelUrl}`);
-            }
-            // 预加载主体和贴图：出错时可超时重试，成功后供渲染器使用浏览器缓存。
-            // 最多同时加载 3 个资源，避免大量贴图占满网络连接。
-            const assets = [...new Set([data.model, ...data.textures])];
-            for (let i = 0; i < assets.length; i += 3) {
-                await Promise.all(assets.slice(i, i + 3).map(asset =>
-                    this.fetchWithRetry(new URL(asset, modelUrl).href, "blob")
-                ));
             }
         }
 
@@ -379,7 +373,6 @@
                 if ((after.split("/")[0] <= now.getMonth() + 1 && now.getMonth() + 1 <= before.split("/")[0]) && (after.split("/")[1] <= now.getDate() && now.getDate() <= before.split("/")[1])) {
                     text = randomSelection(text);
                     text = text.replace("{year}", now.getFullYear());
-                    console.log(123456)
                     messageArray.push(text);
                 }
             });
@@ -453,7 +446,6 @@
                 modelId = 0; // 模型 ID
                 modelTexturesId = 0; // 材质 ID
             }
-            console.log()
             model.loadModel(modelId, modelTexturesId);
             fetch(config.waifuPath)
                 .then(response => response.json())
@@ -508,7 +500,7 @@
      */
     function getWaifuWelcome() {
         // 主页：展示时间相关文本
-        if (location.pathname === "/hugo-stack/") {
+        if (location.pathname === "/") {
             for (let { hour, text } of jsonData.time) {
                 const now = new Date(),
                     after = hour.split("-")[0],

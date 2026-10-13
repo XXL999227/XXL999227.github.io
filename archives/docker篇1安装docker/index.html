@@ -760,7 +760,7 @@
 
     (function () {
         addEventListener("message", (e) => {
-            if (event.origin !== "https://giscus.app") return;
+            if (e.origin !== "https://giscus.app") return;
             handler();
         });
         window.addEventListener("onColorSchemeChange", handler);
@@ -890,116 +890,101 @@
     }());
 </script>
 
+<!-- Non-blocking, user-initiated Live2D and lightweight background -->
+<style>
+  #live2d-launcher {
+    position: fixed;
+    right: 14px;
+    bottom: 80px;
+    z-index: 20;
+    padding: 7px 11px;
+    background: #f8f4f6;
+    color: #4b5563;
+    border: 1px solid #e5d9e1;
+    border-radius: 16px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, .09);
+    font-size: 12px;
+    cursor: pointer;
+  }
+  #live2d-launcher:hover { background: #f3e6ed; }
+  #live2d-launcher:disabled { cursor: wait; opacity: .75; }
+  @media (max-width: 767px) { #live2d-launcher { display: none; } }
+</style>
+<button id="live2d-launcher" type="button" aria-label="点击加载看板娘">看板娘</button>
+<div id="particles-js" aria-hidden="true"></div>
+<link rel="stylesheet" href="https://xxl999227.github.io/background/particles/style.css">
 <script>
-    
-    const cssPath = "https://xxl999227.github.io/waifu/waifu.css";
-    const tipsJsonPath = "https://xxl999227.github.io/waifu/waifu-tips.json";
-    const myTipsJsonPath = "https://xxl999227.github.io/waifu/my-waifu-tips.js";
+(function () {
+    const waifuCss = "https://xxl999227.github.io/waifu/waifu.css";
+    const tipsPath = "https://xxl999227.github.io/waifu/waifu-tips.json";
+    const widgetScript = "https://xxl999227.github.io/waifu/my-waifu-tips.js";
+    const modelScript = "https://xxl999227.github.io/waifu/live2d.min.js";
     const gamePath = "https://xxl999227.github.io/waifu/asteroids.js";
-    
-    const live2d_path = "https://fastly.jsdelivr.net/gh/stevenjoezhang/live2d-widget@latest/";
-    const live2dMinJsPath = "https://xxl999227.github.io/waifu/live2d.min.js";
+    const particlesScript = "https://xxl999227.github.io/background/particles/particles.js";
+    const particlesConfig = "https://xxl999227.github.io/background/particles/particlesjs-config.json";
+    const launcher = document.getElementById("live2d-launcher");
 
-    
-    function loadExternalResource(url, type) {
+    function loadResource(url, type) {
         return new Promise((resolve, reject) => {
-            let tag;
+            const element = document.createElement(type === "css" ? "link" : "script");
             if (type === "css") {
-                tag = document.createElement("link");
-                tag.rel = "stylesheet";
-                tag.href = url;
+                element.rel = "stylesheet";
+                element.href = url;
+            } else {
+                element.src = url;
+                element.async = true;
             }
-            else if (type === "js") {
-                tag = document.createElement("script");
-                tag.src = url;
-            }
-            if (tag) {
-                tag.onload = () => resolve(url);
-                tag.onerror = () => reject(url);
-                document.head.appendChild(tag);
+            element.onload = resolve;
+            element.onerror = () => reject(new Error("无法加载资源: " + url));
+            document.head.appendChild(element);
+        });
+    }
+
+    // Live2D 只在点击后加载，避免阻塞页面并减少常驻动画开销。
+    if (window.innerWidth < 768) {
+        launcher.hidden = true;
+    } else {
+        launcher.addEventListener("click", async () => {
+            if (launcher.disabled) return;
+            launcher.disabled = true;
+            launcher.textContent = "加载中…";
+            try {
+                await loadResource(waifuCss, "css");
+                await loadResource(modelScript, "js");
+                await loadResource(widgetScript, "js");
+                initWidget({
+                    waifuPath: tipsPath,
+                    gamePath: gamePath,
+                    cdnPath: "https://cdn.jsdelivr.net/gh/XXL999227/static-resource@v1.0.0",
+                    tools: ["hitokoto", "asteroids", "switch-model", "switch-texture", "photo", "quit"]
+                });
+                launcher.remove();
+            } catch (error) {
+                console.error("看板娘资源加载失败:", error);
+                launcher.disabled = false;
+                launcher.textContent = "重试看板娘";
             }
         });
     }
 
-    
-    if (screen.width >= 768) {
-        Promise.all([
-            loadExternalResource(cssPath, "css"),
-            loadExternalResource(live2dMinJsPath, "js"),
-            loadExternalResource(myTipsJsonPath, "js")
-        ]).then(() => {
-            
-            initWidget({
-                waifuPath: tipsJsonPath,
-                gamePath: gamePath,
-                cdnPath: "https://cdn.jsdelivr.net/gh/XXL999227/static-resource@v1.0.0",
-                tools: ["hitokoto", "asteroids", "switch-model", "switch-texture", "photo", "quit"]
-             
-            });
-            
-            initWaifuMouseEvent();
-        });
-    }
-
-    function initWaifuMouseEvent() {
-        const waifu = document.getElementById("waifu");
-        let isDown = false;
-        let waifuLeft;
-        let mouseLeft;
-        let waifuTop;
-        let mouseTop;
-        
-        waifu.onmousedown = function (e) {
-            isDown = true;
-            
-            waifuLeft = waifu.offsetLeft;
-            mouseLeft = e.clientX;
-            
-            waifuTop = waifu.offsetTop;
-            mouseTop = e.clientY;
-        }
-        
-        window.onmousemove = function (e) {
-            if (!isDown) {
-                return;
-            }
-            
-            let currentLeft = waifuLeft + (e.clientX - mouseLeft);
-            if (currentLeft < 0) {
-                currentLeft = 0;
-            } else if (currentLeft > window.innerWidth - 300) {
-                currentLeft = window.innerWidth - 300;
-            }
-            waifu.style.left = currentLeft  + "px";
-            
-            let currentTop = waifuTop + (e.clientY - mouseTop);
-            if (currentTop < 30) {
-                currentTop = 30
-            } else if (currentTop > window.innerHeight - 290) {
-                currentTop = window.innerHeight - 290
-            }
-            waifu.style.top = currentTop + "px";
-        }
-        
-        window.onmouseup = function (e) {
-            isDown = false;
+    // 仅宽屏非减少动效模式才加载静态粒子背景，且在空闲时初始化。
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (window.innerWidth >= 900 && !reducedMotion) {
+        const start = () => {
+            loadResource(particlesScript, "js").then(() => {
+                if (!document.hidden && window.particlesJS) {
+                    particlesJS.load("particles-js", particlesConfig);
+                }
+            }).catch(error => console.warn("粒子背景加载失败:", error));
+        };
+        if ("requestIdleCallback" in window) {
+            window.requestIdleCallback(start, { timeout: 3500 });
+        } else {
+            setTimeout(start, 1800);
         }
     }
+})();
 </script>
 
-<script src= https://xxl999227.github.io/background/particles/particles.js></script>
-
-<link rel="stylesheet" href= https://xxl999227.github.io/background/particles/style.css>
-
-
-<div id="particles-js"></div>
-
-<script>
-    
-
-    particlesJS.load('particles-js', "https://xxl999227.github.io/background/particles/particlesjs-config.json", function() {
-        console.log('particles.js loaded - callback');
-    });
-</script>
     </body>
 </html>
