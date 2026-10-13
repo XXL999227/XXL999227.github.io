@@ -556,9 +556,9 @@
     }());
 </script>
 
-<!-- Non-blocking, user-initiated Live2D and lightweight background -->
+<!-- Auto-start Live2D after first paint; retain a retry button on failure. -->
 <style>
-  #live2d-launcher {
+  #live2d-retry {
     position: fixed;
     right: 14px;
     bottom: 80px;
@@ -572,11 +572,11 @@
     font-size: 12px;
     cursor: pointer;
   }
-  #live2d-launcher:hover { background: #f3e6ed; }
-  #live2d-launcher:disabled { cursor: wait; opacity: .75; }
-  @media (max-width: 767px) { #live2d-launcher { display: none; } }
+  #live2d-retry:hover { background: #f3e6ed; }
+  #live2d-retry:disabled { cursor: wait; opacity: .75; }
+  @media (max-width: 767px) { #live2d-retry { display: none; } }
 </style>
-<button id="live2d-launcher" type="button" aria-label="点击加载看板娘">看板娘</button>
+<button id="live2d-retry" type="button" hidden aria-label="重新加载看板娘">重试看板娘</button>
 <div id="particles-js" aria-hidden="true"></div>
 <link rel="stylesheet" href="https://xxl999227.github.io/background/particles/style.css">
 <script>
@@ -588,7 +588,7 @@
     const gamePath = "https://xxl999227.github.io/waifu/asteroids.js";
     const particlesScript = "https://xxl999227.github.io/background/particles/particles.js";
     const particlesConfig = "https://xxl999227.github.io/background/particles/particlesjs-config.json";
-    const launcher = document.getElementById("live2d-launcher");
+    const launcher = document.getElementById("live2d-retry");
 
     function loadResource(url, type) {
         return new Promise((resolve, reject) => {
@@ -606,31 +606,49 @@
         });
     }
 
-    // Live2D 只在点击后加载，避免阻塞页面并减少常驻动画开销。
-    if (window.innerWidth < 768) {
+    // Live2D 保持进入页面自动加载；延迟一个绘制帧启动，避免阻塞首屏。
+    // 失败时才显示重试按钮，并缓存已成功加载的脚本以避免重复注入。
+    const loadedResources = new Map();
+    function loadOnce(url, type) {
+        if (!loadedResources.has(url)) {
+            const task = loadResource(url, type).catch(error => {
+                loadedResources.delete(url);
+                throw error;
+            });
+            loadedResources.set(url, task);
+        }
+        return loadedResources.get(url);
+    }
+
+    let waifuLoading = false;
+    async function startWaifu() {
+        if (waifuLoading || document.getElementById("waifu")) return;
+        waifuLoading = true;
         launcher.hidden = true;
-    } else {
-        launcher.addEventListener("click", async () => {
-            if (launcher.disabled) return;
-            launcher.disabled = true;
-            launcher.textContent = "加载中…";
-            try {
-                await loadResource(waifuCss, "css");
-                await loadResource(modelScript, "js");
-                await loadResource(widgetScript, "js");
-                initWidget({
-                    waifuPath: tipsPath,
-                    gamePath: gamePath,
-                    cdnPath: "https://cdn.jsdelivr.net/gh/XXL999227/static-resource@v1.0.0",
-                    tools: ["hitokoto", "asteroids", "switch-model", "switch-texture", "photo", "quit"]
-                });
-                launcher.remove();
-            } catch (error) {
-                console.error("看板娘资源加载失败:", error);
-                launcher.disabled = false;
-                launcher.textContent = "重试看板娘";
-            }
-        });
+        try {
+            await Promise.all([
+                loadOnce(waifuCss, "css"),
+                loadOnce(modelScript, "js"),
+                loadOnce(widgetScript, "js")
+            ]);
+            initWidget({
+                waifuPath: tipsPath,
+                gamePath: gamePath,
+                cdnPath: "https://cdn.jsdelivr.net/gh/XXL999227/static-resource@v1.0.0",
+                tools: ["hitokoto", "asteroids", "switch-model", "switch-texture", "photo", "quit"]
+            });
+            launcher.remove();
+        } catch (error) {
+            console.error("看板娘自动加载失败:", error);
+            launcher.hidden = false;
+            launcher.textContent = "重试看板娘";
+        } finally {
+            waifuLoading = false;
+        }
+    }
+    if (window.innerWidth >= 768) {
+        launcher.addEventListener("click", startWaifu);
+        requestAnimationFrame(() => setTimeout(startWaifu, 180));
     }
 
     // 仅宽屏非减少动效模式才加载静态粒子背景，且在空闲时初始化。
@@ -651,6 +669,7 @@
     }
 })();
 </script>
+
 
     </body>
 </html>
