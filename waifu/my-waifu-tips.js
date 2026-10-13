@@ -2,72 +2,154 @@
     class Model {
         constructor(config) {
             let { apiPath, cdnPath } = config;
-            let useCDN = false;
             if (typeof cdnPath === "string") {
-                useCDN = true;
-                if (!cdnPath.endsWith("/")) cdnPath += "/";
+                this.useCDN = true;
+                this.cdnPath = cdnPath.endsWith("/") ? cdnPath : cdnPath + "/";
             } else if (typeof apiPath === "string") {
-                if (!apiPath.endsWith("/")) apiPath += "/";
+                this.useCDN = false;
+                this.apiPath = apiPath.endsWith("/") ? apiPath : apiPath + "/";
             } else {
-                throw "Invalid initWidget argument!";
+                throw new Error("Invalid initWidget argument!");
             }
-            this.useCDN = useCDN;
-            this.apiPath = apiPath;
-            this.cdnPath = cdnPath;
+            this.modelList = null;
+            this.modelListPromise = null;
+            this.loadRequestId = 0;
+        }
+
+        // 超时 10 秒，每个请求最多尝试 3 次；404 等永久错误不重试。
+        async fetchWithRetry(url, responseType = "json") {
+            const maxRetries = 2;
+            for (let attempt = 0; attempt <= maxRetries; attempt++) {
+                const controller = new AbortController();
+                const timer = setTimeout(() => controller.abort(), 10000);
+                try {
+                    const response = await fetch(url, { signal: controller.signal });
+                    if (!response.ok) {
+                        const error = new Error(`HTTP ${response.status}: ${url}`);
+                        error.retryable = response.status === 408 || response.status === 429 || response.status >= 500;
+                        throw error;
+                    }
+                    // 包含响应体下载时间，模型二进制和贴图必须完整下载。
+                    return responseType === "blob" ? await response.blob() : await response.json();
+                } catch (error) {
+                    if (attempt === maxRetries || error.retryable === false) {
+                        throw new Error(`资源请求失败 (${url}): ${error.message}`);
+                    }
+                    console.warn(`看板娘下载重试 ${attempt + 1}/${maxRetries}: ${url}`, error);
+                } finally {
+                    clearTimeout(timer);
+                }
+                await new Promise(resolve => setTimeout(resolve, 500 * (attempt + 1)));
+            }
         }
 
         async loadModelList() {
-            const response = await fetch(`${this.cdnPath}model_list.json`);
-            this.modelList = await response.json();
+            if (this.modelList) return this.modelList;
+            if (!this.modelListPromise) {
+                this.modelListPromise = this.fetchWithRetry(`${this.cdnPath}model_list.json`)
+                    .then(data => {
+                        if (!data || !Array.isArray(data.models) || !data.models.length) {
+                            throw new Error("模型清单格式错误");
+                        }
+                        this.modelList = data;
+                        return data;
+                    })
+                    .finally(() => { this.modelListPromise = null; });
+            }
+            return this.modelListPromise;
+        }
+
+        async prepareModelFiles(modelUrl) {
+            const data = await this.fetchWithRetry(modelUrl);
+            if (!data || typeof data.model !== "string" || !Array.isArray(data.textures)) {
+                throw new Error(`模型描述文件格式错误: ${modelUrl}`);
+            }
+            // 预加载主体和贴图：出错时可超时重试，成功后供渲染器使用浏览器缓存。
+            // 最多同时加载 3 个资源，避免大量贴图占满网络连接。
+            const assets = [...new Set([data.model, ...data.textures])];
+            for (let i = 0; i < assets.length; i += 3) {
+                await Promise.all(assets.slice(i, i + 3).map(asset =>
+                    this.fetchWithRetry(new URL(asset, modelUrl).href, "blob")
+                ));
+            }
+        }
+
+        reportError(error) {
+            console.error("Live2D 看板娘加载失败:", error);
+            showMessage("看板娘加载失败，请检查网络或点击切换模型重试。", 10000, 12);
         }
 
         async loadModel(modelId, modelTexturesId, message) {
-            localStorage.setItem("modelId", modelId);
-            localStorage.setItem("modelTexturesId", modelTexturesId);
-            showMessage(message, 4000, 10);
-            if (this.useCDN) {
-                if (!this.modelList) await this.loadModelList();
-                const target = this.modelList.models[modelId][modelTexturesId];
-                loadlive2d("live2d", `${this.cdnPath}model/${target}/index.json`);
-            } else {
-                loadlive2d("live2d", `${this.apiPath}get/?id=${modelId}-${modelTexturesId}`);
-                console.log(`Live2D 模型 ${modelId}-${modelTexturesId} 加载完成`);
+            const requestId = ++this.loadRequestId;
+            try {
+                if (this.useCDN) {
+                    const list = await this.loadModelList();
+                    const parsedModelId = Number.parseInt(modelId, 10);
+                    const selectedModelId = Number.isInteger(parsedModelId)
+                        && parsedModelId >= 0 && parsedModelId < list.models.length ? parsedModelId : 0;
+                    const modelConfig = list.models[selectedModelId];
+                    const textureId = Number.parseInt(modelTexturesId, 10);
+                    const variants = Array.isArray(modelConfig) ? modelConfig : [modelConfig];
+                    const selectedTextureId = Number.isInteger(textureId)
+                        && textureId >= 0 && textureId < variants.length ? textureId : 0;
+                    const target = variants[selectedTextureId];
+                    if (typeof target !== "string" || !target) {
+                        throw new Error(`模型路径无效: ${selectedModelId}-${selectedTextureId}`);
+                    }
+                    const modelUrl = `${this.cdnPath}model/${target}/index.json`;
+                    await this.prepareModelFiles(modelUrl);
+                    if (requestId !== this.loadRequestId) return;
+                    localStorage.setItem("modelId", selectedModelId);
+                    localStorage.setItem("modelTexturesId", selectedTextureId);
+                    loadlive2d("live2d", modelUrl);
+                } else {
+                    localStorage.setItem("modelId", modelId);
+                    localStorage.setItem("modelTexturesId", modelTexturesId);
+                    loadlive2d("live2d", `${this.apiPath}get/?id=${modelId}-${modelTexturesId}`);
+                }
+                if (message) showMessage(message, 4000, 10);
+            } catch (error) {
+                if (requestId === this.loadRequestId) this.reportError(error);
             }
         }
 
         async loadRandModel() {
-            const modelId = localStorage.getItem("modelId"),
-                modelTexturesId = localStorage.getItem("modelTexturesId");
-            if (this.useCDN) {
-                if (!this.modelList) await this.loadModelList();
-                const modelResult = orderSelection(this.modelList.models[modelId], parseInt(modelTexturesId));
-                localStorage.setItem("modelTexturesId", modelResult.nextIdx)
-                const target = modelResult.obj;
-                loadlive2d("live2d", `${this.cdnPath}model/${target}/index.json`);
-                showMessage("我的新衣服好看嘛？", 4000, 10);
-            } else {
-                // 可选 "rand"(随机), "switch"(顺序)
-                fetch(`${this.apiPath}rand_textures/?id=${modelId}-${modelTexturesId}`)
-                    .then(response => response.json())
-                    .then(result => {
-                        if (result.textures.id === 1 && (modelTexturesId === 1 || modelTexturesId === 0)) showMessage("我还没有其他衣服呢！", 4000, 10);
-                        else this.loadModel(modelId, result.textures.id, "我的新衣服好看嘛？");
-                    });
+            try {
+                const modelId = localStorage.getItem("modelId") || 0;
+                const textureId = localStorage.getItem("modelTexturesId") || 0;
+                if (this.useCDN) {
+                    const list = await this.loadModelList();
+                    const config = list.models[Number.parseInt(modelId, 10)];
+                    if (!config) throw new Error("当前模型不存在");
+                    const result = orderSelection(config, Number.parseInt(textureId, 10) || 0);
+                    await this.loadModel(modelId, result.nextIdx, "我的新衣服好看嘛？");
+                } else {
+                    const result = await this.fetchWithRetry(`${this.apiPath}rand_textures/?id=${modelId}-${textureId}`);
+                    if (result.textures.id === 1 && (textureId === "1" || textureId === "0")) {
+                        showMessage("我还没有其他衣服呢！", 4000, 10);
+                    } else {
+                        await this.loadModel(modelId, result.textures.id, "我的新衣服好看嘛？");
+                    }
+                }
+            } catch (error) {
+                this.reportError(error);
             }
         }
 
         async loadOtherModel() {
-            let modelId = localStorage.getItem("modelId");
-            if (this.useCDN) {
-                if (!this.modelList) await this.loadModelList();
-                const index = (++modelId >= this.modelList.models.length) ? 0 : modelId;
-                this.loadModel(index, 0, this.modelList.messages[index]);
-            } else {
-                fetch(`${this.apiPath}switch/?id=${modelId}`)
-                    .then(response => response.json())
-                    .then(result => {
-                        this.loadModel(result.model.id, 0, result.model.message);
-                    });
+            try {
+                if (this.useCDN) {
+                    const list = await this.loadModelList();
+                    const current = Number.parseInt(localStorage.getItem("modelId"), 10);
+                    const index = ((Number.isInteger(current) ? current : 0) + 1) % list.models.length;
+                    await this.loadModel(index, 0, list.messages && list.messages[index]);
+                } else {
+                    const modelId = localStorage.getItem("modelId") || 0;
+                    const result = await this.fetchWithRetry(`${this.apiPath}switch/?id=${modelId}`);
+                    await this.loadModel(result.model.id, 0, result.model.message);
+                }
+            } catch (error) {
+                this.reportError(error);
             }
         }
     }
